@@ -5,61 +5,68 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 void sigint_handler(int signum) {
-    // Handle Ctrl+C signal (SIGINT) by clearing the current input line
-    printf("\n");
+	// Handle Ctrl+C signal (SIGINT) by clearing the current input line
+	printf("\n");
 	rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
-int verify_input(char *cmd)
-{
-    int i = 0;
-    int one = 0;
-    int two = 0;
-    int pos = 0;
-
-    while (cmd[i])
-    {
-        if (cmd[i] == "\"")
-        {
-            two = i;
+bool checkQuotes(const char* str) {
+    int len = strlen(str);
+    int doubleQuoteCount = 0;
+    int singleQuoteCount = 0;
+    bool insideDoubleQuotes = false;
+	int i = 0;
+    while (i < len) 
+	{
+        if (str[i] == '"') 
+		{
+            doubleQuoteCount++;
+            insideDoubleQuotes = !insideDoubleQuotes;
+        } else if (str[i] == '\'' && !insideDoubleQuotes) {
+            singleQuoteCount++;
         }
-        else if 
-        i++;
-        if (one % 2 != 0 && two % 2 != 0)
-            printf("Error: Missing Quote");
+		i++;
     }
+    return doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0;
 }
+
 
 int main() {
-    // Set custom signal handler for Ctrl+C (SIGINT)
-    signal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler);
+	char *command;
 
-    // Set the initial prompt without "^C"
-    char *command;
-
-    while (1) {
-        command = readline("$> ");
+	while (1) {
+		command = readline("$> ");
 		add_history(command);
-        verify_input(command)
-        if (command == NULL) {
-            // Handle end of input (e.g., Ctrl+D)
-            printf("exit\n");
-            exit(0);
-        }
+		if (!command)
+		{
+			printf("exit\n");
+			exit(1);
+		}
+		else if (strcmp(command, "\x0C") == 0) 
+		{
+			int i;
 
-        if (strcmp(command, "\x0C") == 0) { // Check for Ctrl+L (ASCII code 12)
-            // Clear the screen by printing multiple newline characters
-            int i;
-            for (i = 0; i < 30; ++i) {
-                printf("\n");
-            }
-        }
-        free(command);
-    }
-
-    return 0;
+			i = 0;
+			while(i < 30)
+			{
+				printf("\n");
+				i++;
+			}
+		}		
+		if (!checkQuotes(command)) {
+			printf("Error: Missing Quotes\n");
+		} 
+		else 
+			printf("%s\n", command);
+		free(command);
+	}
+	return 0;
 }
