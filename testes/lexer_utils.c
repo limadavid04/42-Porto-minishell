@@ -24,9 +24,16 @@ int	is_whitespace(char c)
 
 int is_special_char(char c)
 {
-	if(c == '<' || c == '>' || c == '|' || c == '$')
+	if(c == '<' || c == '>' || c == '|')
 		return (1);
 	return (0);
+}
+int	is_dollar(char c)
+{
+	if (c == '$')
+		return (1);
+	return (0);
+
 }
 int is_single_quote(char c)
 {

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/09 13:45:23 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/09 17:31:28 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*add_char(char c, char *content)
 		buff = malloc(sizeof(char) * 1 + 1);
 		buff[0] = c;
 		buff[1] = '\0';
-		temp = malloc(sizeof(char) * (ft_strlen(content) + 1) + 1);
+		temp = malloc(sizeof(char) * ft_strlen(content)  + 1); //deleted 1 extra?
 		ft_strlcpy(temp, content, ft_strlen(content) + 1);
 		free(content);
 		new_content = ft_strjoin(temp, buff);
@@ -87,6 +87,74 @@ t_list	*state_no_quote(t_info *info)
 		return (node);
 }
 
+int		find_next_delimiter(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] && !is_special_char(cmd[i])&& !is_whitespace(cmd[i]) && cmd[i] != '$')
+		i++;
+	return (i);
+}
+
+t_list	*expand_var(t_info *info)
+{
+	char	*cmd;
+	int		*i;
+	int		size;
+	char	*var;
+	char	*temp;
+
+
+	cmd = info->cmd;
+	i = info->i;
+	(*i)++;
+	size = find_next_delimiter(&cmd[*i]);
+	var = malloc(sizeof(char) * size + 1);
+	ft_strlcpy(var, &cmd[*i], size + 1);
+	//store var expansion
+	var = getenv(var);
+	*i += (size - 1);
+	if (var == NULL)
+		return (info->node);
+	if (info->inside_word == 0)
+	{
+		info->node = ft_lstnew(NULL);
+		ft_lstadd_back(info->head, info->node);
+		info->node->content =  malloc(sizeof(char) * ft_strlen(var) + 1);
+		ft_strlcpy(info->node->content, var, ft_strlen(var) + 1);
+	}
+	else if (info->inside_word == 1)
+	{
+		temp = malloc(sizeof(char) * ft_strlen(info->node->content) + 1);
+		ft_strlcpy(temp, info->node->content, ft_strlen(info->node->content) + 1);
+		free(info->node->content);
+		info->node->content = ft_strjoin(temp, var);
+		free(temp);
+	}
+	return (info->node);
+}
+// t_list	*state_double_quote(t_info *info)
+// {
+// 	char	*cmd;
+// 	int		*i;
+// 	t_list	*node;
+
+// 	node = info->node;
+// 	cmd = info->cmd;
+// 	i = info->i;
+
+// 	if (!is_single_quote(cmd[*i]) && info->inside_word == 0)
+// 	{
+// 		node = create_node_in_back(info->head, node, i, cmd);
+// 		info->inside_word = 1;
+// 	}
+// 	else if (!is_single_quote(cmd[*i]) && info->inside_word == 1)
+// 		node->content = add_char(cmd[*i],(char*)node->content);
+// 	else if (is_single_quote(cmd[*i]))
+// 		info->quote = 0;
+// 	return (node);
+// }
 t_list	*state_single_quote(t_info *info)
 {
 	char	*cmd;
@@ -129,8 +197,10 @@ void lexer(char *cmd)
 	{
 		if (info->quote == 0 && is_single_quote(cmd[i]))
 			info->quote = 1;
-		// else if (info->quote == 0 && is_double_quote(cmd[i]))
-		// 	info->quote = 2;
+		else if (info->quote == 0 && is_double_quote(cmd[i]))
+			info->quote = 2;
+		else if (info->quote != 1 && is_dollar(cmd[i]))
+			info->node = expand_var(info);
 		else if (info->quote == 0 && !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]))
 			info->node = state_no_quote(info);
 		else if (info->quote == 1)
@@ -141,11 +211,8 @@ void lexer(char *cmd)
 	}
 	if (*info->head != NULL)
 		printLinkedList(*info->head);
-	else
-		printf("head is null cuz");
 	// 	printf("The linked list is empty.\n");
 	lst_clear(info->head);
-
 }
 
 

@@ -32,6 +32,7 @@ void	lst_clear(t_list **lst);
 int		is_double_quote(char c);
 int		is_single_quote(char c);
 char	*add_char(char c, char *content);
+int		is_dollar(char c);
 
 
 #endif
