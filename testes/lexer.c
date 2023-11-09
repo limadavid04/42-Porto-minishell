@@ -6,12 +6,30 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/08 16:48:08 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/09 13:07:43 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+t_list	*create_node_in_back(t_list **head, t_list *node, int *i, char *cmd)
+{
+	node = ft_lstnew(NULL);
+	ft_lstadd_back(head, node);
+	node->content = add_char(cmd[*i],(char*)node->content);
+	return (node);
+}
+t_list *handle_special(t_list **head, t_list *node, int *i, char *cmd)
+{
+	node = create_node_in_back(head, node, i, cmd);
+	if (check_next_char(&cmd[*i]))
+	{
+		(*i)++;
+		node->content = add_char(cmd[*i],(char*)node->content);
+	}
+	return (node);
+}
 char	*add_char(char c, char *content)
 {
 	char *temp;
@@ -38,74 +56,107 @@ char	*add_char(char c, char *content)
 	}
 	return (new_content);
 }
-
-void	state_no_quote(char *cmd, t_state *state, t_list *head, t_list *node, int *i)
+t_list	*state_no_quote(t_info *info)
 {
-		if (!is_whitespace(cmd[*i]) && state->quote == 0 && state->inside_word == 0)
+		char	*cmd;
+		int		*i;
+		t_list	*node;
+
+		node = info->node;
+		cmd = info->cmd;
+		i = info->i;
+		if (!is_whitespace(cmd[*i]) && info->inside_word == 0)
 		{
-			node = ft_lstnew(NULL);
-			ft_lstadd_back(&head, node);
-			node->content = add_char(cmd[*i],(char*)node->content);
 			if (is_special_char(cmd[*i]))
-			{
-				if (check_next_char(&cmd[*i]))
-				{
-					(*i)++;
-					node->content = add_char(cmd[*i],(char*)node->content);
-				}
-			}
+				node = handle_special(info->head, node, i, cmd);
 			else
-				state->inside_word = 1;
+			{
+				node = create_node_in_back(info->head, node, i, cmd);
+				info->inside_word = 1;
+			}
 		}
-		else if (state->quote == 0 && state->inside_word == 1)
+		else if (info->inside_word == 1)
 		{
-			if (is_whitespace(cmd[*i]))
-				state->inside_word = 0;
-			else if (is_special_char(cmd[*i]))
-			{
-				node = ft_lstnew(NULL);
-				ft_lstadd_back(&head, node);
-				node->content = add_char(cmd[*i],(char*)node->content);
-				if (check_next_char(&cmd[*i]))
-				{
-					(*i)++;
-					node->content = add_char(cmd[*i],(char*)node->content);
-				}
-				state->inside_word = 0;
-			}
+			if (is_whitespace(cmd[*i]) || is_special_char(cmd[*i]))
+				info->inside_word = 0;
+			if (is_special_char(cmd[*i]))
+				node = handle_special(info->head, node, i, cmd);
 			else
 				node->content = add_char(cmd[*i],(char*)node->content);
 		}
+		return (node);
 }
+
+// void	state_single_quote(t_info *info)
+// {
+
+// 	char	*cmd;
+// 	int		*i;
+// 	t_list	*node;
+
+// 	node = info->node;
+// 	cmd = info->cmd;
+// 	i = info->i;
+// 	if (!is_whitespace(cmd[*i]) && info->inside_word == 0)
+// 	{
+// 		if (is_special_char(cmd[*i]))
+// 			node = handle_special(info->head, node, i, cmd);
+// 		else
+// 		{
+// 			node = create_node_in_back(info->head, node, i, cmd);
+// 			info->inside_word = 1;
+// 		}
+// 	}
+// 	else if (info->inside_word == 1)
+// 	{
+// 		if (is_whitespace(cmd[*i]) || is_special_char(cmd[*i]))
+// 			info->inside_word = 0;
+// 		if (is_special_char(cmd[*i]))
+// 			node = handle_special(info->head, node, i, cmd);
+// 		else
+// 			node->content = add_char(cmd[*i],(char*)node->content);
+// 	}
+// 	return (node);
+// }
+
 void lexer(char *cmd)
 {
-	t_state *state;
+	t_info *info;
+	int i;
 
-	state = malloc(sizeof(t_state));
-	state->quote = 0;
-	state->inside_word = 0;
-
-	t_list *head;
-	t_list *node;
-
-	head = NULL;
-	node = NULL;
-
-	int i = 0;
+	i = 0;
+	info = malloc(sizeof(t_info));
+	info->i = &i;
+	info->cmd = cmd;
+	info->quote = 0;
+	info->inside_word = 0;
+	info->head = malloc(sizeof(t_list *));
+	*info->head = NULL;
+	info->node = NULL;
 	// >> << > <
+
 	while (cmd[i] != '\0')
 	{
-
-		state_no_quote(cmd, state, head, node, &i);
+		// if (info->quote == 0 && is_single_quote(cmd[i]))
+		// 	info->quote == 1;
+		// else if (info->quote == 0 && is_double_quote(cmd[i]))
+		// 			info->quote == 2;
+		// else if (info->quote == 0 && !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]))
+			info->node = state_no_quote(info);
+		// else if (info->quote == 1)
+		// 	state_single_quote(info);
+		// else if (info->quote == 2)
+		// 	state_double_quote(info);
+			//state_double_quote(info);
 		i++;
 	}
-	if (head != NULL)
-		printLinkedList(head);
+	if (*info->head != NULL)
+		printLinkedList(*info->head);
 	else
-		printf("The linked list is empty.\n");
-	lst_clear(&head);
-	// free(head)
-	// free the nodes and memory allocation ft_lstclear()
+		printf("head is null cuz");
+	// 	printf("The linked list is empty.\n");
+	lst_clear(info->head);
+
 }
 
 

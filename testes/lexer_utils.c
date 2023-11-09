@@ -28,6 +28,18 @@ int is_special_char(char c)
 		return (1);
 	return (0);
 }
+int is_single_quote(char c)
+{
+	if (c == '\'')
+		return (1);
+	return (0);
+}
+int is_double_quote(char c)
+{
+	if (c == '\"')
+		return (1);
+	return (0);
+}
 void printLinkedList(t_list* head)
 {
     t_list* current = head;
