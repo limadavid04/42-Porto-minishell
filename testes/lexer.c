@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/09 13:07:43 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/09 13:45:23 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,37 +87,27 @@ t_list	*state_no_quote(t_info *info)
 		return (node);
 }
 
-// void	state_single_quote(t_info *info)
-// {
+t_list	*state_single_quote(t_info *info)
+{
+	char	*cmd;
+	int		*i;
+	t_list	*node;
 
-// 	char	*cmd;
-// 	int		*i;
-// 	t_list	*node;
+	node = info->node;
+	cmd = info->cmd;
+	i = info->i;
 
-// 	node = info->node;
-// 	cmd = info->cmd;
-// 	i = info->i;
-// 	if (!is_whitespace(cmd[*i]) && info->inside_word == 0)
-// 	{
-// 		if (is_special_char(cmd[*i]))
-// 			node = handle_special(info->head, node, i, cmd);
-// 		else
-// 		{
-// 			node = create_node_in_back(info->head, node, i, cmd);
-// 			info->inside_word = 1;
-// 		}
-// 	}
-// 	else if (info->inside_word == 1)
-// 	{
-// 		if (is_whitespace(cmd[*i]) || is_special_char(cmd[*i]))
-// 			info->inside_word = 0;
-// 		if (is_special_char(cmd[*i]))
-// 			node = handle_special(info->head, node, i, cmd);
-// 		else
-// 			node->content = add_char(cmd[*i],(char*)node->content);
-// 	}
-// 	return (node);
-// }
+	if (!is_single_quote(cmd[*i]) && info->inside_word == 0)
+	{
+		node = create_node_in_back(info->head, node, i, cmd);
+		info->inside_word = 1;
+	}
+	else if (!is_single_quote(cmd[*i]) && info->inside_word == 1)
+		node->content = add_char(cmd[*i],(char*)node->content);
+	else if (is_single_quote(cmd[*i]))
+		info->quote = 0;
+	return (node);
+}
 
 void lexer(char *cmd)
 {
@@ -137,17 +127,16 @@ void lexer(char *cmd)
 
 	while (cmd[i] != '\0')
 	{
-		// if (info->quote == 0 && is_single_quote(cmd[i]))
-		// 	info->quote == 1;
+		if (info->quote == 0 && is_single_quote(cmd[i]))
+			info->quote = 1;
 		// else if (info->quote == 0 && is_double_quote(cmd[i]))
-		// 			info->quote == 2;
-		// else if (info->quote == 0 && !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]))
+		// 	info->quote = 2;
+		else if (info->quote == 0 && !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]))
 			info->node = state_no_quote(info);
-		// else if (info->quote == 1)
-		// 	state_single_quote(info);
+		else if (info->quote == 1)
+			info->node = state_single_quote(info);
 		// else if (info->quote == 2)
 		// 	state_double_quote(info);
-			//state_double_quote(info);
 		i++;
 	}
 	if (*info->head != NULL)
