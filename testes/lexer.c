@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/09 17:31:28 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/09 18:08:22 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		find_next_delimiter(char *cmd)
 	int	i;
 
 	i = 0;
-	while (cmd[i] && !is_special_char(cmd[i])&& !is_whitespace(cmd[i]) && cmd[i] != '$')
+	while (cmd[i] && !is_special_char(cmd[i])&& !is_whitespace(cmd[i]) && !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]) && cmd[i] != '$')
 		i++;
 	return (i);
 }
@@ -123,6 +123,7 @@ t_list	*expand_var(t_info *info)
 		ft_lstadd_back(info->head, info->node);
 		info->node->content =  malloc(sizeof(char) * ft_strlen(var) + 1);
 		ft_strlcpy(info->node->content, var, ft_strlen(var) + 1);
+		info->inside_word = 1;
 	}
 	else if (info->inside_word == 1)
 	{
@@ -134,27 +135,27 @@ t_list	*expand_var(t_info *info)
 	}
 	return (info->node);
 }
-// t_list	*state_double_quote(t_info *info)
-// {
-// 	char	*cmd;
-// 	int		*i;
-// 	t_list	*node;
+t_list	*state_double_quote(t_info *info)
+{
+	char	*cmd;
+	int		*i;
+	t_list	*node;
 
-// 	node = info->node;
-// 	cmd = info->cmd;
-// 	i = info->i;
+	node = info->node;
+	cmd = info->cmd;
+	i = info->i;
 
-// 	if (!is_single_quote(cmd[*i]) && info->inside_word == 0)
-// 	{
-// 		node = create_node_in_back(info->head, node, i, cmd);
-// 		info->inside_word = 1;
-// 	}
-// 	else if (!is_single_quote(cmd[*i]) && info->inside_word == 1)
-// 		node->content = add_char(cmd[*i],(char*)node->content);
-// 	else if (is_single_quote(cmd[*i]))
-// 		info->quote = 0;
-// 	return (node);
-// }
+	if (!is_double_quote(cmd[*i]) && info->inside_word == 0)
+	{
+		node = create_node_in_back(info->head, node, i, cmd);
+		info->inside_word = 1;
+	}
+	else if (!is_double_quote(cmd[*i]) && info->inside_word == 1)
+		node->content = add_char(cmd[*i],(char*)node->content);
+	else if (is_double_quote(cmd[*i]))
+		info->quote = 0;
+	return (node);
+}
 t_list	*state_single_quote(t_info *info)
 {
 	char	*cmd;
@@ -205,8 +206,8 @@ void lexer(char *cmd)
 			info->node = state_no_quote(info);
 		else if (info->quote == 1)
 			info->node = state_single_quote(info);
-		// else if (info->quote == 2)
-		// 	state_double_quote(info);
+		else if (info->quote == 2)
+			info->node = state_double_quote(info);
 		i++;
 	}
 	if (*info->head != NULL)
