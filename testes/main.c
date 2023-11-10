@@ -66,7 +66,7 @@ int main() {
 
 		if (!checkQuotes(command)) {
 			printf("Error: Missing Quotes\n");
-		} 
+		}
 		else
 			printf("%s\n", command);
 		free(command);
