@@ -6,108 +6,163 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 10:54:48 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/10 11:03:14 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*add_char(char c, char *content)
+t_list	*state_no_quote(t_info *info)
 {
-	char *temp;
-	char *buff;
-	char *new_content;
+	char	*cmd;
+	int		*i;
+	t_list	*node;
 
-	if (content == NULL)
+	node = info->node;
+	cmd = info->cmd;
+	i = info->i;
+	if (!is_whitespace(cmd[*i]) && info->inside_word == 0)
 	{
-		new_content = malloc(sizeof(char) * 1 + 1);
-		new_content[0] = c;
-		new_content[1] = '\0';
+		if (is_special_char(cmd[*i]))
+			node = handle_special(info->head, node, i, cmd);
+		else
+		{
+			node = create_token(info->head, node, i, cmd);
+			info->inside_word = 1;
+		}
 	}
-	else
+	else if (info->inside_word == 1)
 	{
-		buff = malloc(sizeof(char) * 1 + 1);
-		buff[0] = c;
-		buff[1] = '\0';
-		temp = malloc(sizeof(char) * (ft_strlen(content) + 1) + 1);
-		ft_strlcpy(temp, content, ft_strlen(content) + 1);
-		free(content);
-		new_content = ft_strjoin(temp, buff);
-		free(buff);
+		if (is_whitespace(cmd[*i]) || is_special_char(cmd[*i]))
+			info->inside_word = 0;
+		if (is_special_char(cmd[*i]))
+			node = handle_special(info->head, node, i, cmd);
+		else
+			node->content = add_char(cmd[*i], (char *)node->content);
+	}
+	return (node);
+}
+
+t_list	*expand_var(t_info *info)
+{
+	char	*cmd;
+	int		*i;
+	int		size;
+	char	*var;
+	char	*temp;
+
+	cmd = info->cmd;
+	i = info->i;
+	(*i)++;
+	size = find_next_delimiter(&cmd[*i]);
+	var = malloc(sizeof(char) * size + 1);
+	ft_strlcpy(var, &cmd[*i], size + 1);
+	var = getenv(var);
+	*i += (size - 1);
+	if (var == NULL)
+		return (info->node);
+	if (info->inside_word == 0)
+	{
+		info->node = ft_lstnew(NULL);
+		ft_lstadd_back(info->head, info->node);
+		info->node->content = malloc(sizeof(char) * ft_strlen(var) + 1);
+		ft_strlcpy(info->node->content, var, ft_strlen(var) + 1);
+		info->inside_word = 1;
+	}
+	else if (info->inside_word == 1)
+	{
+		temp = malloc(sizeof(char) * ft_strlen(info->node->content) + 1);
+		ft_strlcpy(temp, info->node->content, ft_strlen(info->node->content) + 1);
+		free(info->node->content);
+		info->node->content = ft_strjoin(temp, var);
 		free(temp);
 	}
-	return (new_content);
+	return (info->node);
+}
+t_list	*state_double_quote(t_info *info)
+{
+	char	*cmd;
+	int		*i;
+	t_list	*node;
+
+	node = info->node;
+	cmd = info->cmd;
+	i = info->i;
+	if (!is_double_quote(cmd[*i]) && info->inside_word == 0)
+	{
+		node = create_token(info->head, node, i, cmd);
+		info->inside_word = 1;
+	}
+	else if (!is_double_quote(cmd[*i]) && info->inside_word == 1)
+		node->content = add_char(cmd[*i], (char *)node->content);
+	else if (is_double_quote(cmd[*i]))
+		info->quote = 0;
+	return (node);
 }
 
-void	state_no_quote(char *cmd, t_state *state, t_list *head, t_list *node, int *i)
+t_list	*state_single_quote(t_info *info)
 {
-		if (!is_whitespace(cmd[*i]) && state->quote == 0 && state->inside_word == 0)
-		{
-			node = ft_lstnew(NULL);
-			ft_lstadd_back(&head, node);
-			node->content = add_char(cmd[*i],(char*)node->content);
-			if (is_special_char(cmd[*i]))
-			{
-				if (check_next_char(&cmd[*i]))
-				{
-					(*i)++;
-					node->content = add_char(cmd[*i],(char*)node->content);
-				}
-			}
-			else
-				state->inside_word = 1;
-		}
-		else if (state->quote == 0 && state->inside_word == 1)
-		{
-			if (is_whitespace(cmd[*i]))
-				state->inside_word = 0;
-			else if (is_special_char(cmd[*i]))
-			{
-				node = ft_lstnew(NULL);
-				ft_lstadd_back(&head, node);
-				node->content = add_char(cmd[*i],(char*)node->content);
-				if (check_next_char(&cmd[*i]))
-				{
-					(*i)++;
-					node->content = add_char(cmd[*i],(char*)node->content);
-				}
-				state->inside_word = 0;
-			}
-			else
-				node->content = add_char(cmd[*i],(char*)node->content);
-		}
+	char	*cmd;
+	int		*i;
+	t_list	*node;
+
+	node = info->node;
+	cmd = info->cmd;
+	i = info->i;
+	if (!is_single_quote(cmd[*i]) && info->inside_word == 0)
+	{
+		node = create_token(info->head, node, i, cmd);
+		info->inside_word = 1;
+	}
+	else if (!is_single_quote(cmd[*i]) && info->inside_word == 1)
+		node->content = add_char(cmd[*i], (char *)node->content);
+	else if (is_single_quote(cmd[*i]))
+		info->quote = 0;
+	return (node);
 }
-void lexer(char *cmd)
+
+void	get_tokens(t_info *info)
 {
-	t_state *state;
+	int		i;
+	char	*cmd;
 
-	state = malloc(sizeof(t_state));
-	state->quote = 0;
-	state->inside_word = 0;
-
-	t_list *head;
-	t_list *node;
-
-	head = NULL;
-	node = NULL;
-
-	int i = 0;
-	// >> << > <
+	cmd = info->cmd;
+	i = 0;
+	info->i = &i;
 	while (cmd[i] != '\0')
 	{
-
-		state_no_quote(cmd, state, head, node, &i);
+		if (info->quote == 0 && is_single_quote(cmd[i]))
+			info->quote = 1;
+		else if (info->quote == 0 && is_double_quote(cmd[i]))
+			info->quote = 2;
+		else if (info->quote != 1 && is_dollar(cmd[i]))
+			info->node = expand_var(info);
+		else if (info->quote == 0 && !is_double_quote(cmd[i]) \
+		&& !is_single_quote(cmd[i]))
+			info->node = state_no_quote(info);
+		else if (info->quote == 1)
+			info->node = state_single_quote(info);
+		else if (info->quote == 2)
+			info->node = state_double_quote(info);
 		i++;
 	}
-	if (head != NULL)
-		printLinkedList(head);
-	else
-		printf("The linked list is empty.\n");
-	lst_clear(&head);
-	// free(head)
-	// free the nodes and memory allocation ft_lstclear()
 }
 
+void	lexer(char *cmd)
+{
+	t_info	*info;
 
+	info = malloc(sizeof(t_info));
+	info->cmd = cmd;
+	info->quote = 0;
+	info->inside_word = 0;
+	info->head = malloc(sizeof(t_list *));
+	*info->head = NULL;
+	info->node = NULL;
+	get_tokens(info);
+	if (*info->head != NULL)
+		print_linked_list(*info->head);
+	lst_clear(info->head);
+}
 // ls -la
 // echo "$PATH" '$PATH'
