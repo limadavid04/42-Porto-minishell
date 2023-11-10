@@ -46,6 +46,8 @@ int		find_next_delimiter(char *cmd);
 t_list	*create_token(t_list **head, t_list *node, int *i, char *cmd);
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
+t_list	*create_space_for_expansion(t_info *info, char *var);
+t_list	*expand_var(t_info *info);
 
 // main.c
 int	handle_ctrl_d(char *cmd);
