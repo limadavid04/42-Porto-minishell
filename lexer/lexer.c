@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 11:19:33 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/10 12:24:18 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,72 +15,31 @@
 t_list	*state_no_quote(t_info *info)
 {
 	char	*cmd;
-	int		*i;
-	t_list	*node;
 
-	node = info->node;
 	cmd = info->cmd;
-	i = info->i;
-	if (!is_whitespace(cmd[*i]) && info->inside_word == 0)
+	if (!is_whitespace(cmd[*info->i]) && info->inside_word == 0)
 	{
-		if (is_special_char(cmd[*i]))
-			node = handle_special(info->head, node, i, cmd);
+		if (is_special_char(cmd[*info->i]))
+			info->node = handle_special(info->head, info->node, info->i, cmd);
 		else
 		{
-			node = create_token(info->head, node, i, cmd);
+			info->node = create_token(info->head, info->node, info->i, cmd);
 			info->inside_word = 1;
 		}
 	}
 	else if (info->inside_word == 1)
 	{
-		if (is_whitespace(cmd[*i]) || is_special_char(cmd[*i]))
+		if (is_whitespace(cmd[*info->i]) || is_special_char(cmd[*info->i]))
 			info->inside_word = 0;
-		if (is_special_char(cmd[*i]))
-			node = handle_special(info->head, node, i, cmd);
+		if (is_special_char(cmd[*info->i]))
+			info->node = handle_special(info->head, info->node, info->i, cmd);
 		else
-			node->content = add_char(cmd[*i], (char *)node->content);
-	}
-	return (node);
-}
-
-t_list	*expand_var(t_info *info)
-{
-	char	*cmd;
-	int		*i;
-	int		size;
-	char	*var;
-	char	*temp;
-	char	*var_name;
-
-	cmd = info->cmd;
-	i = info->i;
-	(*i)++;
-	size = find_next_delimiter(&cmd[*i]);
-	var_name = malloc(sizeof(char) * size + 1);
-	ft_strlcpy(var_name, &cmd[*i], size + 1);
-	var = getenv(var_name);
-	free(var_name);
-	*i += (size - 1);
-	if (var == NULL)
-		return (info->node);
-	if (info->inside_word == 0)
-	{
-		info->node = ft_lstnew(NULL);
-		ft_lstadd_back(info->head, info->node);
-		info->node->content = malloc(sizeof(char) * ft_strlen(var) + 1);
-		ft_strlcpy(info->node->content, var, ft_strlen(var) + 1);
-		info->inside_word = 1;
-	}
-	else if (info->inside_word == 1)
-	{
-		temp = malloc(sizeof(char) * ft_strlen(info->node->content) + 1);
-		ft_strlcpy(temp, info->node->content, ft_strlen(info->node->content) + 1);
-		free(info->node->content);
-		info->node->content = ft_strjoin(temp, var);
-		free(temp);
+			info->node->content = add_char(cmd[*info->i], \
+			(char *)info->node->content);
 	}
 	return (info->node);
 }
+
 t_list	*state_double_quote(t_info *info)
 {
 	char	*cmd;
