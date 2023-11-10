@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/10 11:28:38 by dlima             #+#    #+#             */
+/*   Updated: 2023/11/10 10:31:38 by dlima            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,41 +22,42 @@
 #include <string.h>
 #include "minishell.h"
 
-
 //substituir printf por ft_printf
 
-// void sigint_handler(int signum) {
-// 	// Handle Ctrl+C signal (SIGINT) by clearing the current input line
-//     (void)signum;
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
+void sigint_handler(int signum) {
+	// Handle Ctrl+C signal (SIGINT) by clearing the current input line
+	(void)signum;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
 
-// bool checkQuotes(const char* str) {
-//     int len = strlen(str);
-//     int doubleQuoteCount = 0;
-//     int singleQuoteCount = 0;
-//     bool insideDoubleQuotes = false;
-// 	int i = 0;
-//     while (i < len)
-// 	{
-//         if (str[i] == '"')
-// 		{
-//             doubleQuoteCount++;
-//             insideDoubleQuotes = !insideDoubleQuotes;
-//         } else if (str[i] == '\'' && !insideDoubleQuotes) {
-//             singleQuoteCount++;
-//         }
-// 		i++;
-//     }
-//     return doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0;
-// }
+bool checkQuotes(const char* str) {
+
+	int		len = strlen(str);
+	int		doubleQuoteCount = 0;
+	int		singleQuoteCount = 0;
+	bool	insideDoubleQuotes = false;
+
+	int i = 0;
+	while (i < len)
+	{
+		if (str[i] == '"')
+		{
+			doubleQuoteCount++;
+			insideDoubleQuotes = !insideDoubleQuotes;
+		} else if (str[i] == '\'' && !insideDoubleQuotes) {
+			singleQuoteCount++;
+		}
+		i++;
+	}
+	return doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0;
+}
 
 
 int main() {
-	// signal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler);
 	char *command;
 
 	while (1) {
@@ -66,14 +79,14 @@ int main() {
 				i++;
 			}
 		}
-		// if (!checkQuotes(command)) {
-		// 	printf("Error: Missing Quotes\n");
-		// }
-		// else
-        // {
-            lexer(command);
-        // printf("%s\n", command);
-        // }
+		if (!checkQuotes(command)) {
+			printf("Error: Missing Quotes\n");
+		}
+		else
+		{
+			lexer(command);
+		printf("%s\n", command);
+		}
 		free(command);
 	}
 	return 0;

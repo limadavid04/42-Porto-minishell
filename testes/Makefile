@@ -4,7 +4,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 
-SRCS = lexer_utils.c lexer.c main.c
+SRCS = lexer_utils_1.c lexer_utils_2.c lexer_utils_3.c lexer.c main.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
