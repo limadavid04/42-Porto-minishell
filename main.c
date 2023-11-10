@@ -25,28 +25,6 @@ void sig_handling()
 	signal(SIGQUIT, SIG_IGN);
 }
 
-bool checkQuotes(const char* str)
-{
-    int len = strlen(str);
-    int doubleQuoteCount = 0;
-    int singleQuoteCount = 0;
-    bool insideDoubleQuotes = false;
-	int i = 0;
-    while (i < len) 
-	{
-        if (str[i] == '"') 
-		{
-            doubleQuoteCount++;
-            insideDoubleQuotes = !insideDoubleQuotes;
-        } else if (str[i] == '\'' && !insideDoubleQuotes) {
-            singleQuoteCount++;
-        }
-		i++;
-    }
-    return doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0;
-}
-
-
 int main() {
 	char *command;
 
@@ -57,10 +35,7 @@ int main() {
 			break;
 		add_history(command);
 
-		if (!checkQuotes(command)) {
-			printf("Error: Missing Quotes\n");
-		}
-		else
+		if (checkInput(command) == 0)
 			lexer(command);
 		free(command);
 	}

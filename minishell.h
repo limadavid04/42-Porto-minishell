@@ -51,6 +51,9 @@ char	*add_char(char c, char *content);
 int	handle_ctrl_d(char *cmd);
 void sigint_handler();
 void sig_handling();
-bool checkQuotes(const char* str);
 
+// utils/quotes.c
+bool hasMissingQuotes(const char* str);
+bool hasInvalidRedirects(const char* str);
+bool checkInput(const char* str);
 #endif
