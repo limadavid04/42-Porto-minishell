@@ -27,10 +27,10 @@ $(LIBFT):
 	@echo -n "[$(CYAN)Compiling Libft$(RESET)]"
 	@$(MAKE)  --no-print-director -C ./libft
 	@echo "[$(GREEN)Libft Done!$(RESET)]"
-	
+
 $(NAME): $(OBJS) $(LIBFT)
 	@echo -n "[$(CYAN)Compiling Minishell$(RESET)]"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)  $(LIBFT) $(LDFLAGS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
 	@echo "[$(GREEN)Minishell Done!$(RESET)]"
 
 clean:

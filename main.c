@@ -61,7 +61,7 @@ int main() {
 			printf("Error: Missing Quotes\n");
 		}
 		else
-			printf("%s\n", command);
+			lexer(command);
 		free(command);
 	}
 	return 0;

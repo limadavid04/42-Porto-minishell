@@ -50,14 +50,16 @@ t_list	*expand_var(t_info *info)
 	int		size;
 	char	*var;
 	char	*temp;
+	char	*var_name;
 
 	cmd = info->cmd;
 	i = info->i;
 	(*i)++;
 	size = find_next_delimiter(&cmd[*i]);
-	var = malloc(sizeof(char) * size + 1);
-	ft_strlcpy(var, &cmd[*i], size + 1);
-	var = getenv(var);
+	var_name = malloc(sizeof(char) * size + 1);
+	ft_strlcpy(var_name, &cmd[*i], size + 1);
+	var = getenv(var_name);
+	free(var_name);
 	*i += (size - 1);
 	if (var == NULL)
 		return (info->node);
@@ -163,6 +165,8 @@ void	lexer(char *cmd)
 	if (*info->head != NULL)
 		print_linked_list(*info->head);
 	lst_clear(info->head);
+	free(info->head);
+	free(info);
 }
 // ls -la
 // echo "$PATH" '$PATH'
