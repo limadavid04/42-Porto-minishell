@@ -1,31 +1,51 @@
-NAME = minishell
-LIBFT = ../libft/libft.a
+#_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_ COLORS _/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_
+RESET	= \033[0m
+BLACK 	= \033[1;30m
+RED 	= \033[1;31m
+GREEN 	= \033[1;32m
+YELLOW 	= \033[1;33m
+BLUE	= \033[1;34m
+PURPLE 	= \033[1;35m
+CYAN 	= \033[1;36m
+WHITE 	= \033[1;37m
+
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-RM = rm -rf
+CFLAGS = -Wall -Wextra -Werror -lreadline
 
-SRCS = lexer_utils.c lexer.c main.c
-OBJS = $(SRCS:.c=.o)
+all: main
 
-all: $(NAME)
-
-$(LIBFT):
-		$(MAKE)  --no-print-director -C ../libft bonus
-
-$(NAME): $(OBJS) $(LIBFT)
-		$(CC) $(CFLAGS) $(OBJS) $(LIBFT) ../libft/libft.a -lreadline -o $(NAME)
-		echo Makefile done!
+main: main.c
+	@$(CC) $(CFLAGS) -o Minishell main.c
+	@echo -n "[$(CYAN)Compiling$(RESET)]"
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo " ."
+	@echo "[$(GREEN)Done!$(RESET)]"
 
 clean:
-		$(MAKE) clean --no-print-director -C ../libft
-		$(RM) $(OBJS)
-		echo clean done!
+	@$(RM) $(OBJS)
+	@echo -n "[$(CYAN)Cleaning$(RESET)]"
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo " ."
+	@echo "[$(GREEN)Done!$(RESET)]"
 
 fclean: clean
-		$(MAKE) fclean --no-print-director -C ../libft
-		$(RM) libft.a
-		$(RM) $(MAKE)
-		echo fclean done!
+	@$(RM) $(MAKE)
+	@echo -n "[$(CYAN)F Cleaning$(RESET)]"
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo -n " ."
+	@sleep 1
+	@echo " ."
+	@echo "[$(GREEN)Done!$(RESET)]"
 
 re: fclean all
 		$(MAKE) -C ../libft bonus
