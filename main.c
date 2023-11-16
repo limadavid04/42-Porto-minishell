@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 12:46:05 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/16 18:03:27 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,27 @@ bool	checkQuotes(const char *str)
 	}
 	return (doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0);
 }
+int	wait_for_children(t_status *status)
+{
+	int	exit_code;
 
-int	main(void)
+	waitpid(status->last_pid, &exit_code, 0);
+	status->process_count--;
+	while (status->process_count != 0)
+	{
+		wait(0);
+		status->process_count--;
+	}
+	return (exit_code);
+}
+int	main()
 {
 	char		*command;
-	// t_status	*status;
+	t_status	*status;
 	t_list		**token_lst;
 
-	// status = malloc(sizeof(t_status));
+	status = malloc(sizeof(t_status));
 	// status->last_pid = 0;
-	// status->process_count = 0;
 	while (1)
 	{
 		sig_handling();
@@ -88,7 +99,8 @@ int	main(void)
 		else
 		{
 			token_lst = lexer(command);
-			parser_main(token_lst);
+			parser_main(token_lst, status);
+			wait_for_children(status);
 			lst_clear(token_lst);
 			free(token_lst);
 		}

@@ -13,14 +13,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <sys/wait.h>
 
 # define IN 0
 # define OUT 1
 
 typedef struct Status
 {
-	int	last_pid;
-	int	process_count;
+	int		last_pid;
+	int		process_count;
+	int		old_pipe_in;
 	//env;
 	//export;
 }	t_status;
@@ -67,7 +69,8 @@ t_list	*expand_var(t_info *info);
 ////////////////////////////////////////////----PARSER-----////////////////////////////////////////////
 
 //parser
-void	parser_main(t_list **token_lst);
+void	parser_main(t_list **token_lst,  t_status *status);
+void	execute(t_status *status, char **cmd, int default_fd[2]);
 
 //parser_utils
 void	save_default_fd(int default_fd[2]);

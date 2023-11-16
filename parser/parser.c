@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 12:36:32 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/16 18:58:41 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 
 	i = 0;
 	cmd_size = command_length(cmd_start, pipe_tkn);
-	// printf("cmd size = %d\n", cmd_size);
+	printf("cmd size = %d\n", cmd_size);
 	cmd = malloc(sizeof(char *) * (cmd_size + 1));
 	while (cmd_start != pipe_tkn)
 	{
@@ -34,33 +34,53 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	return (cmd);
 
 }
+/*
+FD table after create_pipe
 
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn)
+|    fd    |    file       |
+|__________|_______________|
+|    0     |   old_pipe_in |
+|    1     |   pipe_fd[OUT]|
+|    2     |  STDERR       |
+|    3     |  STDIN        |
+|    4     |  STDOUT       |
+|    5     |  pipe_fd[IN]  |
+*/
+void	create_pipe(t_status *status, t_list *pipe_tkn)
+{
+	int	pipe_fd[2];
+	if (status->old_pipe_in != -1)
+	{
+		dup2(status->old_pipe_in, IN);
+		close(status->old_pipe_in);
+	}
+	if (pipe_tkn == NULL) //if there are no pipes left we just want to close the previous pipe;
+		return ;
+	pipe(pipe_fd);
+	dup2(pipe_fd[OUT], OUT);
+	close(pipe_fd[OUT]);
+	status->old_pipe_in = pipe_fd[IN];
+}
+void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
+	// int i = 0;
+	// default_fd[IN] = 0;
+	// default_fd[OUT] = 1;
 	//save the STDIN and STDOUT before overwriting fd 0 and 1;
-	default_fd[IN] = 0;
-	default_fd[OUT] = 1;
-
-	// printf("before default_fd[IN] = %d\n", default_fd[IN]);
-	// printf("before default_fd[OUT] = %d\n", default_fd[OUT]);
 	save_default_fd(default_fd);
-	printf("default_fd[IN] = %d\n", default_fd[IN]);
-	printf("default_fd[OUT] = %d\n", default_fd[OUT]);
-	restore_default_fd(default_fd);
+	//create pipe
+	create_pipe(status, pipe_tkn);
 	cmd = get_cmd(cmd_start, pipe_tkn);
 
-	matrix_free(cmd);
-
-	//check command redirects;
-	//create pipe
-	//execute
-
+	execute(status, cmd, default_fd);
 	//restore fd's 0 and 1 back to stdin and stdout for next command to properly execute
+	restore_default_fd(default_fd);
 
+	matrix_free(cmd);
 }
-void	parse_tokens(t_list *token_lst)
+void	parse_tokens(t_list *token_lst,  t_status *status)
 {
 	t_list *cur_tkn;
 	t_list *cmd_start;
@@ -74,7 +94,7 @@ void	parse_tokens(t_list *token_lst)
 	{
 		if (ft_strncmp(cur_tkn->content, &pipe, 1) == 0)
 		{
-			parse_command(cmd_start, cur_tkn);
+			parse_command(cmd_start, cur_tkn, status);
 			cmd_start = cur_tkn->next;
 			// parse_tokens(cmd_start, old_pipe_in);
 		}
@@ -82,16 +102,17 @@ void	parse_tokens(t_list *token_lst)
 	}
 	//parse last command
 	if (cmd_start != NULL)
-		parse_command(cmd_start, cur_tkn);
+		parse_command(cmd_start, cur_tkn, status);
 }
-void	parser_main(t_list **token_lst)
+void	parser_main(t_list **token_lst, t_status *status)
 {
 
-	//recieve status as parameter
-	//define int old_pipe_in to save the fd of the read end of the last pipe;
+	status->old_pipe_in = -1;
+	status->process_count = 0; //means that this is the first command;
 	if (*token_lst == NULL)
 		return ;
-	parse_tokens(*token_lst);
+	parse_tokens(*token_lst, status);
+	//close old_pipe_in if it wasn't closed
 }
 	// while (cmd[i])
 	// {

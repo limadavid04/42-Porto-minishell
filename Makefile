@@ -16,7 +16,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline -lhistory
 FILES = main lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1\
-parser/parser parser/parser_utils
+parser/parser parser/parser_utils parser/execute
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a
