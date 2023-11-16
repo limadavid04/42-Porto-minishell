@@ -37,9 +37,7 @@ typedef struct TapeInfo
 }	t_info;
 
 // main.c
-int		handle_ctrl_d(char *cmd);
-void	sigint_handler(int sig);
-void	sig_handling(void);
+
 
 // utils/quotes.c
 bool	missing_quotes(const char *str);
@@ -73,4 +71,8 @@ char	*add_char(char c, char *content);
 t_list	*create_space_for_expansion(t_info *info, char *var);
 t_list	*expand_var(t_info *info);
 
+// signal/signal.c
+int		handle_ctrl_d(char *cmd);
+void	sigint_handler(int sig);
+void	sig_handling(void);
 #endif
