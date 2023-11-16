@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 12:24:18 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/16 11:12:02 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,10 @@ void	get_tokens(t_info *info)
 	}
 }
 
-void	lexer(char *cmd)
+t_list	**lexer(char *cmd)
 {
 	t_info	*info;
+	t_list	**token_lst;
 
 	info = malloc(sizeof(t_info));
 	info->cmd = cmd;
@@ -121,11 +122,13 @@ void	lexer(char *cmd)
 	*info->head = NULL;
 	info->node = NULL;
 	get_tokens(info);
-	if (*info->head != NULL)
-		print_linked_list(*info->head);
-	lst_clear(info->head);
-	free(info->head);
+	// if (*info->head != NULL)
+	// 	print_linked_list(*info->head);
+	// lst_clear(info->head);
+	// free(info->head);
+	token_lst = info->head;
 	free(info);
+	return (token_lst);
 }
 // ls -la
 // echo "$PATH" '$PATH'

@@ -1,8 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
+/*   Updated: 2023/11/16 12:46:05 by dlima            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// TO DO:
+// write function to check for >>>> and <<<< and ||| etc
+//Parser
+
+//MAKE FILE IS NOT CLEANING THE minishell BINARY!!
 #include "minishell.h"
 
-void sigint_handler()
+void	sigint_handler()
 {
-	// Handle Ctrl+C signal (SIGINT) by clearing the current input line
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -19,50 +35,64 @@ int	handle_ctrl_d(char *cmd)
 	return (0);
 }
 
-void sig_handling()
+void	sig_handling(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-bool checkQuotes(const char* str)
+bool	checkQuotes(const char *str)
 {
-    int len = strlen(str);
-    int doubleQuoteCount = 0;
-    int singleQuoteCount = 0;
-    bool insideDoubleQuotes = false;
+	int len = strlen(str);
+	int doubleQuoteCount = 0;
+	int singleQuoteCount = 0;
+	bool insideDoubleQuotes = false;
 	int i = 0;
-    while (i < len) 
+
+	while (i < len)
 	{
-        if (str[i] == '"') 
+		if (str[i] == '"')
 		{
-            doubleQuoteCount++;
-            insideDoubleQuotes = !insideDoubleQuotes;
-        } else if (str[i] == '\'' && !insideDoubleQuotes) {
-            singleQuoteCount++;
-        }
+			doubleQuoteCount++;
+			insideDoubleQuotes = !insideDoubleQuotes;
+		}
+		else if (str[i] == '\'' && !insideDoubleQuotes)
+		{
+			singleQuoteCount++;
+		}
 		i++;
-    }
-    return doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0;
+	}
+	return (doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0);
 }
 
+int	main(void)
+{
+	char		*command;
+	// t_status	*status;
+	t_list		**token_lst;
 
-int main() {
-	char *command;
-
-	while (1) {
+	// status = malloc(sizeof(t_status));
+	// status->last_pid = 0;
+	// status->process_count = 0;
+	while (1)
+	{
 		sig_handling();
 		command = readline("$> ");
 		if (handle_ctrl_d(command))
-			break;
+			break ;
 		add_history(command);
-
-		if (!checkQuotes(command)) {
+		if (!checkQuotes(command))
+		{
 			printf("Error: Missing Quotes\n");
 		}
 		else
-			lexer(command);
+		{
+			token_lst = lexer(command);
+			parser_main(token_lst);
+			lst_clear(token_lst);
+			free(token_lst);
+		}
 		free(command);
 	}
-	return 0;
+	return (0);
 }
