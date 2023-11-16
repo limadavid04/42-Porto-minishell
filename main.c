@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/16 10:41:31 by psousa            #+#    #+#             */
+/*   Updated: 2023/11/16 10:41:35 by psousa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void sigint_handler()
+void	sigint_handler()
 {
-	// Handle Ctrl+C signal (SIGINT) by clearing the current input line
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -19,25 +30,32 @@ int	handle_ctrl_d(char *cmd)
 	return (0);
 }
 
-void sig_handling()
+void	sig_handling(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int main() {
-	char *command;
+int	main(int argc, char **argv, char **envp)
+{
+	char	*command;
 
-	while (1) {
+	(void)envp;
+	if (argc > 1 && argv)
+	{
+		printf("Error: Wrong arguments!");
+		return (EXIT_FAILURE);
+	}
+	while (1)
+	{
 		sig_handling();
 		command = readline("$> ");
 		if (handle_ctrl_d(command))
-			break;
+			break ;
 		add_history(command);
-
-		if (checkInput(command) == 0)
+		if (check_input(command) == 0)
 			lexer(command);
 		free(command);
 	}
-	return 0;
+	return (EXIT_SUCCESS);
 }

@@ -1,25 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
+/*   Updated: 2023/11/16 10:41:50 by psousa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft/libft.h"
 # include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-
-// typedef struct stateVar
-// {
-// 	int quote;                   // 0- {no quote}; 1- single quote; 2- double quote;
-// 	int inside_word;             // 0 if not inside word; 1-
-
-// }   t_state;
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdio.h>
+# include <stdbool.h>
+# include <string.h>
 
 typedef struct TapeInfo
 {
@@ -50,12 +55,12 @@ t_list	*create_space_for_expansion(t_info *info, char *var);
 t_list	*expand_var(t_info *info);
 
 // main.c
-int	handle_ctrl_d(char *cmd);
-void sigint_handler();
-void sig_handling();
+int		handle_ctrl_d(char *cmd);
+void	sigint_handler();
+void	sig_handling(void);
 
 // utils/quotes.c
-bool hasMissingQuotes(const char* str);
-bool hasInvalidRedirects(const char* str);
-bool checkInput(const char* str);
+bool	missing_quotes(const char *str);
+bool	invalid_redirects(const char *str);
+bool	check_input(const char *str);
 #endif

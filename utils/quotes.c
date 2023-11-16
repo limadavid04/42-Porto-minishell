@@ -1,57 +1,70 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/16 10:42:04 by psousa            #+#    #+#             */
+/*   Updated: 2023/11/16 10:42:06 by psousa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-bool	has_invalid_redirects(const char* str)
+bool	missing_quotes(const char *str)
 {
-	int len;
-	int redirectCount = 0;
-	char current_char;
+	size_t	i;
+	int		redirect_count;
 
-	len = ft_strlen(str);
-	for (int i = 0; i < len; i++)
+	redirect_count = 0;
+	i = 0;
+	while (i < ft_strlen(str))
 	{
-		current_char = str[i];
-		if (current_char == '>' || current_char == '<') {
-			redirectCount++;
-			if (redirectCount > 2) {
+		if (str[i] == '>' || str[i] == '<')
+		{
+			redirect_count++;
+			if (redirect_count > 2)
+			{
 				printf("Error: Invalid Redirects\n");
-				return true;
+				return (true);
 			}
-		} else {
-			redirectCount = 0;
 		}
+		else
+			redirect_count = 0;
+		i++;
 	}
-
-	return false;
+	return (false);
 }
 
-bool	has_missing_quotes(const char* str)
+bool	invalid_redirects(const char *str)
 {
-	int len;
-	char current_char;
-	bool insideSingleQuotes = false;
-	bool insideDoubleQuotes = false;
+	size_t	i;
+	bool	inside_single_quotes;
+	bool	inside_double_quotes;
 
-	len = ft_strlen(str);
-	for (int i = 0; i < len; i++) 
+	inside_single_quotes = false;
+	inside_double_quotes = false;
+	i = 0;
+	while (i < ft_strlen(str))
 	{
-		current_char = str[i];
-		if (current_char == '\'' && !insideDoubleQuotes) 
-			insideSingleQuotes = !insideSingleQuotes;
-		else if (current_char == '\"' && !insideSingleQuotes) 
-			insideDoubleQuotes = !insideDoubleQuotes;
+		if (str[i] == '\'' && !inside_double_quotes)
+			inside_single_quotes = !inside_single_quotes;
+		else if (str[i] == '\"' && !inside_single_quotes)
+			inside_double_quotes = !inside_double_quotes;
+		i++;
 	}
-
-	if (insideSingleQuotes || insideDoubleQuotes) {
+	if (inside_single_quotes || inside_double_quotes)
+	{
 		printf("Error: Missing Quotes\n");
-		return true;
+		return (true);
 	}
-
-	return false;
+	return (false);
 }
 
-bool	check_input(const char* str)
+bool	check_input(const char *str)
 {
-	if (hasInvalidRedirects(str) || hasMissingQuotes(str))
-		return true;
-	return false;
+	if (invalid_redirects(str) || missing_quotes(str))
+		return (true);
+	return (false);
 }
