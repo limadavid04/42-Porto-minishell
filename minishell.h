@@ -26,6 +26,8 @@
 # include <stdbool.h>
 # include <string.h>
 
+# define HEREDOC_FILE ".heredoc"
+
 typedef struct TapeInfo
 {
 	t_list	**head;
@@ -35,6 +37,12 @@ typedef struct TapeInfo
 	int		quote;
 	int		inside_word;
 }	t_info;
+
+typedef struct s_env {
+	char			*v_name;
+	char			*v_value;
+	struct s_env	*next;
+}	t_env;
 
 // main.c
 
@@ -73,6 +81,32 @@ t_list	*expand_var(t_info *info);
 
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);
-void	sigint_handler(int sig);
 void	sig_handling(void);
+
+// builtins/b_cd.c
+void	update_oldpwd(t_data *data);
+int		handle_cd(char *path, t_data *data);
+int		go_old_path(char **path, t_data *data);
+void	b_cd(t_data *data, char **cmd)
+
+// builtins/b_echo.c
+void	print_words(char **word, int i, int flag);
+void	b_echo(char **cmd);
+
+// builtins/b_exit.c
+void	two_args(char **cmd, t_state *state);
+void 	b_exit(char **cmd);
+
+// builtins/b_export.c
+
+
+// builtins/b_pwd.c
+
+
+// builtins/b_unset.c
+
+
+// builtins/builtins.c
+void	x_commands(char **cmd, t_data *data);
+int		commands(char **cmd);
 #endif
