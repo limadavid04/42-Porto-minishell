@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 11:12:02 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/20 10:54:34 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list	*state_no_quote(t_info *info)
 	{
 		if (is_whitespace(cmd[*info->i]) || is_special_char(cmd[*info->i]))
 			info->inside_word = 0;
-		if (is_special_char(cmd[*info->i]))
+		else if (is_special_char(cmd[*info->i]))
 			info->node = handle_special(info->head, info->node, info->i, cmd);
 		else
 			info->node->content = add_char(cmd[*info->i], \

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 18:58:41 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/20 11:00:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 
 	i = 0;
 	cmd_size = command_length(cmd_start, pipe_tkn);
-	printf("cmd size = %d\n", cmd_size);
 	cmd = malloc(sizeof(char *) * (cmd_size + 1));
 	while (cmd_start != pipe_tkn)
 	{
@@ -30,9 +29,8 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 		i++;
 		cmd_start = cmd_start->next;
 	}
-	cmd[i] = NULL;
+	cmd[i] = 0; //changed from cmd[i] == NULL;
 	return (cmd);
-
 }
 /*
 FD table after create_pipe
@@ -73,7 +71,9 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	//create pipe
 	create_pipe(status, pipe_tkn);
 	cmd = get_cmd(cmd_start, pipe_tkn);
-
+	// printf("cmd = %s\n", cmd[0]);
+	// printf("HELLO");
+	// printf("cmd[2]%s\n", cmd[2]);
 	execute(status, cmd, default_fd);
 	//restore fd's 0 and 1 back to stdin and stdout for next command to properly execute
 	restore_default_fd(default_fd);
@@ -96,7 +96,6 @@ void	parse_tokens(t_list *token_lst,  t_status *status)
 		{
 			parse_command(cmd_start, cur_tkn, status);
 			cmd_start = cur_tkn->next;
-			// parse_tokens(cmd_start, old_pipe_in);
 		}
 		cur_tkn = cur_tkn->next;
 	}
@@ -104,10 +103,10 @@ void	parse_tokens(t_list *token_lst,  t_status *status)
 	if (cmd_start != NULL)
 		parse_command(cmd_start, cur_tkn, status);
 }
-void	parser_main(t_list **token_lst, t_status *status)
+void	parser_main(t_list **token_lst, t_status *status, char **envp)
 {
-
 	status->old_pipe_in = -1;
+	status->envp = envp;
 	status->process_count = 0; //means that this is the first command;
 	if (*token_lst == NULL)
 		return ;

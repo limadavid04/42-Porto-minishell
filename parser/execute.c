@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 19:12:22 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/20 11:22:16 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ Parent fd's -> child needs to close unused fd's
 void	execute(t_status *status, char **cmd, int default_fd[2])
 {
 	int pid;
-    // char *args[] = {"ls", "-l", NULL};
-	// (void)cmd;
 
 	status->process_count++;
 	pid = fork();
@@ -34,14 +32,13 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 		status->last_pid = pid;
 	else
 	{//child
-		printf("cmd = %s\n", cmd[0]);
-		printf("arg = %s\n", cmd[1]);
 		if (status->old_pipe_in != -1)
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
-		// execve("/bin/cat:/bin/ls", cmd);
-		// execvp(cmd[0], cmd);
+		// printf("cmd = %s\n", cmd[0]);
+		if (execvp(cmd[0], cmd) == -1)
+			write(1, "erro", 4);
 		exit(0);
 	}
 	// return ;

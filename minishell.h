@@ -23,6 +23,7 @@ typedef struct Status
 	int		last_pid;
 	int		process_count;
 	int		old_pipe_in;
+	char	**envp;
 	//env;
 	//export;
 }	t_status;
@@ -69,7 +70,7 @@ t_list	*expand_var(t_info *info);
 ////////////////////////////////////////////----PARSER-----////////////////////////////////////////////
 
 //parser
-void	parser_main(t_list **token_lst,  t_status *status);
+void	parser_main(t_list **token_lst, t_status *status, char **envp);
 void	execute(t_status *status, char **cmd, int default_fd[2]);
 
 //parser_utils
