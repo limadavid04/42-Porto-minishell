@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 11:19:06 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 12:50:45 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 		if (execvp(cmd[0], cmd) == -1)
 		{
 			//dar free as merdas
-			printf("command not found");
+			printf("command not found\n");
 		}
 		exit(0);
 	}

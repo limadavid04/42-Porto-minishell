@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:19:59 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 12:53:14 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	if (*token_lst == NULL)
 		return ;
 	parse_tokens(*token_lst, status);
-	free(status);
 	//close old_pipe_in if it wasn't closed
 }
 	// while (cmd[i])
