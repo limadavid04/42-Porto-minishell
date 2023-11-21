@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/20 09:48:20 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 12:40:45 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-
+	(void)envp;
 	status = malloc(sizeof(t_status));
 	// status->last_pid = 0;
 	while (1)
@@ -102,6 +102,13 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			token_lst = lexer(command);
+			if (!check_for_errors_in_redirect(token_lst))
+			{
+				lst_clear(token_lst);
+				free(token_lst);
+				free(command);
+				continue ;
+			}
 			parser_main(token_lst, status, envp);
 			wait_for_children(status);
 			lst_clear(token_lst);

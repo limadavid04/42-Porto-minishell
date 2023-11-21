@@ -6,11 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/20 10:54:34 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 12:38:34 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int g_exit_status;
 
 t_list	*state_no_quote(t_info *info)
 {
@@ -29,10 +31,13 @@ t_list	*state_no_quote(t_info *info)
 	}
 	else if (info->inside_word == 1)
 	{
-		if (is_whitespace(cmd[*info->i]) || is_special_char(cmd[*info->i]))
+		if (is_whitespace(cmd[*info->i]))
 			info->inside_word = 0;
 		else if (is_special_char(cmd[*info->i]))
+		{
 			info->node = handle_special(info->head, info->node, info->i, cmd);
+			info->inside_word = 0;
+		}
 		else
 			info->node->content = add_char(cmd[*info->i], \
 			(char *)info->node->content);
@@ -109,6 +114,7 @@ void	get_tokens(t_info *info)
 	}
 }
 
+
 t_list	**lexer(char *cmd)
 {
 	t_info	*info;
@@ -123,7 +129,7 @@ t_list	**lexer(char *cmd)
 	info->node = NULL;
 	get_tokens(info);
 	// if (*info->head != NULL)
-	// 	print_linked_list(*info->head);
+	// print_linked_list(*info->head);
 	// lst_clear(info->head);
 	// free(info->head);
 	token_lst = info->head;
