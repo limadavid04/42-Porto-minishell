@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+#include <fcntl.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -110,6 +111,9 @@ void	save_default_fd(int default_fd[2]);
 void	restore_default_fd(int default_fd[2]);
 int		command_length(t_list *cmd_start, t_list *pipe_tkn);
 void	matrix_free(char **matrix);
+
+//parser/redirect_handler.c
+int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn);
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd, int default_fd[2]);

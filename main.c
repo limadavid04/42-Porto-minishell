@@ -59,7 +59,8 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			}
 			parser_main(token_lst, status, envp);
-			wait_for_children(status);
+			if (status->last_pid != 0)
+				wait_for_children(status);
 			lst_clear(token_lst);
 			free(token_lst);
 		}
