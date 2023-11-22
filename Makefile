@@ -46,9 +46,13 @@ clean:
 fclean: clean
 	@echo -n "[$(CYAN)F Cleaning$(RESET)]"
 	@$(MAKE) fclean --no-print-director -C ./libft
+	@$(RM) minishell
 	@$(RM) libft.a
 	@$(RM) $(MAKE)
 	@echo "[$(GREEN)Done!$(RESET)]"
+
+valgrind: re
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline_supression ./minishell
 
 re: fclean all
 
