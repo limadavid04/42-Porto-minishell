@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/22 12:02:47 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/22 14:42:57 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ Parent fd's -> child needs to close unused fd's
 |    4     |  STDOUT       |
 |    5     |  pipe_fd[IN]  |
 */
-void	execute(t_status *status, char **cmd, int default_fd[2])
+void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst)
 {
 	int pid;
-	//check path
-	//check if it is executable in current working dir
-	//check if it exists in any of the PATH Dir
 
 	if (!cmd[0])
 		return ;
@@ -41,13 +38,13 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
-		//handle ctrl /
-		// printf("cmd = %s\n", cmd[0]);
-		//clonar o path antes the passar para o child
 		if (execvp(cmd[0], cmd) == -1)
 		{
-			//dar free as merdas
-			printf("%s: command not found\n", cmd[0]);
+			perror("minishell");
+			lst_clear(token_lst);
+			free(token_lst);
+			matrix_free(cmd);
+			free(status);
 		}
 		exit(0);
 	}

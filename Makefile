@@ -13,7 +13,7 @@ CYAN 	= \033[1;36m
 WHITE 	= \033[1;37m
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -lhistory
 FILES = main lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1\
 parser/parser parser/parser_utils parser/execute parser/redirect_handler
@@ -47,5 +47,7 @@ fclean: clean
 	@$(RM) $(MAKE)
 	@echo "[$(GREEN)Done!$(RESET)]"
 
-re: fclean all
+valgrind: re
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline_supression ./minishell
 
+re: fclean all

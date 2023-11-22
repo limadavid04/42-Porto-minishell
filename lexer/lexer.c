@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 14:22:24 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/22 14:42:59 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,13 +126,7 @@ t_list	**lexer(char *cmd)
 	*info->head = NULL;
 	info->node = NULL;
 	get_tokens(info);
-	// if (*info->head != NULL)
-	// print_linked_list(*info->head);
-	// lst_clear(info->head);
-	// free(info->head);
 	token_lst = info->head;
 	free(info);
 	return (token_lst);
 }
-// ls -la
-// echo "$PATH" '$PATH'

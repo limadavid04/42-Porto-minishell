@@ -75,7 +75,7 @@ int	check_for_errors_in_redirect(t_list	**token_lst);
 
 //parser
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
-void	execute(t_status *status, char **cmd, int default_fd[2]);
+void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst);
 
 //parser_utils
 void	save_default_fd(int default_fd[2]);
