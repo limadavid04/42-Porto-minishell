@@ -15,7 +15,11 @@ WHITE 	= \033[1;37m
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline -lhistory
-FILES = main lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 utils/quotes
+FILES = main \
+lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
+parser/parser parser/parser_utils \
+signal/exec_signal signal/signal utils/quotes \
+execute/executer 
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a

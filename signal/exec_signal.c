@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   exec_signal.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,22 @@
 
 #include "../minishell.h"
 
-int	handle_ctrl_d(char *cmd)
+void	exec_ctrl_c(int signal)
 {
-	if (!cmd)
-	{
-		printf("exit\n");
-		return (1);
-	}
-	return (0);
+	(void)signal;
+	write(1, "\n", 1);
 }
-
 // g_exit_status = EXIT_CTRL_C;
-void	handle_ctrl_c(int sig)
-{
-	(void)sig;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
 
-void	sig_handling(void)
+void	exec_ctrl_bslash(int signal)
 {
-	signal(SIGINT, handle_ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
+	(void)signal;
+	printf("Quit (core dumped)\n");
+}
+// g_exit_status = 131;
+
+void	signals_exec(void)
+{
+	signal(SIGINT, exec_ctrl_c);
+	signal(SIGQUIT, exec_ctrl_bslash);
 }
