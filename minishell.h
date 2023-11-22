@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+#include <fcntl.h>
 # include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 # define IN 0
 # define OUT 1
@@ -87,5 +89,7 @@ int	handle_ctrl_d(char *cmd);
 void sigint_handler();
 void sig_handling();
 bool checkQuotes(const char* str);
+//redirect_handler
+int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn);
 
 #endif

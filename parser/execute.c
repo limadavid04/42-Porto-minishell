@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:50:45 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/22 12:02:47 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 	//check if it is executable in current working dir
 	//check if it exists in any of the PATH Dir
 
+	if (!cmd[0])
+		return ;
 	status->process_count++;
 	pid = fork();
 	if (pid != 0)
@@ -39,12 +41,13 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
+		//handle ctrl /
 		// printf("cmd = %s\n", cmd[0]);
 		//clonar o path antes the passar para o child
 		if (execvp(cmd[0], cmd) == -1)
 		{
 			//dar free as merdas
-			printf("command not found\n");
+			printf("%s: command not found\n", cmd[0]);
 		}
 		exit(0);
 	}

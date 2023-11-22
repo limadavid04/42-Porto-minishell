@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:54:45 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/22 11:51:41 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 //MAKE FILE IS NOT CLEANING THE minishell BINARY!!
 #include "minishell.h"
 
+int g_exit_status;
+
 void	sigint_handler()
 {
+	g_exit_status = 130;
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -68,8 +71,13 @@ int	wait_for_children(t_status *status)
 {
 	int	exit_code;
 
-	waitpid(status->last_pid, &exit_code, 0);
-	status->process_count--;
+	if (waitpid(status->last_pid, &exit_code, 0) != -1)
+	{
+		status->process_count--;
+		if (WIFEXITED(exit_code))
+			g_exit_status = WEXITSTATUS(exit_code);
+		status->last_pid = 0;
+	}
 	while (status->process_count != 0)
 	{
 		wait(0);
@@ -77,6 +85,7 @@ int	wait_for_children(t_status *status)
 	}
 	return (exit_code);
 }
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*command;
@@ -85,9 +94,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	status = malloc(sizeof(t_status));
-	// status->last_pid = 0;
+	status->last_pid = 0;
 	while (1)
 	{
 		sig_handling();
@@ -110,7 +118,9 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			}
 			parser_main(token_lst, status, envp);
-			wait_for_children(status);
+			//only wait for childern when theres no error;
+			if (status->last_pid != 0)
+				wait_for_children(status);
 			lst_clear(token_lst);
 			free(token_lst);
 		}
