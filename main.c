@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:44:15 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:47:11 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,6 @@
 #include "minishell.h"
 
 int g_exit_status;
-
-void	sigint_handler()
-{
-	g_exit_status = 130;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-int	handle_ctrl_d(char *cmd)
-{
-	if (!cmd)
-	{
-		printf("exit\n");
-		return (1);
-	}
-	return (0);
-}
-
-void	sig_handling(void)
-{
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
 
 bool	checkQuotes(const char *str)
 {
