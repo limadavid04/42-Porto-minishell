@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/22 14:32:36 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:01:14 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status, t_list **token_lst)
+void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
@@ -104,41 +104,42 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status, t_lis
 	if (redirect_handler(cmd_start, pipe_tkn))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
-		execute(status, cmd, default_fd, token_lst);
+		execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
 	//restore fd's 0 and 1 back to stdin and stdout for next command to properly execute
 	restore_default_fd(default_fd);
 
 }
-void	parse_tokens(t_list **token_lst,  t_status *status)
+void	parse_tokens(t_status *status)
 {
 	t_list *cur_tkn;
 	t_list *cmd_start;
 
-	cur_tkn = *token_lst;
-	cmd_start = *token_lst;
+	cur_tkn = *status->token_lst;
+	cmd_start = *status->token_lst;
 
 	while (cur_tkn != NULL)
 	{
 		if (ft_strncmp(cur_tkn->content, "|", ft_strlen(cur_tkn->content)) == 0)
 		{
-			parse_command(cmd_start, cur_tkn, status, token_lst);
+			parse_command(cmd_start, cur_tkn, status);
 			cmd_start = cur_tkn->next;
 		}
 		cur_tkn = cur_tkn->next;
 	}
 	//parse last command
 	if (cmd_start != NULL)
-		parse_command(cmd_start, cur_tkn, status, token_lst);
+		parse_command(cmd_start, cur_tkn, status);
 }
 void	parser_main(t_list **token_lst, t_status *status, char **envp)
 {
 	status->old_pipe_in = -1;
 	status->envp = envp;
-	status->process_count = 0; //means that this is the first command;
+	status->process_count = 0;
+	status->token_lst =  token_lst; //means that this is the first command;
 	if (*token_lst == NULL)
 		return ;
-	parse_tokens(token_lst, status);
+	parse_tokens(status);
 	//close old_pipe_in if it wasn't closed
 }

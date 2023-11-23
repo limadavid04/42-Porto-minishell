@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/22 14:36:14 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:01:36 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			}
 			parser_main(token_lst, status, envp);
-			//only wait for childern when theres no error;
 			if (status->last_pid != 0)
 				wait_for_children(status);
 			lst_clear(token_lst);

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/22 14:42:57 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:01:36 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Parent fd's -> child needs to close unused fd's
 |    4     |  STDOUT       |
 |    5     |  pipe_fd[IN]  |
 */
-void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst)
+void	execute(t_status *status, char **cmd, int default_fd[2])
 {
 	int pid;
 
@@ -33,7 +33,7 @@ void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst
 	if (pid != 0)
 		status->last_pid = pid;
 	else
-	{//child
+	{
 		if (status->old_pipe_in != -1)
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
@@ -41,8 +41,8 @@ void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst
 		if (execvp(cmd[0], cmd) == -1)
 		{
 			perror("minishell");
-			lst_clear(token_lst);
-			free(token_lst);
+			lst_clear(status->token_lst);
+			free(status->token_lst);
 			matrix_free(cmd);
 			free(status);
 		}

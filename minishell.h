@@ -26,6 +26,7 @@ typedef struct Status
 	int		process_count;
 	int		old_pipe_in;
 	char	**envp;
+	t_list	**token_lst;
 	//env;
 	//export;
 }	t_status;
@@ -75,7 +76,7 @@ int	check_for_errors_in_redirect(t_list	**token_lst);
 
 //parser
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
-void	execute(t_status *status, char **cmd, int default_fd[2], t_list **token_lst);
+void	execute(t_status *status, char **cmd, int default_fd[2]);
 
 //parser_utils
 void	save_default_fd(int default_fd[2]);
