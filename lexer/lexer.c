@@ -6,11 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 12:24:18 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 14:22:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	g_exit_status;
 
 t_list	*state_no_quote(t_info *info)
 {
@@ -29,10 +31,13 @@ t_list	*state_no_quote(t_info *info)
 	}
 	else if (info->inside_word == 1)
 	{
-		if (is_whitespace(cmd[*info->i]) || is_special_char(cmd[*info->i]))
+		if (is_whitespace(cmd[*info->i]))
 			info->inside_word = 0;
-		if (is_special_char(cmd[*info->i]))
+		else if (is_special_char(cmd[*info->i]))
+		{
 			info->node = handle_special(info->head, info->node, info->i, cmd);
+			info->inside_word = 0;
+		}
 		else
 			info->node->content = add_char(cmd[*info->i], \
 			(char *)info->node->content);
@@ -109,9 +114,10 @@ void	get_tokens(t_info *info)
 	}
 }
 
-void	lexer(char *cmd)
+t_list	**lexer(char *cmd)
 {
 	t_info	*info;
+	t_list	**token_lst;
 
 	info = malloc(sizeof(t_info));
 	info->cmd = cmd;
@@ -121,11 +127,7 @@ void	lexer(char *cmd)
 	*info->head = NULL;
 	info->node = NULL;
 	get_tokens(info);
-	if (*info->head != NULL)
-		print_linked_list(*info->head);
-	lst_clear(info->head);
-	free(info->head);
+	token_lst = info->head;
 	free(info);
+	return (token_lst);
 }
-// ls -la
-// echo "$PATH" '$PATH'

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 12:21:15 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/21 12:13:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,30 @@ t_list	*expand_var(t_info *info)
 	else
 		info->node = create_space_for_expansion(info, var);
 	return (info->node);
+}
+
+int	check_for_errors_in_redirect(t_list	**token_lst)
+{
+	t_list	*cur;
+
+	cur = *token_lst;
+	while (cur != NULL)
+	{
+		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
+		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
+		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)))
+		{
+			if (cur->next == NULL \
+			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, ">", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, ">>", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
+			{
+				printf("Syntax Error\n");
+				return (0);
+			}
+		}
+		cur = cur->next;
+	}
+	return (1);
 }
