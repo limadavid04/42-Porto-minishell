@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:01:14 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	is_redir(t_list *cmd)
 	}
 	return (0);
 }
+
 int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
 {
 	int i;
@@ -35,6 +36,7 @@ int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
 	}
 	return (i);
 }
+
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
 	char **cmd;
@@ -65,39 +67,30 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	cmd[i] = 0; //changed from cmd[i] == NULL;
 	return (cmd);
 }
-/*
-FD table after create_pipe
 
-|    fd    |    file       |
-|__________|_______________|
-|    0     |   old_pipe_in |
-|    1     |   pipe_fd[OUT]|
-|    2     |  STDERR       |
-|    3     |  STDIN        |
-|    4     |  STDOUT       |
-|    5     |  pipe_fd[IN]  |
-*/
+
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
+
 	if (status->old_pipe_in != -1)
 	{
 		dup2(status->old_pipe_in, IN);
 		close(status->old_pipe_in);
 	}
-	if (pipe_tkn == NULL) //if there are no pipes left we just want to close the previous pipe;
+	if (pipe_tkn == NULL)
 		return ;
 	pipe(pipe_fd);
 	dup2(pipe_fd[OUT], OUT);
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
+
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
-	// int i = 0;
-	//save the STDIN and STDOUT before overwriting fd 0 and 1;
+
 	save_default_fd(default_fd);
 	//create pipe
 	create_pipe(status, pipe_tkn);
@@ -107,9 +100,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 		execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
-	//restore fd's 0 and 1 back to stdin and stdout for next command to properly execute
 	restore_default_fd(default_fd);
-
 }
 void	parse_tokens(t_status *status)
 {
@@ -128,10 +119,10 @@ void	parse_tokens(t_status *status)
 		}
 		cur_tkn = cur_tkn->next;
 	}
-	//parse last command
 	if (cmd_start != NULL)
 		parse_command(cmd_start, cur_tkn, status);
 }
+
 void	parser_main(t_list **token_lst, t_status *status, char **envp)
 {
 	status->old_pipe_in = -1;

@@ -15,8 +15,11 @@ WHITE 	= \033[1;37m
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -lhistory
-FILES = main lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1\
-parser/parser parser/parser_utils parser/execute parser/redirect_handler
+FILES = main \
+lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
+parser/parser parser/parser_utils \
+signal/exec_signal signal/signal utils/quotes \
+execute/executer parser/redirect_handler
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a
@@ -43,6 +46,7 @@ clean:
 fclean: clean
 	@echo -n "[$(CYAN)F Cleaning$(RESET)]"
 	@$(MAKE) fclean --no-print-director -C ./libft
+	@$(RM) minishell
 	@$(RM) libft.a
 	@$(RM) $(MAKE)
 	@echo "[$(GREEN)Done!$(RESET)]"

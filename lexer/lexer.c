@@ -12,6 +12,8 @@
 
 #include "../minishell.h"
 
+int	g_exit_status;
+
 t_list	*state_no_quote(t_info *info)
 {
 	char	*cmd;
