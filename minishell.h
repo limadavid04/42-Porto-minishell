@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:21:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	signals_exec(void);
 
 // parser/parser.c
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
-void	parse_tokens(t_list *token_lst, t_status *status);
+// void	parse_tokens(t_list *token_lst, t_status *status);
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);

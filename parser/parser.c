@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:21:12 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,12 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 			}
 		}
 		cmd[i] = ft_strdup(cmd_start->content);
-		// printf("cmd = %s\n", cmd[i]);
 		i++;
 		cmd_start = cmd_start->next;
 	}
-	cmd[i] = 0; //changed from cmd[i] == NULL;
+	cmd[i] = 0;
 	return (cmd);
 }
-
 
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
@@ -92,7 +90,6 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	int		default_fd[2];
 
 	save_default_fd(default_fd);
-	//create pipe
 	create_pipe(status, pipe_tkn);
 	if (redirect_handler(cmd_start, pipe_tkn))
 	{
@@ -128,7 +125,7 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	status->old_pipe_in = -1;
 	status->envp = envp;
 	status->process_count = 0;
-	status->token_lst =  token_lst; //means that this is the first command;
+	status->token_lst =  token_lst;
 	if (*token_lst == NULL)
 		return ;
 	parse_tokens(status);
