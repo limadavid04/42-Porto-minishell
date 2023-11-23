@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/16 10:41:50 by psousa           ###   ########.fr       */
+/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ typedef struct Status
 	int		process_count;
 	int		old_pipe_in;
 	char	**envp;
+	t_list	**token_lst;
+	//env;
+	//export;
 }	t_status;
 //env;
 //export;

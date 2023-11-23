@@ -9,7 +9,7 @@ int	redirect_input(t_list	*redir)
 	fd = open(file->content, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("Error redirecting input");
+		perror("minishell");
 		return (0);
 	}
 	dup2(fd, IN);
@@ -28,7 +28,7 @@ int	redirect_output(t_list	*redir, int	append)
 		fd = open(file->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("Error redirecting output");
+		perror("minishell");
 		return (0);
 	}
 	dup2(fd, OUT);

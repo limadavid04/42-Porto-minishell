@@ -13,7 +13,7 @@ CYAN 	= \033[1;36m
 WHITE 	= \033[1;37m
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -lhistory
 FILES = main \
 lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
@@ -55,4 +55,3 @@ valgrind: re
 	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline_supression ./minishell
 
 re: fclean all
-

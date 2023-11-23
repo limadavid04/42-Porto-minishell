@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:50:45 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	execute(t_status *status, char **cmd, int default_fd[2])
 {
-	int	pid;
+	int pid;
 
 	if (!cmd[0])
 		return ;
@@ -30,7 +30,13 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
 		if (execvp(cmd[0], cmd) == -1)
-			printf("%s: command not found\n", cmd[0]);
+		{
+			perror("minishell");
+			lst_clear(status->token_lst);
+			free(status->token_lst);
+			matrix_free(cmd);
+			free(status);
+		}
 		exit(0);
 	}
 }

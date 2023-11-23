@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:53:14 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,14 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	}
 	restore_default_fd(default_fd);
 }
-
-void	parse_tokens(t_list *token_lst,  t_status *status)
+void	parse_tokens(t_status *status)
 {
 	t_list *cur_tkn;
 	t_list *cmd_start;
 
-	cur_tkn = token_lst;
-	cmd_start = token_lst;
+	cur_tkn = *status->token_lst;
+	cmd_start = *status->token_lst;
+
 	while (cur_tkn != NULL)
 	{
 		if (ft_strncmp(cur_tkn->content, "|", ft_strlen(cur_tkn->content)) == 0)
@@ -128,7 +128,9 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	status->old_pipe_in = -1;
 	status->envp = envp;
 	status->process_count = 0;
+	status->token_lst =  token_lst; //means that this is the first command;
 	if (*token_lst == NULL)
 		return ;
-	parse_tokens(*token_lst, status);
+	parse_tokens(status);
+	//close old_pipe_in if it wasn't closed
 }
