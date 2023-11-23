@@ -6,18 +6,74 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:36:51 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/23 11:44:15 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "minishell.h"
 
+int g_exit_status;
+
+void	sigint_handler()
+{
+	g_exit_status = 130;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+int	handle_ctrl_d(char *cmd)
+{
+	if (!cmd)
+	{
+		printf("exit\n");
+		return (1);
+	}
+	return (0);
+}
+
+void	sig_handling(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+bool	checkQuotes(const char *str)
+{
+	int len = strlen(str);
+	int doubleQuoteCount = 0;
+	int singleQuoteCount = 0;
+	bool insideDoubleQuotes = false;
+	int i = 0;
+
+	while (i < len)
+	{
+		if (str[i] == '"')
+		{
+			doubleQuoteCount++;
+			insideDoubleQuotes = !insideDoubleQuotes;
+		}
+		else if (str[i] == '\'' && !insideDoubleQuotes)
+		{
+			singleQuoteCount++;
+		}
+		i++;
+	}
+	return (doubleQuoteCount % 2 == 0 && singleQuoteCount % 2 == 0);
+}
 int	wait_for_children(t_status *status)
 {
 	int	exit_code;
 
-	waitpid(status->last_pid, &exit_code, 0);
-	status->process_count--;
+	if (waitpid(status->last_pid, &exit_code, 0) != -1)
+	{
+		status->process_count--;
+		if (WIFEXITED(exit_code))
+			g_exit_status = WEXITSTATUS(exit_code);
+		status->last_pid = 0;
+	}
 	while (status->process_count != 0)
 	{
 		wait(0);
@@ -34,13 +90,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	status = malloc(sizeof(t_status));
-	if (argc > 1 && argv)
-	{
-		printf("Error: Wrong arguments!");
-		return (EXIT_FAILURE);
-	}
+	status->last_pid = 0;
 	while (1)
 	{
 		sig_handling();
@@ -48,7 +99,11 @@ int	main(int argc, char **argv, char **envp)
 		if (handle_ctrl_d(command))
 			break ;
 		add_history(command);
-		if (check_input(command) == 0)
+		if (!checkQuotes(command))
+		{
+			printf("Error: Missing Quotes\n");
+		}
+		else
 		{
 			token_lst = lexer(command);
 			if (!check_for_errors_in_redirect(token_lst))
@@ -67,5 +122,5 @@ int	main(int argc, char **argv, char **envp)
 		free(command);
 	}
 	free(status);
-	return (EXIT_SUCCESS);
+	return (0);
 }
