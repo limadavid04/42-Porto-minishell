@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:21:12 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/27 12:37:33 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	is_redir(t_list *cmd)
 {
 	if (!ft_strncmp(cmd->content, "<", ft_strlen(cmd->content))\
 		|| !ft_strncmp(cmd->content, ">", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">>", ft_strlen(cmd->content)))
+		|| !ft_strncmp(cmd->content, ">>", ft_strlen(cmd->content))\
+		|| !ft_strncmp(cmd->content, "<<", ft_strlen(cmd->content)))
+
 	{
 		return (1);
 	}
@@ -90,8 +92,9 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	int		default_fd[2];
 
 	save_default_fd(default_fd);
+	status->default_fd = default_fd;
 	create_pipe(status, pipe_tkn);
-	if (redirect_handler(cmd_start, pipe_tkn))
+	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
 		execute(status, cmd, default_fd);

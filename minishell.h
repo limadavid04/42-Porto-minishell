@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/23 11:21:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/27 12:38:19 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ typedef struct Status
 	int		old_pipe_in;
 	char	**envp;
 	t_list	**token_lst;
+	int		*default_fd;
+	char	**cmd;
 	//env;
 	//export;
 }	t_status;
@@ -116,7 +118,7 @@ int		command_length(t_list *cmd_start, t_list *pipe_tkn);
 void	matrix_free(char **matrix);
 
 //parser/redirect_handler.c
-int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn);
+int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd, int default_fd[2]);

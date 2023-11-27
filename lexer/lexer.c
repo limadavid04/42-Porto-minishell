@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:49:18 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/27 13:35:57 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void	get_tokens(t_info *info)
 			info->quote = 1;
 		else if (info->quote == 0 && is_double_quote(cmd[i]))
 			info->quote = 2;
-		else if (info->quote != 1 && is_dollar(cmd[i]))
-			info->node = expand_var(info);
+		// else if (info->quote != 1 && is_dollar(cmd[i]))
+		// 	info->node = expand_var(info);
 		else if (info->quote == 0 && !is_double_quote(cmd[i]) \
 		&& !is_single_quote(cmd[i]))
 			info->node = state_no_quote(info);
@@ -126,6 +126,7 @@ t_list	**lexer(char *cmd)
 	info->node = NULL;
 	get_tokens(info);
 	token_lst = info->head;
+	// print_linked_list(*token_lst);
 	free(info);
 	return (token_lst);
 }
