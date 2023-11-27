@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:13:04 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/27 17:34:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,15 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 	{
 		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
 		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)))
+		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content))
+		|| !ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
+
 		{
 			if (cur->next == NULL \
 			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, ">", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, ">>", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
 			{
 				printf("Syntax Error\n");
