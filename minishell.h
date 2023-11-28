@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/27 12:38:19 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 12:56:57 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ int		is_double_quote(char c);
 // lexar/lexar_utils2.c
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
-t_list	*create_space_for_expansion(t_info *info, char *var);
-t_list	*expand_var(t_info *info);
 int		check_for_errors_in_redirect(t_list	**token_lst);
 
 // signal/signal.c
@@ -116,9 +114,17 @@ void	save_default_fd(int default_fd[2]);
 void	restore_default_fd(int default_fd[2]);
 int		command_length(t_list *cmd_start, t_list *pipe_tkn);
 void	matrix_free(char **matrix);
+int		count_redir(t_list *cmd_start, t_list *pipe_tkn);
+
+// parser/parser_utils1.c
+int		is_redir(t_list *cmd);
+
+// parser/parser_utils2.c
+char	**strip_tokens(char **cmd);
+char	*expand_var(char *new_token, char *token, int *i);
 
 //parser/redirect_handler.c
-int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd, int default_fd[2]);

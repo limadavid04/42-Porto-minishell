@@ -6,38 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/27 12:37:33 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 13:05:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	is_redir(t_list *cmd)
-{
-	if (!ft_strncmp(cmd->content, "<", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">>", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, "<<", ft_strlen(cmd->content)))
-
-	{
-		return (1);
-	}
-	return (0);
-}
-
-int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
-{
-	int i;
-
-	i = 0;
-	while (cmd_start != pipe_tkn)
-	{
-		if (is_redir(cmd_start))
-			i++;
-		cmd_start = cmd_start->next;
-	}
-	return (i);
-}
 
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
@@ -97,6 +70,13 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
+		cmd = strip_tokens(cmd);
+		// int i = 0;
+		// while (cmd[i])
+		// {
+		// 	printf("cmd[%d] = %s\n", i, cmd[i]);
+		// 	i++;
+		// }
 		execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
@@ -128,7 +108,7 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	status->old_pipe_in = -1;
 	status->envp = envp;
 	status->process_count = 0;
-	status->token_lst =  token_lst;
+	status->token_lst = token_lst;
 	if (*token_lst == NULL)
 		return ;
 	parse_tokens(status);
