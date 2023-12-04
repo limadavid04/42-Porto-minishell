@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_signal.c                                      :+:      :+:    :+:   */
+/*   signal_heredoc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 10:41:31 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/29 12:18:48 by dlima            ###   ########.fr       */
+/*   Created: 2023/11/29 12:19:10 by dlima             #+#    #+#             */
+/*   Updated: 2023/11/29 13:34:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_ctrl_c(int signal)
+void	exec_ctrl_c(int signal, t_status *status)
 {
+	//static *tmp = status;
+	//if (signal = -1)
+	//tmp = status
+	//else
+	//free a tudo
 	(void)signal;
 	write(1, "\n", 1);
 }
@@ -26,6 +31,7 @@ void	exec_ctrl_bslash(int signal)
 // g_exit_status = 131;
 void	signals_exec(void)
 {
+
 	signal(SIGINT, exec_ctrl_c);
 	signal(SIGQUIT, exec_ctrl_bslash);
 }

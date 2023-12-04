@@ -45,7 +45,7 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 	//signals need to change exit status
 	//make special signals for heredoc that print >
 	pid = fork();
-	signals_exec();
+	// signals_si();
 	if (pid == 0)
 	{
 		fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);

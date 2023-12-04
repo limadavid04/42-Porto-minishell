@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:47:11 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/29 11:46:52 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,18 @@ int	main(int argc, char **argv, char **envp)
 		if (!checkQuotes(command))
 		{
 			printf("Error: Missing Quotes\n");
+			g_exit_status = 2;
 		}
 		else
 		{
 			token_lst = lexer(command);
 			if (!check_for_errors_in_redirect(token_lst))
 			{
+
 				lst_clear(token_lst);
 				free(token_lst);
 				free(command);
+				g_exit_status = 2;
 				continue ;
 			}
 			parser_main(token_lst, status, envp);

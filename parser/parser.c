@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/28 13:05:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 11:31:29 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	cmd[i] = 0;
 	return (cmd);
 }
-
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
@@ -58,7 +57,6 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
-
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
@@ -71,13 +69,13 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
 		cmd = strip_tokens(cmd);
+		execute(status, cmd, default_fd);
 		// int i = 0;
 		// while (cmd[i])
 		// {
 		// 	printf("cmd[%d] = %s\n", i, cmd[i]);
 		// 	i++;
 		// }
-		execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);
