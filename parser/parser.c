@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/04 11:31:29 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 16:38:20 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	save_default_fd(default_fd);
 	status->default_fd = default_fd;
 	create_pipe(status, pipe_tkn);
+	//strip file_name tokens before redirect handler and strip heredoc delim of quotes as well but dont expand
 	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);

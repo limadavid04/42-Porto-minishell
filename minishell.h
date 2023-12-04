@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/28 12:56:57 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 17:15:35 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,20 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define HEREDOC_FILE ".heredoc"
 # define EXIT_CTRL_C 130
+#define SUCCESS 0
+#define GENERAL_ERROR 1
+#define SYNTAX_ERROR 2
+#define CMD_CANNOT_EXECUTE 126
+#define CMD_NOT_FOUND 127
+#define INVALID_ARGUMENT 128
 # define IN 0
 # define OUT 1
+
+extern int g_exit_status;
 
 typedef struct Status
 {
@@ -65,7 +74,8 @@ int		wait_for_children(t_status *status);
 bool	missing_quotes(const char *str);
 bool	invalid_redirects(const char *str);
 bool	check_input(const char *str);
-
+// utils/utils.c
+void print_error(int error_code, char *error_msg, char *file);
 // lexar/lexar.c
 t_list	*state_no_quote(t_info *info);
 t_list	*state_double_quote(t_info *info);
@@ -105,7 +115,7 @@ void	signals_exec(void);
 // parser/parser.c
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
 // void	parse_tokens(t_list *token_lst, t_status *status);
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+void	parse_CMD(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
 
@@ -122,6 +132,8 @@ int		is_redir(t_list *cmd);
 // parser/parser_utils2.c
 char	**strip_tokens(char **cmd);
 char	*expand_var(char *new_token, char *token, int *i);
+char	*process_tokens(char *token, int expand);
+
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);

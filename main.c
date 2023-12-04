@@ -6,14 +6,14 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/29 11:46:52 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 15:05:20 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-int g_exit_status;
+int	g_exit_status;
 
 bool	checkQuotes(const char *str)
 {
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(command);
 		if (!checkQuotes(command))
 		{
-			printf("Error: Missing Quotes\n");
+			print_error(SYNTAX_ERROR, "Missing Quotes" ,"minishell");
 			g_exit_status = 2;
 		}
 		else
@@ -88,7 +88,7 @@ int	main(int argc, char **argv, char **envp)
 				lst_clear(token_lst);
 				free(token_lst);
 				free(command);
-				g_exit_status = 2;
+				// g_exit_status = 2;
 				continue ;
 			}
 			parser_main(token_lst, status, envp);

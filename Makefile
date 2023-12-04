@@ -20,7 +20,7 @@ lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
 parser/parser parser/parser_utils \
 signal/exec_signal signal/signal utils/quotes \
 execute/executer parser/redirect_handler parser/parser_utils1 \
-parser/parser_utils2
+parser/parser_utils2 utils/utils
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a

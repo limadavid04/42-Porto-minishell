@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/04 12:36:17 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 15:01:15 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ int	get_absolute_path(char **cmd, t_status *status)
 		return (1);
 	new_command = search_for_file(*cmd, status);
 	if (new_command == NULL)
+	{
+		print_error(CMD_NOT_FOUND, "Command not found", *cmd);
 		return (0);
+	}
 	else
 	{
 		free(*cmd);
@@ -117,7 +120,7 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 		close(default_fd[OUT]);
 		if (execve(cmd[0], cmd, status->envp) == -1)
 		{
-			perror("minishell");
+			print_error(errno, strerror(errno), cmd[0]);
 			lst_clear(status->token_lst);
 			free(status->token_lst);
 			matrix_free(cmd);
