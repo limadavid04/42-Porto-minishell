@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 11:54:00 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/16 12:36:32 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 11:24:05 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,16 @@ void	matrix_free(char **matrix)
 	}
 	free(matrix);
 }
+int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
+{
+	int i;
+
+	i = 0;
+	while (cmd_start != pipe_tkn)
+	{
+		if (is_redir(cmd_start))
+			i++;
+		cmd_start = cmd_start->next;
+	}
+	return (i);
+}	

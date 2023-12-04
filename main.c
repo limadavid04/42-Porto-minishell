@@ -12,9 +12,12 @@
 
 #include "minishell.h"
 
+int g_exit_status;
+
 int	wait_for_children(t_status *status)
 {
 	int	exit_code;
+
 
 	waitpid(status->last_pid, &exit_code, 0);
 	status->process_count--;
@@ -34,13 +37,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	status = malloc(sizeof(t_status));
-	if (argc > 1 && argv)
-	{
-		printf("Error: Wrong arguments!");
-		return (EXIT_FAILURE);
-	}
+	status->last_pid = 0;
 	while (1)
 	{
 		sig_handling();
@@ -66,5 +64,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(command);
 	}
-	return (EXIT_SUCCESS);
+	free(status);
+	return (g_exit_status);
 }

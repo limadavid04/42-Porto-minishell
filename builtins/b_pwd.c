@@ -6,6 +6,19 @@
 /*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:26:27 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/22 12:26:30 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/04 11:36:17 by psousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../minishell.h"
+
+extern int	g_exit_status;
+
+void	b_pwd(void)
+{
+	char	pwd[256];
+
+	getcwd(pwd, sizeof(pwd));
+	printf("%s\n", pwd);
+	g_exit_status = 0;
+}

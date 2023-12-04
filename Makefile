@@ -16,10 +16,14 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline -lhistory
 FILES = main \
-lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
-parser/parser parser/parser_utils \
-signal/exec_signal signal/signal utils/quotes \
-execute/executer parser/redirect_handler
+builtins/b_cd builtins/b_echo builtins/b_exit builtins/b_export builtins/b_export1 \
+builtins/b_export2 builtins/b_pwd builtins/b_unset builtins/builtin \
+enviroment/enviro enviroment/enviro2 \
+execute/executer \
+lexer/lexer lexer/lexer_utils lexer/lexer_utils1 lexer/lexer_utils2 \
+parser/parser parser/parser_utils parser/parser_utils1 parser/parser_utils2 parser/redirect_handler \
+signal/exec_signal signal/signal \
+utils/quotes utils/utils
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a

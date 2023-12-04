@@ -6,36 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:53:14 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 11:31:29 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	is_redir(t_list *cmd)
-{
-	if (!ft_strncmp(cmd->content, "<", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">>", ft_strlen(cmd->content)))
-	{
-		return (1);
-	}
-	return (0);
-}
-
-int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
-{
-	int i;
-
-	i = 0;
-	while (cmd_start != pipe_tkn)
-	{
-		if (is_redir(cmd_start))
-			i++;
-		cmd_start = cmd_start->next;
-	}
-	return (i);
-}
 
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
@@ -60,15 +35,12 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 			}
 		}
 		cmd[i] = ft_strdup(cmd_start->content);
-		// printf("cmd = %s\n", cmd[i]);
 		i++;
 		cmd_start = cmd_start->next;
 	}
-	cmd[i] = 0; //changed from cmd[i] == NULL;
+	cmd[i] = 0;
 	return (cmd);
 }
-
-
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
@@ -85,31 +57,37 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
-
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
 
 	save_default_fd(default_fd);
-	//create pipe
+	status->default_fd = default_fd;
 	create_pipe(status, pipe_tkn);
-	if (redirect_handler(cmd_start, pipe_tkn))
+	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
+		cmd = strip_tokens(cmd);
 		execute(status, cmd, default_fd);
+		// int i = 0;
+		// while (cmd[i])
+		// {
+		// 	printf("cmd[%d] = %s\n", i, cmd[i]);
+		// 	i++;
+		// }
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);
 }
-
-void	parse_tokens(t_list *token_lst,  t_status *status)
+void	parse_tokens(t_status *status)
 {
 	t_list *cur_tkn;
 	t_list *cmd_start;
 
-	cur_tkn = token_lst;
-	cmd_start = token_lst;
+	cur_tkn = *status->token_lst;
+	cmd_start = *status->token_lst;
+
 	while (cur_tkn != NULL)
 	{
 		if (ft_strncmp(cur_tkn->content, "|", ft_strlen(cur_tkn->content)) == 0)
@@ -128,7 +106,9 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	status->old_pipe_in = -1;
 	status->envp = envp;
 	status->process_count = 0;
+	status->token_lst = token_lst;
 	if (*token_lst == NULL)
 		return ;
-	parse_tokens(*token_lst, status);
+	parse_tokens(status);
+	//close old_pipe_in if it wasn't closed
 }
