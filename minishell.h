@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/04 17:15:35 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 12:45:34 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
 # include <stdio.h>
 # include <stdbool.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 
 # define HEREDOC_FILE ".heredoc"
@@ -115,7 +117,7 @@ void	signals_exec(void);
 // parser/parser.c
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
 // void	parse_tokens(t_list *token_lst, t_status *status);
-void	parse_CMD(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+// void	parse_CMD(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
 
@@ -140,6 +142,16 @@ int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd, int default_fd[2]);
+
+// execute/path.c
+int		validate_cmd(char **cmd, t_status *status);
+
+// execute/path_utils.c
+char	*get_path(char **envp);
+int		is_executable_file(char *cmd);
+int		is_directory(char *cmd);
+int		is_valid_relative_path(char *cmd);
+
 
 // builtins/b_cd.c
 /*

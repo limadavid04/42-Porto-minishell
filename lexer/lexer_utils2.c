@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/04 15:08:26 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 10:24:06 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
 			{
-				print_error(SYNTAX_ERROR, "Syntax error", "minishell");
+				print_error(SYNTAX_ERROR, "syntax error", "minishell");
 				return (0);
 			}
 		}
