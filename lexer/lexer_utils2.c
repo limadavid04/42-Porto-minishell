@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 10:24:06 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 14:18:48 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,35 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 			}
 		}
 		cur = cur->next;
+	}
+	return (1);
+}
+int	check_for_pipe_errors(t_list **token_lst)
+{
+	t_list	*cur;
+
+	cur = *token_lst;
+	if (cur == NULL)
+		return (0);
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
+	}
+	while (cur->next != NULL)
+	{
+		if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+			if (!ft_strncmp(cur->next->content, "|", ft_strlen(cur->next->content)))
+			{
+				print_error(SYNTAX_ERROR, "syntax error near unexpected token `||'", "minishell");
+				return (0);
+			}
+		cur = cur->next;
+	}
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
 	}
 	return (1);
 }

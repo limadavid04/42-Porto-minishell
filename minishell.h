@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/05 12:45:34 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 14:09:59 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int		is_double_quote(char c);
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
 int		check_for_errors_in_redirect(t_list	**token_lst);
+int		check_for_pipe_errors(t_list **token_lst);
 
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);

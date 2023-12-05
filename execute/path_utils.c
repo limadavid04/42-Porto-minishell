@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:33:32 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 12:12:05 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 13:54:08 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,4 @@ int is_directory(char *cmd)
     stat(cmd, &path_stat);
     return S_ISDIR(path_stat.st_mode);
 }
-int is_valid_relative_path(char *cmd)
-{
-	if (access(cmd, F_OK) == 0)
-	{
-		if (is_directory(cmd))
-		{
-			print_error(CMD_CANNOT_EXECUTE, "Is a directory", cmd);
-			return (0);
-		}
-		else if (!is_executable_file(cmd))
-		{
-			print_error(CMD_CANNOT_EXECUTE, "permission denied", cmd);
-			return (0);
-		}
-		else
-			return (1);
-	}
-	print_error(CMD_NOT_FOUND, "No such file or directory", cmd);
-	return (0);
-}
+

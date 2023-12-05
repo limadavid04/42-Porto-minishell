@@ -6,12 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 12:03:21 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 13:59:44 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 char *get_file_full_path(char *cmd, char *dir)
 {
@@ -54,7 +53,26 @@ char	*search_for_file(char *cmd, t_status *status)
 	dir = ft_split(path, ':');
 	return (find_exec_bin(dir, cmd));
 }
-
+int is_valid_relative_path(char *cmd)
+{
+	if (access(cmd, F_OK) == 0)
+	{
+		if (is_directory(cmd))
+		{
+			print_error(CMD_CANNOT_EXECUTE, "Is a directory", cmd);
+			return (0);
+		}
+		else if (!is_executable_file(cmd))
+		{
+			print_error(CMD_CANNOT_EXECUTE, "permission denied", cmd);
+			return (0);
+		}
+		else
+			return (1);
+	}
+	print_error(CMD_NOT_FOUND, "No such file or directory", cmd);
+	return (0);
+}
 int	validate_cmd(char **cmd, t_status *status)
 {
 	char *executable;
@@ -65,17 +83,10 @@ int	validate_cmd(char **cmd, t_status *status)
 		return (0);
 	}
 	if (ft_strchr(*cmd, '/') != 0)
-	{
-		if (!is_valid_relative_path(*cmd))
-			return (0);
-		return (1);
-	}
+		return(is_valid_relative_path(*cmd));
 	executable = search_for_file(*cmd, status);
 	if (executable == NULL)
-	{
 		print_error(CMD_NOT_FOUND, "Command not found", *cmd);
-		return (0);
-	}
 	else
 	{
 		free(*cmd);
