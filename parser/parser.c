@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 10:21:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/06 11:51:16 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	{
 		while (is_redir(cmd_start))
 		{
-			cmd_start = cmd_start->next; //cmd_start->next->next
-			cmd_start = cmd_start->next;
+			cmd_start = cmd_start->next->next;
 			if (cmd_start == NULL || cmd_start == pipe_tkn)
 			{
 				cmd[i] = 0;
@@ -70,12 +69,6 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 		cmd = get_cmd(cmd_start, pipe_tkn);
 		cmd = strip_tokens(cmd);
 		execute(status, cmd, default_fd);
-		// int i = 0;
-		// while (cmd[i])
-		// {
-		// 	printf("cmd[%d] = %s\n", i, cmd[i]);
-		// 	i++;
-		// }
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);
@@ -101,14 +94,9 @@ void	parse_tokens(t_status *status)
 		parse_command(cmd_start, cur_tkn, status);
 }
 
-void	parser_main(t_list **token_lst, t_status *status, char **envp)
+void	parser_main(t_status *status)
 {
-	status->old_pipe_in = -1;
-	status->envp = envp;
-	status->process_count = 0;
-	status->token_lst = token_lst;
-	if (*token_lst == NULL)
+	if (*status->token_lst == NULL)
 		return ;
 	parse_tokens(status);
-	//close old_pipe_in if it wasn't closed
 }

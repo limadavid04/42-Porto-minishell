@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 14:14:57 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/06 11:49:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,12 @@ int	wait_for_children(t_status *status)
 	}
 	return (exit_code);
 }
-
+void	init_status(t_status *status, t_list **token_lst)
+{
+	status->old_pipe_in = -1;
+	status->process_count = 0;
+	status->token_lst = token_lst;
+}
 int	main(int argc, char **argv, char **envp)
 {
 	char		*command;
@@ -66,6 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	status = malloc(sizeof(t_status));
+	status->envp = envp;
 	status->last_pid = 0;
 	while (1)
 	{
@@ -75,27 +81,21 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		add_history(command);
 		if (!checkQuotes(command))
-		{
 			print_error(SYNTAX_ERROR, "Missing Quotes" ,"minishell");
-			g_exit_status = 2;
-		}
 		else
 		{
 			token_lst = lexer(command);
-			if (!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst))
+			init_status(status, token_lst);
+			if (!(!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst)))
 			{
-				lst_clear(token_lst);
-				free(token_lst);
-				free(command);
-				continue ;
+				parser_main(status);
+				if (status->last_pid != 0)
+					wait_for_children(status);
 			}
-			parser_main(token_lst, status, envp);
-			if (status->last_pid != 0)
-				wait_for_children(status);
 			lst_clear(token_lst);
 			free(token_lst);
 		}
-		free(command);
+		// free(command);
 	}
 	free(status);
 	return (0);
