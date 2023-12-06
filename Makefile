@@ -19,11 +19,11 @@ FILES = main \
 builtins/b_cd builtins/b_echo builtins/b_exit builtins/b_export builtins/b_export1 \
 builtins/b_export2 builtins/b_pwd builtins/b_unset builtins/builtin \
 enviroment/enviro enviroment/enviro2 \
-execute/executer \
+execute/executer execute/path execute/path_utils \
 lexer/lexer lexer/lexer_utils lexer/lexer_utils1 lexer/lexer_utils2 \
 parser/parser parser/parser_utils parser/parser_utils1 parser/parser_utils2 parser/redirect_handler \
 signal/exec_signal signal/signal \
-utils/quotes utils/utils
+utils/quotes utils/utils utils/free
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
 LIBFT = ./libft/libft.a
@@ -56,6 +56,6 @@ fclean: clean
 	@echo "[$(GREEN)Done!$(RESET)]"
 
 valgrind: re
-	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
+	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all ./minishell
 
 re: fclean all

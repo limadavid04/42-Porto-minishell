@@ -137,7 +137,6 @@ t_list	**lexer(char *cmd)
 	info->node = NULL;
 	get_tokens(info);
 	token_lst = info->head;
-	// print_linked_list(*token_lst);
 	free(info);
 	return (token_lst);
 }

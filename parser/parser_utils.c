@@ -53,6 +53,7 @@ void	matrix_free(char **matrix)
 	}
 	free(matrix);
 }
+
 int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
 {
 	int i;
@@ -65,8 +66,5 @@ int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
 		cmd_start = cmd_start->next;
 	}
 	return (i);
-<<<<<<< HEAD
 }	
-=======
-}
->>>>>>> origin/david-work
+

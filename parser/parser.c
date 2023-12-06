@@ -26,8 +26,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	{
 		while (is_redir(cmd_start))
 		{
-			cmd_start = cmd_start->next; //cmd_start->next->next
-			cmd_start = cmd_start->next;
+			cmd_start = cmd_start->next->next;
 			if (cmd_start == NULL || cmd_start == pipe_tkn)
 			{
 				cmd[i] = 0;
@@ -41,6 +40,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	cmd[i] = 0;
 	return (cmd);
 }
+
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
@@ -57,6 +57,7 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
+
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
@@ -77,6 +78,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	}
 	restore_default_fd(default_fd);
 }
+
 void	parse_tokens(t_status *status)
 {
 	t_list *cur_tkn;
@@ -98,15 +100,13 @@ void	parse_tokens(t_status *status)
 		parse_command(cmd_start, cur_tkn, status);
 }
 
-void	parser_main(t_list **token_lst, t_status *status, char **envp)
+void	parser_main(t_list **token_lst, t_status *status)
 {
 	status->old_pipe_in = -1;
-	status->envp = envp;
 	status->process_count = 0;
 	status->token_lst = token_lst;
 	if (*token_lst == NULL)
 		return ;
 	parse_tokens(status);
-	//close old_pipe_in if it wasn't closed
 }
 

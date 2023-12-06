@@ -19,7 +19,7 @@ void	update_oldpwd(t_status *status)
 	char	newpwd[256];
 
 	getcwd(newpwd, sizeof(newpwd));
-	set_env("OLDPWD", get_env("PWD", status), status);
+	set_env("OLDPWD", get_enviro("PWD", status), status);
 	set_env("PWD", newpwd, status);
 }
 
@@ -34,14 +34,14 @@ int	handle_cd(char *path, t_status *status)
 
 int	go_old_path(char **path, t_status *status)
 {
-	*path = get_env("OLDPWD", status);
+	*path = get_enviro("OLDPWD", status);
 	if (!*path)
 	{
 		printf("OLDPWD not set\n");
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		return (1);
 	}
-	printf("%s\n", get_env("OLDPWD", status));
+	printf("%s\n", get_enviro("OLDPWD", status));
 	return (0);
 }
 
@@ -63,13 +63,13 @@ void	b_cd(t_status *status, char **cmd)
 	if (cmd[1] && cmd[2])
 	{
 		printf("too many arguments");
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		return ;
 	}
 	if (path == NULL || *path == '\0')
-		path = get_env("HOME", status);
+		path = get_enviro("HOME", status);
 	else if (*path == '-' && *(path + 1) == '-' && *(path + 2) == '\0')
-		path = get_env("HOME", status);
+		path = get_enviro("HOME", status);
 	else if (*path == '-' && *(path + 1) == '\0')
 	{
 		if (go_old_path(&path, status))
@@ -77,7 +77,7 @@ void	b_cd(t_status *status, char **cmd)
 	}
 	if (handle_cd(path, status) < 0)
 	{
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		perror("cd");
 	}
 }

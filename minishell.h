@@ -28,9 +28,9 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <stddef.h>
+# include <sys/stat.h>
 # include <errno.h>
 
-extern int g_exit_status;
 # define HEREDOC_FILE ".heredoc"
 # define EXIT_CTRL_C 130
 #define SUCCESS 0
@@ -42,6 +42,7 @@ extern int g_exit_status;
 # define IN 0
 # define OUT 1
 
+extern int g_exit_status;
 
 typedef struct s_exp {
 	char			*v_name;
@@ -82,11 +83,14 @@ typedef struct TapeInfo
 // main.c
 int		wait_for_children(t_status *status);
 
+// utils/free.c
+void free_all(t_status *status);
+
 // utils/quotes.c
 bool	missing_quotes(const char *str);
 bool	invalid_redirects(const char *str);
 bool	check_input(const char *str);
-void print_error(int error_code, char *error_msg, char *file);
+void 	print_error(int error_code, char *error_msg, char *file);
 
 //utils/utils.c
 long long	ft_atol(const char *str);
@@ -113,7 +117,7 @@ void	get_tokens(t_info *info);
 t_list	**lexer(char *cmd);
 
 // lexar/lexar_utils.c
-int	check_next_char(char *c);
+int		check_next_char(char *c);
 void	print_linked_list(t_list	*head);
 void	lst_clear(t_list **lst);
 t_list	*create_token(t_list **head, t_list *node, int *i, char *cmd);
@@ -132,7 +136,7 @@ int		check_for_errors_in_redirect(t_list	**token_lst);
 int		check_for_pipe_errors(t_list **token_lst);
 
 // parser/parser.c
-void	parser_main(t_list **token_lst, t_status *status, char **envp);
+void	parser_main(t_list **token_lst, t_status *status);
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
@@ -151,26 +155,26 @@ int		is_redir(t_list *cmd);
 char	**strip_tokens(char **cmd);
 char	*expand_var(char *new_token, char *token, int *i);
 char	*process_tokens(char *token, int expand);
-int	check_for_pipe_errors(t_list **token_lst);
+int		check_for_pipe_errors(t_list **token_lst);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 // execute/executer.c
-void throw_execve_error(char **cmd, t_status *status);
+void 	throw_execve_error(char **cmd, t_status *status);
 void	execute(t_status *status, char **cmd, int default_fd[2]);
 
 // execute/path.c
-char *get_file_full_path(char *cmd, char *dir);
-char *find_exec_bin(char **dir, char *cmd);
+char 	*get_file_full_path(char *cmd, char *dir);
+char 	*find_exec_bin(char **dir, char *cmd);
 char	*search_for_file(char *cmd, t_status *status);
-int is_valid_relative_path(char *cmd);
-int	validate_cmd(char **cmd, t_status *status);
+int 	is_valid_relative_path(char *cmd);
+int		validate_cmd(char **cmd, t_status *status);
 
 // execute/path_utils.c
-char *get_path(char **envp);
-int is_executable_file(char *cmd);
-int is_directory(char *cmd);
+char 	*get_path(char **envp);
+int 	is_executable_file(char *cmd);
+int 	is_directory(char *cmd);
 
 // builtins/b_cd.c
 void	update_oldpwd(t_status *status);
@@ -184,8 +188,8 @@ int		ft_strcmp(char *s1, char *s2);
 void	b_echo(char **cmd);
 
 // builtins/b_exit.c
-void	exit_args(char **cmd);
-void	b_exit(char **cmd);
+void	exit_args(t_status *status, char **cmd);
+void	b_exit(t_status *status, char **cmd);
 
 // builtins/b_export.c
 void	single_export(t_status *status, char *key);
@@ -231,6 +235,6 @@ int		set_env(char *key, char *newvalue, t_status *status);
 void	print_env(t_status *status);
 char	**array_env(t_status *status);
 t_env	*search_env(char *name, t_status *status);
-char	*get_env(char *name, t_status *status);
+char	*get_enviro(char *name, t_status *status);
 
 #endif

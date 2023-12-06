@@ -89,7 +89,7 @@ t_env	*search_env(char *name, t_status *status)
 	return (NULL);
 }
 
-char	*get_env(char *name, t_status *status)
+char	*get_enviro(char *name, t_status *status)
 {
 	t_env	*search;
 

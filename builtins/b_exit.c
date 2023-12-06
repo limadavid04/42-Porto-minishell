@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-void	exit_args(char **cmd)
+void	exit_args(t_status *status, char **cmd)
 {
 	long long	exit_code;
 
@@ -22,21 +22,21 @@ void	exit_args(char **cmd)
 	{
 		// print_error("numeric argument required", 2, cmd);
 		printf("numeric argument required");
-		//free all
+		free_all(status);
 		exit_code = (char)ft_atol(cmd[1]);
-		//free cmd
+		matrix_free(cmd);
 		exit(exit_code);
 	}
 	else if (is_number(cmd[1]) && !cmd[2])
 	{
-		//free all
+		free_all(status);
 		exit_code = (char)ft_atol(cmd[1]);
-		//free cmd
+		matrix_free(cmd);
 		exit(exit_code);
 	}
 }
 
-void	b_exit(char **cmd)
+void	b_exit(t_status *status, char **cmd)
 {
 	int	len;
 
@@ -48,16 +48,16 @@ void	b_exit(char **cmd)
 	printf("exit\n");
 	if (len >= 2)
 	{
-		exit_args(cmd);
+		exit_args(status, cmd);
 		if (len > 2)
 		{
-			// print_error("too many arguments", 1, cmd);
+			//print_error("too many arguments", 1, cmd);
 			printf("too many arguments");
 			return ;
 		}
 	}
-	//if (len == 1)
-		//free all
-	//free cmd
+	if (len == 1)
+		free_all(status);
+	matrix_free(cmd);
 	exit(g_exit_status);
 }

@@ -44,6 +44,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	status = malloc(sizeof(t_status));
 	status->last_pid = 0;
+	status->envp = envp;
+	status->env = NULL;
+	status->exp = NULL;
+	create_env(status, envp);
 	while (1)
 	{
 		sig_handling();
@@ -56,12 +60,11 @@ int	main(int argc, char **argv, char **envp)
 			token_lst = lexer(command);
 			if (!check_for_errors_in_redirect(token_lst))
 			{
-				lst_clear(token_lst);
-				free(token_lst);
+				free_all(status);
 				free(command);
 				continue ;
 			}
-			parser_main(token_lst, status, envp);
+			parser_main(token_lst, status);
 			if (status->last_pid != 0)
 				wait_for_children(status);
 			lst_clear(token_lst);
@@ -69,6 +72,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(command);
 	}
+	free_env(status->env);
 	free(status);
-	return (g_exit_status);
+	return (EXIT_SUCCESS);
 }
