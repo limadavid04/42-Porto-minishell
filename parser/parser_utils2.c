@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/28 12:59:22 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 17:15:35 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	*handle_single_quote(char *new_token, char cur_char, int *quote)
 	return (new_token);
 }
 
-char	*process_tokens(char *token)
+char	*process_tokens(char *token, int expand)
 {
 	int		i;
 	char	*new_token;
@@ -82,7 +82,7 @@ char	*process_tokens(char *token)
 			quote = 1;
 		else if (quote == 0 && is_double_quote(token[i]))
 			quote = 2;
-		else if (quote != 1 && is_dollar(token[i]))
+		else if (quote != 1 && is_dollar(token[i]) && expand == 1)
 			new_token = expand_var(new_token, token, &i);
 		else if (quote == 0 && !is_double_quote(token[i]) \
 		&& !is_single_quote(token[i]))
@@ -109,7 +109,7 @@ char	**strip_tokens(char **cmd)
 	new_cmd = malloc(sizeof(char *) * (arg_nbr + 1));
 	while (cmd[i])
 	{
-		new_cmd[i] = process_tokens(cmd[i]);
+		new_cmd[i] = process_tokens(cmd[i], 1);
 		i++;
 	}
 	new_cmd[arg_nbr] = NULL;

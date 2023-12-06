@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "../minishell.h"
 
 int	is_number(char *str)
@@ -89,3 +90,25 @@ int	is_all_digits(char *str)
 	}
 	return (1);
 }	
+=======
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 14:05:42 by dlima             #+#    #+#             */
+/*   Updated: 2023/12/04 14:58:27 by dlima            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+
+void print_error(int error_code, char *error_msg, char *file)
+{
+	g_exit_status = error_code;
+	printf("%s: %s\n", file, error_msg);
+}
+>>>>>>> origin/david-work

@@ -6,7 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/12/04 11:31:29 by dlima            ###   ########.fr       */
+=======
+/*   Updated: 2023/12/05 10:21:13 by dlima            ###   ########.fr       */
+>>>>>>> origin/david-work
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +30,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	{
 		while (is_redir(cmd_start))
 		{
-			cmd_start = cmd_start->next;
+			cmd_start = cmd_start->next; //cmd_start->next->next
 			cmd_start = cmd_start->next;
 			if (cmd_start == NULL || cmd_start == pipe_tkn)
 			{
@@ -109,3 +113,4 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	parse_tokens(status);
 	//close old_pipe_in if it wasn't closed
 }
+

@@ -98,3 +98,4 @@ int	validate_cmd(char **cmd, t_status *status)
 	}
 	return (0);
 }
+

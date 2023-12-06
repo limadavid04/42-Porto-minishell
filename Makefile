@@ -13,7 +13,7 @@ CYAN 	= \033[1;36m
 WHITE 	= \033[1;37m
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline -lhistory
 FILES = main \
 builtins/b_cd builtins/b_echo builtins/b_exit builtins/b_export builtins/b_export1 \
@@ -56,7 +56,6 @@ fclean: clean
 	@echo "[$(GREEN)Done!$(RESET)]"
 
 valgrind: re
-	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline_supression ./minishell
+	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
 
 re: fclean all
-

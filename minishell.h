@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/16 10:41:50 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/05 14:09:59 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/wait.h>
-#include <errno.h>
+# include <stddef.h>
+# include <errno.h>
 
-
+extern int g_exit_status;
 # define HEREDOC_FILE ".heredoc"
 # define EXIT_CTRL_C 130
 #define SUCCESS 0
@@ -54,6 +55,7 @@ typedef struct s_env {
 	struct s_env	*next;
 }	t_env;
 
+
 typedef struct Status
 {
 	int		last_pid;
@@ -66,8 +68,6 @@ typedef struct Status
 	t_env	*env;
 	t_exp	*exp;
 }	t_status;
-//env;
-//export;
 
 typedef struct TapeInfo
 {
@@ -129,6 +129,7 @@ int		is_double_quote(char c);
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
 int		check_for_errors_in_redirect(t_list	**token_lst);
+int		check_for_pipe_errors(t_list **token_lst);
 
 // parser/parser.c
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
@@ -149,6 +150,8 @@ int		is_redir(t_list *cmd);
 // parser/parser_utils2.c
 char	**strip_tokens(char **cmd);
 char	*expand_var(char *new_token, char *token, int *i);
+char	*process_tokens(char *token, int expand);
+int	check_for_pipe_errors(t_list **token_lst);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);

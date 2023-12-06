@@ -70,11 +70,41 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
 			{
-				printf("Syntax Error\n");
+				print_error(SYNTAX_ERROR, "syntax error", "minishell");
 				return (0);
 			}
 		}
 		cur = cur->next;
+	}
+	return (1);
+}
+
+	int	check_for_pipe_errors(t_list **token_lst)
+{
+	t_list	*cur;
+
+	cur = *token_lst;
+	if (cur == NULL)
+		return (0);
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
+	}
+	while (cur->next != NULL)
+	{
+		if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+			if (!ft_strncmp(cur->next->content, "|", ft_strlen(cur->next->content)))
+			{
+				print_error(SYNTAX_ERROR, "syntax error near unexpected token `||'", "minishell");
+				return (0);
+			}
+		cur = cur->next;
+	}
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
 	}
 	return (1);
 }

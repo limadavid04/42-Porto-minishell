@@ -3,24 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 10:41:31 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/16 10:41:35 by psousa           ###   ########.fr       */
+/*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
+/*   Updated: 2023/12/05 14:14:57 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "minishell.h"
 
-int g_exit_status;
+int	g_exit_status;
 
 int	wait_for_children(t_status *status)
 {
 	int	exit_code;
 
-
-	waitpid(status->last_pid, &exit_code, 0);
-	status->process_count--;
+	if (waitpid(status->last_pid, &exit_code, 0) != -1)
+	{
+		status->process_count--;
+		if (WIFEXITED(exit_code))
+			g_exit_status = WEXITSTATUS(exit_code);
+		status->last_pid = 0;
+	}
 	while (status->process_count != 0)
 	{
 		wait(0);

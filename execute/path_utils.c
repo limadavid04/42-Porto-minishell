@@ -40,6 +40,7 @@ char *get_path(char **envp)
 	free(path_name);
 	return (NULL);
 }
+
 int is_executable_file(char *cmd)
 {
 	if (access(cmd ,X_OK ) == 0)
@@ -59,3 +60,4 @@ int is_directory(char *cmd)
     stat(cmd, &path_stat);
     return S_ISDIR(path_stat.st_mode);
 }
+

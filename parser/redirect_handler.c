@@ -3,15 +3,18 @@
 int	redirect_input(t_list	*redir)
 {
 	int	fd;
-	t_list	*file;
+	char *new_filename;
 
-	file = redir->next;
-	fd = open(file->content, O_RDONLY);
+	new_filename = process_tokens(redir->next->content, 1);
+	// printf("NEW filename = %s\n", new_filename);
+	fd = open(new_filename, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("minishell");
+		print_error(errno, strerror(errno), new_filename);
+		free(new_filename);
 		return (0);
 	}
+	free(new_filename);
 	dup2(fd, IN);
 	close(fd);
 	return (1);
@@ -19,18 +22,21 @@ int	redirect_input(t_list	*redir)
 int	redirect_output(t_list	*redir, int	append)
 {
 	int	fd;
-	t_list	*file;
+	char *new_filename;
 
-	file = redir->next;
+	new_filename = process_tokens(redir->next->content, 1);
+	// printf("NEW filename = %s\n", new_filename);
 	if (append == 1)
-		fd = open(file->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(new_filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		fd = open(file->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(new_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("minishell");
+		print_error(errno, strerror(errno), new_filename);
+		free(new_filename);
 		return (0);
 	}
+	free(new_filename);
 	dup2(fd, OUT);
 	close(fd);
 	return (1);
@@ -42,10 +48,7 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 	int	out;
 	int	fd;
 	int	exit_code;
-	//signals need to change exit status
-	//make special signals for heredoc that print >
 	pid = fork();
-	// signals_si();
 	if (pid == 0)
 	{
 		fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -62,6 +65,8 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 			out = read(status->default_fd[IN], buff, 4095);
 		}
 		close(fd);
+		if(status->old_pipe_in != -1)
+			close(status->old_pipe_in);
 		free(delim);
 		lst_clear(status->token_lst);
 		free(status->token_lst);
@@ -77,10 +82,13 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 int	handle_heredoc(t_list	*heredoc, t_status *status)
 {
 	char	*delim;
+	char	*temp;
 	int		fd;
 
-	delim = heredoc->next->content;
-	delim = ft_strjoin(delim, "\n");
+	temp = process_tokens(heredoc->next->content, 0);
+	delim = ft_strjoin(temp, "\n");
+	free(temp);
+	// printf("new_delim = %s\n", delim);
 	create_heredoc_subprocess(delim, status);
 	free(delim);
 	fd = open(".heredoc", O_RDONLY, 0644);
