@@ -69,13 +69,10 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
 		cmd = strip_tokens(cmd);
-		execute(status, cmd, default_fd);
-		// int i = 0;
-		// while (cmd[i])
-		// {
-		// 	printf("cmd[%d] = %s\n", i, cmd[i]);
-		// 	i++;
-		// }
+		if (commands(cmd))
+			x_commands(&cmd[0], status);
+		else
+			execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);

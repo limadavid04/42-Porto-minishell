@@ -56,7 +56,7 @@ void	b_exit(char **cmd)
 			return ;
 		}
 	}
-	if (len == 1)
+	//if (len == 1)
 		//free all
 	//free cmd
 	exit(g_exit_status);
