@@ -6,17 +6,28 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/04 12:36:17 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+extern int	g_exit_status;
+
+void throw_execve_error(char **cmd, t_status *status)
+{
+	print_error(errno, strerror(errno), cmd[0]);
+	lst_clear(status->token_lst);
+	free(status->token_lst);
+	matrix_free(cmd);
+	free(status);
+	exit(g_exit_status);
+}
 void	execute(t_status *status, char **cmd, int default_fd[2])
 {
 	int pid;
 
-	if (!cmd[0])
+	if (!cmd[0] || !validate_cmd(&cmd[0], status))
 		return ;
 	status->process_count++;
 	pid = fork();
@@ -29,14 +40,7 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
-		if (execvp(cmd[0], cmd) == -1)
-		{
-			perror("minishell");
-			lst_clear(status->token_lst);
-			free(status->token_lst);
-			matrix_free(cmd);
-			free(status);
-		}
-		exit(0);
+		if (execve(cmd[0], cmd, status->envp) == -1)
+			throw_execve_error(cmd, status);
 	}
 }

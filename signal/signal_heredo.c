@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   b_pwd.c                                            :+:      :+:    :+:   */
+/*   signal_heredo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 12:26:27 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/04 11:36:17 by psousa           ###   ########.fr       */
+/*   Created: 2023/11/29 12:19:10 by dlima             #+#    #+#             */
+/*   Updated: 2023/11/29 13:34:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-extern int	g_exit_status;
-
-void	b_pwd(void)
+void	exec_ctrl_c(int signal, t_status *status)
 {
-	char	pwd[256];
+	(void)signal;
+	write(1, "\n", 1);
+}
 
-	getcwd(pwd, sizeof(pwd));
-	printf("%s\n", pwd);
-	g_exit_status = 0;
+void	exec_ctrl_bslash(int signal)
+{
+	(void)signal;
+	printf("Quit (core dumped)\n");
+}
+
+void	signals_exec(void)
+{
+	signal(SIGINT, exec_ctrl_c);
+	signal(SIGQUIT, exec_ctrl_bslash);
 }

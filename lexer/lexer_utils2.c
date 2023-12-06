@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/21 12:13:04 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 12:49:59 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,52 +50,6 @@ char	*add_char(char c, char *content)
 	return (new_content);
 }
 
-t_list	*create_space_for_expansion(t_info *info, char *var)
-{
-	char	*temp;
-
-	if (info->inside_word == 0)
-	{
-		info->node = ft_lstnew(NULL);
-		ft_lstadd_back(info->head, info->node);
-		info->node->content = malloc(sizeof(char) * ft_strlen(var) + 1);
-		ft_strlcpy(info->node->content, var, ft_strlen(var) + 1);
-		info->inside_word = 1;
-	}
-	else if (info->inside_word == 1)
-	{
-		temp = malloc(sizeof(char) * ft_strlen(info->node->content) + 1);
-		ft_strlcpy(temp, info->node->content, \
-		ft_strlen(info->node->content) + 1);
-		free(info->node->content);
-		info->node->content = ft_strjoin(temp, var);
-		free(temp);
-	}
-	return (info->node);
-}
-
-t_list	*expand_var(t_info *info)
-{
-	char	*cmd;
-	int		size;
-	char	*var;
-	char	*var_name;
-
-	cmd = info->cmd;
-	(*info->i)++;
-	size = find_next_delimiter(&cmd[*info->i]);
-	var_name = malloc(sizeof(char) * size + 1);
-	ft_strlcpy(var_name, &cmd[*info->i], size + 1);
-	var = getenv(var_name);
-	free(var_name);
-	*info->i += (size - 1);
-	if (var == NULL)
-		return (info->node);
-	else
-		info->node = create_space_for_expansion(info, var);
-	return (info->node);
-}
-
 int	check_for_errors_in_redirect(t_list	**token_lst)
 {
 	t_list	*cur;
@@ -105,19 +59,52 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 	{
 		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
 		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)))
+		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content))
+		|| !ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
+
 		{
 			if (cur->next == NULL \
 			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, ">", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, ">>", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
 			{
-				printf("Syntax Error\n");
+				print_error(SYNTAX_ERROR, "syntax error", "minishell");
 				return (0);
 			}
 		}
 		cur = cur->next;
+	}
+	return (1);
+}
+
+	int	check_for_pipe_errors(t_list **token_lst)
+{
+	t_list	*cur;
+
+	cur = *token_lst;
+	if (cur == NULL)
+		return (0);
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
+	}
+	while (cur->next != NULL)
+	{
+		if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+			if (!ft_strncmp(cur->next->content, "|", ft_strlen(cur->next->content)))
+			{
+				print_error(SYNTAX_ERROR, "syntax error near unexpected token `||'", "minishell");
+				return (0);
+			}
+		cur = cur->next;
+	}
+	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
+	{
+		print_error(SYNTAX_ERROR, "syntax error near unexpected token `|'", "minishell");
+		return (0);
 	}
 	return (1);
 }

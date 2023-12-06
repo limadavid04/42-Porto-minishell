@@ -6,36 +6,15 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/23 11:16:49 by dlima            ###   ########.fr       */
+<<<<<<< HEAD
+/*   Updated: 2023/12/04 11:31:29 by dlima            ###   ########.fr       */
+=======
+/*   Updated: 2023/12/05 10:21:13 by dlima            ###   ########.fr       */
+>>>>>>> origin/david-work
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	is_redir(t_list *cmd)
-{
-	if (!ft_strncmp(cmd->content, "<", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">", ft_strlen(cmd->content))\
-		|| !ft_strncmp(cmd->content, ">>", ft_strlen(cmd->content)))
-	{
-		return (1);
-	}
-	return (0);
-}
-
-int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
-{
-	int i;
-
-	i = 0;
-	while (cmd_start != pipe_tkn)
-	{
-		if (is_redir(cmd_start))
-			i++;
-		cmd_start = cmd_start->next;
-	}
-	return (i);
-}
 
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
@@ -51,7 +30,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	{
 		while (is_redir(cmd_start))
 		{
-			cmd_start = cmd_start->next;
+			cmd_start = cmd_start->next; //cmd_start->next->next
 			cmd_start = cmd_start->next;
 			if (cmd_start == NULL || cmd_start == pipe_tkn)
 			{
@@ -60,15 +39,12 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 			}
 		}
 		cmd[i] = ft_strdup(cmd_start->content);
-		// printf("cmd = %s\n", cmd[i]);
 		i++;
 		cmd_start = cmd_start->next;
 	}
-	cmd[i] = 0; //changed from cmd[i] == NULL;
+	cmd[i] = 0;
 	return (cmd);
 }
-
-
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
@@ -85,19 +61,22 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
-
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
 
 	save_default_fd(default_fd);
-	//create pipe
+	status->default_fd = default_fd;
 	create_pipe(status, pipe_tkn);
-	if (redirect_handler(cmd_start, pipe_tkn))
+	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
-		execute(status, cmd, default_fd);
+		cmd = strip_tokens(cmd);
+		if (commands(cmd))
+			x_commands(&cmd[0], status);
+		else
+			execute(status, cmd, default_fd);
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);
@@ -128,9 +107,10 @@ void	parser_main(t_list **token_lst, t_status *status, char **envp)
 	status->old_pipe_in = -1;
 	status->envp = envp;
 	status->process_count = 0;
-	status->token_lst =  token_lst; //means that this is the first command;
+	status->token_lst = token_lst;
 	if (*token_lst == NULL)
 		return ;
 	parse_tokens(status);
 	//close old_pipe_in if it wasn't closed
 }
+

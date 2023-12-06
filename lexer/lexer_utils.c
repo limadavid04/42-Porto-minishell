@@ -1,27 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils_1.c                                    :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:05:59 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/10 11:17:19 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 12:48:54 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	find_next_delimiter(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i] && !is_special_char(cmd[i]) && !is_whitespace(cmd[i]) \
-	&& !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]) && cmd[i] != '$')
-		i++;
-	return (i);
-}
 
 int	check_next_char(char *c)
 {

@@ -12,6 +12,8 @@
 
 #include "../minishell.h"
 
+extern int	g_exit_status;
+
 bool	missing_quotes(const char *str)
 {
 	size_t	i;
@@ -67,4 +69,10 @@ bool	check_input(const char *str)
 	if (invalid_redirects(str) || missing_quotes(str))
 		return (true);
 	return (false);
+}
+
+void print_error(int error_code, char *error_msg, char *file)
+{
+	g_exit_status = error_code;
+	printf("%s: %s\n", file, error_msg);
 }

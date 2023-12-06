@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/22 16:11:18 by dlima            ###   ########.fr       */
+/*   Updated: 2023/11/28 13:05:31 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	g_exit_status;
 
 t_list	*state_no_quote(t_info *info)
 {
@@ -54,15 +52,22 @@ t_list	*state_double_quote(t_info *info)
 	node = info->node;
 	cmd = info->cmd;
 	i = info->i;
-	if (!is_double_quote(cmd[*i]) && info->inside_word == 0)
+	if (is_double_quote(cmd[*i]) && info->quote == 2)
 	{
-		node = create_token(info->head, node, i, cmd);
-		info->inside_word = 1;
-	}
-	else if (!is_double_quote(cmd[*i]) && info->inside_word == 1)
-		node->content = add_char(cmd[*i], (char *)node->content);
-	else if (is_double_quote(cmd[*i]))
 		info->quote = 0;
+		node->content = add_char(cmd[*i], (char *)node->content);
+	}
+	else
+	{
+		info->quote = 2;
+		if (info->inside_word == 0)
+		{
+			node = create_token(info->head, node, i, cmd);
+			info->inside_word = 1;
+		}
+		else if (info->inside_word == 1)
+			node->content = add_char(cmd[*i], (char *)node->content);
+	}
 	return (node);
 }
 
@@ -75,15 +80,23 @@ t_list	*state_single_quote(t_info *info)
 	node = info->node;
 	cmd = info->cmd;
 	i = info->i;
-	if (!is_single_quote(cmd[*i]) && info->inside_word == 0)
+
+	if (is_single_quote(cmd[*i]) && info->quote == 1)
 	{
-		node = create_token(info->head, node, i, cmd);
-		info->inside_word = 1;
-	}
-	else if (!is_single_quote(cmd[*i]) && info->inside_word == 1)
-		node->content = add_char(cmd[*i], (char *)node->content);
-	else if (is_single_quote(cmd[*i]))
 		info->quote = 0;
+		node->content = add_char(cmd[*i], (char *)node->content);
+	}
+	else
+	{
+		info->quote = 1;
+		if (info->inside_word == 0)
+		{
+			node = create_token(info->head, node, i, cmd);
+			info->inside_word = 1;
+		}
+		else if (info->inside_word == 1)
+			node->content = add_char(cmd[*i], (char *)node->content);
+	}
 	return (node);
 }
 
@@ -97,19 +110,15 @@ void	get_tokens(t_info *info)
 	info->i = &i;
 	while (cmd[i] != '\0')
 	{
-		if (info->quote == 0 && is_single_quote(cmd[i]))
-			info->quote = 1;
-		else if (info->quote == 0 && is_double_quote(cmd[i]))
-			info->quote = 2;
-		else if (info->quote != 1 && is_dollar(cmd[i]))
-			info->node = expand_var(info);
+		if ((info->quote == 0 && is_single_quote(cmd[i]))\
+		 || info->quote == 1)
+			info->node = state_single_quote(info);
+		else if ((info->quote == 0 && is_double_quote(cmd[i]))\
+		|| info->quote == 2)
+			info->node = state_double_quote(info);
 		else if (info->quote == 0 && !is_double_quote(cmd[i]) \
 		&& !is_single_quote(cmd[i]))
 			info->node = state_no_quote(info);
-		else if (info->quote == 1)
-			info->node = state_single_quote(info);
-		else if (info->quote == 2)
-			info->node = state_double_quote(info);
 		i++;
 	}
 }
@@ -128,6 +137,7 @@ t_list	**lexer(char *cmd)
 	info->node = NULL;
 	get_tokens(info);
 	token_lst = info->head;
+	// print_linked_list(*token_lst);
 	free(info);
 	return (token_lst);
 }
