@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 13:59:44 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/05 17:17:47 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int	validate_cmd(char **cmd, t_status *status)
 		return(is_valid_relative_path(*cmd));
 	executable = search_for_file(*cmd, status);
 	if (executable == NULL)
-		print_error(CMD_NOT_FOUND, "Command not found", *cmd);
+		ft_putstr_fd("Command not found\n",2);
+		// print_error(CMD_NOT_FOUND, "Command not found", *cmd);
 	else
 	{
 		free(*cmd);

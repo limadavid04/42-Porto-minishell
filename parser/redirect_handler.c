@@ -49,7 +49,7 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 	int	fd;
 	int	exit_code;
 	//signals need to change exit status
-	//make special signals for heredoc that print >
+	//
 	pid = fork();
 	// signals_si();
 	if (pid == 0)
@@ -79,7 +79,7 @@ void create_heredoc_subprocess(char *delim, t_status *status)
 		exit(0);
 	}
 	waitpid(pid, &exit_code,0);
-	// g_exit_status = exit;
+	g_exit_status = WEXITSTATUS(exit_code);
 }
 
 int	handle_heredoc(t_list	*heredoc, t_status *status)
@@ -91,7 +91,6 @@ int	handle_heredoc(t_list	*heredoc, t_status *status)
 	temp = process_tokens(heredoc->next->content, 0);
 	delim = ft_strjoin(temp, "\n");
 	free(temp);
-	// printf("new_delim = %s\n", delim);
 	create_heredoc_subprocess(delim, status);
 	free(delim);
 	fd = open(".heredoc", O_RDONLY, 0644);
