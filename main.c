@@ -34,6 +34,13 @@ int	wait_for_children(t_status *status)
 	return (exit_code);
 }
 
+void	init(t_status *status)
+{
+	status->env = NULL;
+	status->exp = NULL;
+	status->last_pid = 0;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*command;
@@ -43,7 +50,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	status = malloc(sizeof(t_status));
-	status->last_pid = 0;
+	init(status);
+	create_env(status, envp);
+	create_exp(status, envp);
 	while (1)
 	{
 		sig_handling();

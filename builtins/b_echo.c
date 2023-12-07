@@ -22,7 +22,7 @@ void	print_words(char **word, int i, int flag)
 		i++;
 	}
 	if (flag)
-		printf("\n");
+		printf("\n  you are here\n");
 }
 
 void	b_echo(char **cmd)

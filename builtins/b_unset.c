@@ -45,13 +45,13 @@ void	unset_exp(t_status *status, char *key)
 
 	temp = status->exp;
 	prev = NULL;
-	if (temp != NULL && temp->v_name == key)
+	if (temp != NULL && temp->vexp_name == key)
 	{
 		status->exp = temp->next;
-		free_exp2(temp);
+		free_exp(temp);
 		return ;
 	}
-	while (temp != NULL && ft_strcmp(temp->v_name, key) != 0)
+	while (temp != NULL && ft_strcmp(temp->vexp_name, key) != 0)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -59,7 +59,7 @@ void	unset_exp(t_status *status, char *key)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	free_exp2(temp);
+	free_exp(temp);
 }
 
 int	valid_unset(char *key, char *type)

@@ -23,11 +23,12 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
 # include <stdio.h>
 # include <stdbool.h>
 # include <string.h>
 # include <sys/wait.h>
-# include <stddef.h>
+# include <sys/stat.h>
 # include <errno.h>
 
 extern int g_exit_status;
@@ -44,8 +45,8 @@ extern int g_exit_status;
 
 
 typedef struct s_exp {
-	char			*v_name;
-	char			*v_value;
+	char			*vexp_name;
+	char			*vexp_value;
 	struct s_exp	*next;
 }	t_exp;
 
@@ -193,19 +194,6 @@ int		valid_export(char *key, char *type);
 void	export_single(char *cmd, t_status *status);
 void	b_export(t_status *status, char **cmd);
 
-// builtins/b_export1.c
-void	free_exp2(t_exp *tmp);
-void	free_exp(t_exp *exp);
-t_exp	*new__exp(char *vexp_name, char *vexp_value);
-void	add_exp(t_exp **exp, t_exp *new);
-void	exp_create(t_status *status, char **exp);
-
-// builtins/b_export2.c
-t_exp	*search_exp(char *name, t_status *status);
-int	set_exp(char *name, char *new_value, t_status *status);
-char	*get_exp(char *name, t_status *status);
-void	print_exp(t_status *status);
-
 // builtins/b_pwd.c
 void	b_pwd(void);
 
@@ -219,18 +207,31 @@ void	b_unset(t_status *status, char **cmd);
 void	x_commands(char **cmd, t_status *status);
 int		commands(char **cmd);
 
-//enviroment/enviro.c
+//extra/enviro.c
 void	free_env(t_env *env);
 t_env	*new_env(char *v_name, char *v_value);
 t_env	*get_last_env(t_env *env);
 void	env_back(t_env **env, t_env *new);
 void	create_env(t_status *status, char **env);
 
-//enviroment/enviro2.c
+//extra/enviro2.c
 int		set_env(char *key, char *newvalue, t_status *status);
 void	print_env(t_status *status);
 char	**array_env(t_status *status);
 t_env	*search_env(char *name, t_status *status);
 char	*get_env(char *name, t_status *status);
+
+//extra/expo.c
+void	free_exp2(t_exp *tmp);
+void	free_exp(t_exp *exp);
+t_exp	*new__exp(char *vexp_name, char *vexp_value);
+void	add_exp(t_exp **exp, t_exp *new);
+void	create_exp(t_status *status, char **exp);
+
+//extra/expo2.c
+t_exp	*search_exp(char *name, t_status *status);
+int		set_exp(char *name, char *new_value, t_status *status);
+char	*get_exp(char *name, t_status *status);
+void	print_exp(t_status *status);
 
 #endif

@@ -58,6 +58,6 @@ int is_directory(char *cmd)
         return (0);
     }
     stat(cmd, &path_stat);
-    return S_ISDIR(path_stat.st_mode);
+    return (S_ISDIR(path_stat.st_mode));
 }
 

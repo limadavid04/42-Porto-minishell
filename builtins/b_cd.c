@@ -63,7 +63,7 @@ void	b_cd(t_status *status, char **cmd)
 	if (cmd[1] && cmd[2])
 	{
 		printf("too many arguments");
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		return ;
 	}
 	if (path == NULL || *path == '\0')
@@ -77,7 +77,7 @@ void	b_cd(t_status *status, char **cmd)
 	}
 	if (handle_cd(path, status) < 0)
 	{
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		perror("cd");
 	}
 }
