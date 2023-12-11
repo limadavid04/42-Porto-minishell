@@ -27,6 +27,29 @@ int	is_number(char *str)
 	return (1);
 }
 
+void print_syntax_err(struct s_list *token)
+{
+	g_exit_status = SYNTAX_ERROR;
+	ft_putstr_fd(SYNTAX_MSG,2);
+	write(1, "`", 2);
+	if (token == NULL)
+		ft_putstr_fd("newline", 2);
+	else
+		ft_putstr_fd((char *)token->content, 2);
+	write(1, "'", 2);
+	ft_putstr_fd("\n", 2);
+}
+
+void print_error(int error_code, char *error_msg, char *file)
+{
+	g_exit_status = error_code;
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error_msg, 2);
+	ft_putstr_fd("\n", 2);
+	// printf("%s: %s\n", file, error_msg);
+}
+
 long long	ft_atol(const char *str)
 {
 	long long	i;
@@ -88,4 +111,4 @@ int	is_all_digits(char *str)
 		i++;
 	}
 	return (1);
-}	
+}

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/05 14:09:59 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 15:54:12 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 extern int g_exit_status;
 # define HEREDOC_FILE ".heredoc"
+# define SYNTAX_MSG "minishell: syntax error near unexpected token "
 # define EXIT_CTRL_C 130
 #define SUCCESS 0
 #define GENERAL_ERROR 1
@@ -70,6 +71,15 @@ typedef struct Status
 	t_exp	*exp;
 }	t_status;
 
+
+typedef struct Heredoc
+{
+	t_status	*status;
+	int			fd;
+	char		*delim;
+}	t_heredoc;
+
+
 typedef struct TapeInfo
 {
 	t_list	**head;
@@ -105,6 +115,7 @@ void	sig_handling(void);
 void	exec_ctrl_c(int signal);
 void	exec_ctrl_bslash(int signal);
 void	signals_exec(void);
+void print_syntax_err(struct s_list *token);
 
 // lexar/lexar.c
 t_list	*state_no_quote(t_info *info);
@@ -135,6 +146,24 @@ int		check_for_pipe_errors(t_list **token_lst);
 // parser/parser.c
 void	parser_main(t_list **token_lst, t_status *status, char **envp);
 void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+// signal/signal.c
+int		handle_ctrl_d(char *cmd);
+void	handle_ctrl_c(int sig);
+void	sig_handling(void);
+
+// signal/exec_signal.c
+void	exec_ctrl_c(int signal);
+void	exec_ctrl_bslash(int signal);
+void	signals_exec(void);
+
+// signal/signal_heredoc.c
+void	signals_heredoc(t_heredoc *heredoc);
+
+
+// parser/parser.c
+void	parser_main(t_status *status);
+// void	parse_tokens(t_list *token_lst, t_status *status);
+// void	parse_CMD(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
 
@@ -156,6 +185,11 @@ int	check_for_pipe_errors(t_list **token_lst);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+
+//parser/heredoc.c
+void	create_heredoc_subprocess(char *delim, t_status *status);
+void	free_heap(t_status *status, char *delim, int fd);
+
 
 // execute/executer.c
 void throw_execve_error(char **cmd, t_status *status);

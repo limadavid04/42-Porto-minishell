@@ -1,15 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+<<<<<<<< HEAD:signal/signal_heredo.c
 /*   signal_heredo.c                                    :+:      :+:    :+:   */
+========
+/*   signal_heredoc.c                                   :+:      :+:    :+:   */
+>>>>>>>> david-work:signal/signal_heredoc.c
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 13:08:24 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 15:49:46 by dlima            ###   ########.fr       */
+/*   Created: 2023/11/29 12:19:10 by dlima             #+#    #+#             */
+/*   Updated: 2023/12/11 13:08:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 
 void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
 {

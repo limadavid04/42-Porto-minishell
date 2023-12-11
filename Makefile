@@ -20,10 +20,13 @@ builtins/b_cd builtins/b_echo builtins/b_exit builtins/b_export \
 builtins/b_pwd builtins/b_unset builtins/builtin \
 extra/enviro extra/enviro2 extra/expo extra/expo2 \
 execute/executer execute/path_utils execute/path \
-lexer/lexer lexer/lexer_utils lexer/lexer_utils1 lexer/lexer_utils2 \
-parser/parser parser/parser_utils parser/parser_utils1 parser/parser_utils2 parser/redirect_handler \
-signal/exec_signal signal/signal \
-utils/quotes utils/utils
+lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 \
+parser/parser parser/parser_utils parser/parser_utils1 parser/parser_utils2 \
+parser/redirect_handler \
+signal/exec_signal signal/signal signal/signal_heredoc utils/quotes \
+execute/executer parser/redirect_handler parser/parser_utils1 \
+parser/parser_utils2 utils/utils execute/path execute/path_utils \
+parser/heredoc
 
 OBJS = $(addsuffix .o, $(FILES))
 NAME = minishell
@@ -57,6 +60,6 @@ fclean: clean
 	@echo "[$(GREEN)Done!$(RESET)]"
 
 valgrind: re
-	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
+	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes ./minishell
 
 re: fclean all
