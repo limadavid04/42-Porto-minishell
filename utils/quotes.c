@@ -3,43 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:42:04 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/16 10:42:06 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:15:56 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-extern int	g_exit_status;
-
-bool	missing_quotes(const char *str)
-{
-	size_t	i;
-	int		redirect_count;
-
-	redirect_count = 0;
-	i = 0;
-	while (i < ft_strlen(str))
-	{
-		if (str[i] == '>' || str[i] == '<')
-		{
-			redirect_count++;
-			if (redirect_count > 2)
-			{
-				printf("Error: Invalid Redirects\n");
-				return (true);
-			}
-		}
-		else
-			redirect_count = 0;
-		i++;
-	}
-	return (false);
-}
-
-bool	invalid_redirects(const char *str)
+bool	 missing_quotes(const char *str)
 {
 	size_t	i;
 	bool	inside_single_quotes;
@@ -58,21 +31,8 @@ bool	invalid_redirects(const char *str)
 	}
 	if (inside_single_quotes || inside_double_quotes)
 	{
-		printf("Error: Missing Quotes\n");
+		// printf("Error: Missing Quotes\n");
 		return (true);
 	}
 	return (false);
-}
-
-bool	check_input(const char *str)
-{
-	if (invalid_redirects(str) || missing_quotes(str))
-		return (true);
-	return (false);
-}
-
-void print_error(int error_code, char *error_msg, char *file)
-{
-	g_exit_status = error_code;
-	printf("%s: %s\n", file, error_msg);
 }

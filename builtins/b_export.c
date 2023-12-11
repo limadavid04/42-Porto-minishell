@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_export.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:36:35 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/04 11:36:37 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:57:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-void	single_export(t_status *status, char *key)
+void	rename_export(t_status *status, char *key)
 {
 	if (get_exp(key, status) == NULL)
 		set_exp(key, NULL, status);
@@ -60,7 +60,7 @@ void	export_single(char *cmd, t_status *status)
 	}
 	if (cmd[len] != '=')
 	{
-		single_export(status, key);
+		rename_export(status, key);
 		free(key);
 		return ;
 	}
@@ -79,6 +79,6 @@ void	b_export(t_status *status, char **cmd)
 	// if (has_pipe(status))
 	// 	return ;
 	while (cmd[++i])
-		single_export(status, cmd[i]);
+		export_single(cmd[i], status);
 	g_exit_status = 0;
 }

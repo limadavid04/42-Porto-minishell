@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/04 12:36:17 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 16:24:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_exit_status;
 
 void throw_execve_error(char **cmd, t_status *status)
 {
@@ -20,9 +18,12 @@ void throw_execve_error(char **cmd, t_status *status)
 	lst_clear(status->token_lst);
 	free(status->token_lst);
 	matrix_free(cmd);
+	free_env(status->env);
+	free_exp(status->exp);
 	free(status);
 	exit(g_exit_status);
 }
+
 void	execute(t_status *status, char **cmd, int default_fd[2])
 {
 	int pid;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_unset.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:35:52 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/04 11:35:54 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/11 17:15:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ void	unset_exp(t_status *status, char *key)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	free_exp(temp);
+	free(temp->vexp_name);
+	free(temp->vexp_value);
+	free(temp);
+	// free_exp(temp);
 }
 
 int	valid_unset(char *key, char *type)

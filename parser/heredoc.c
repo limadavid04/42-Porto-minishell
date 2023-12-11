@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 13:23:22 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 16:26:31 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void free_heap(t_status *status, char *delim, int fd)
 		close(status->old_pipe_in);
 	lst_clear(status->token_lst);
 	free(status->token_lst);
+	free_env(status->env);
+	free_exp(status->exp);
 	free(status);
 	close(fd);
 	free(delim);
