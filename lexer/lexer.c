@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/06 11:12:42 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/06 12:03:50 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,6 @@ t_list	**lexer(char *cmd)
 	info->node = NULL;
 	get_tokens(info);
 	token_lst = info->head;
-	// print_linked_list(*token_lst);
 	free(info);
-	// free(cmd);
 	return (token_lst);
 }

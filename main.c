@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/06 11:49:53 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 11:38:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv, char **envp)
 			lst_clear(token_lst);
 			free(token_lst);
 		}
-		// free(command);
+		free(command);
 	}
 	free(status);
 	return (0);

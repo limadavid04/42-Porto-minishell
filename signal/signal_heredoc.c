@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_heredoc                                     :+:      :+:    :+:   */
+/*   signal_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 12:19:10 by dlima             #+#    #+#             */
-/*   Updated: 2023/11/29 13:34:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 13:08:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_ctrl_c(int signal, t_status *status)
+void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
 {
-	//static *tmp = status;
-	//if (signal = -1)
-	//tmp = status
-	//else
-	//free a tudo
-	(void)signal;
-	write(1, "\n", 1);
+	static t_heredoc *here_static;
+	if (signal == -1)
+		here_static = heredoc;
+	else
+	{
+		g_exit_status = 130;
+		free_heap(here_static->status, here_static->delim, here_static->fd);
+		exit(g_exit_status);
+	}
 }
-// g_exit_status = EXIT_CTRL_C;
-void	exec_ctrl_bslash(int signal)
+void	signals_heredoc(t_heredoc *heredoc)
 {
-	(void)signal;
-	printf("Quit (core dumped)\n");
-}
-// g_exit_status = 131;
-void	signals_exec(void)
-{
-
-	signal(SIGINT, exec_ctrl_c);
-	signal(SIGQUIT, exec_ctrl_bslash);
+	exec_ctrl_c_heredoc(-1, heredoc);
+	signal(SIGINT, (void *)exec_ctrl_c_heredoc);
 }

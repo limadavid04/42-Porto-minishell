@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/06 11:38:28 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/11 13:08:23 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <errno.h>
 
 # define HEREDOC_FILE ".heredoc"
+# define SYNTAX_MSG "minishell: syntax error near unexpected token "
 # define EXIT_CTRL_C 130
 #define SUCCESS 0
 #define GENERAL_ERROR 1
@@ -53,11 +54,15 @@ typedef struct Status
 	t_list	**token_lst;
 	int		*default_fd;
 	char	**cmd;
-	//env;
-	//export;
 }	t_status;
-//env;
-//export;
+
+typedef struct Heredoc
+{
+	t_status	*status;
+	int			fd;
+	char		*delim;
+}	t_heredoc;
+
 
 typedef struct TapeInfo
 {
@@ -78,6 +83,8 @@ bool	invalid_redirects(const char *str);
 bool	check_input(const char *str);
 // utils/utils.c
 void print_error(int error_code, char *error_msg, char *file);
+void print_syntax_err(struct s_list *token);
+
 // lexar/lexar.c
 t_list	*state_no_quote(t_info *info);
 t_list	*state_double_quote(t_info *info);
@@ -115,6 +122,10 @@ void	exec_ctrl_c(int signal);
 void	exec_ctrl_bslash(int signal);
 void	signals_exec(void);
 
+// signal/signal_heredoc.c
+void	signals_heredoc(t_heredoc *heredoc);
+
+
 // parser/parser.c
 void	parser_main(t_status *status);
 // void	parse_tokens(t_list *token_lst, t_status *status);
@@ -140,6 +151,11 @@ char	*process_tokens(char *token, int expand);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+
+//parser/heredoc.c
+void	create_heredoc_subprocess(char *delim, t_status *status);
+void	free_heap(t_status *status, char *delim, int fd);
+
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd, int default_fd[2]);

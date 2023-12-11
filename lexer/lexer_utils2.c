@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 14:18:48 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/06 14:11:02 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ char	*add_char(char c, char *content)
 	}
 	return (new_content);
 }
+// char *get_custom_error_msg(char *token)
+// {
+// 	if (!ft_strncmp(token, "<", ft_strlen(token)))
+// 		print_error(SYNTAX_ERROR, SYNTAX_MSG)
+// }
 
 int	check_for_errors_in_redirect(t_list	**token_lst)
 {
@@ -70,7 +75,7 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
 			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
 			{
-				print_error(SYNTAX_ERROR, "syntax error", "minishell");
+				print_syntax_err(cur->next);
 				return (0);
 			}
 		}
