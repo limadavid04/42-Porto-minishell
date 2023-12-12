@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:35:52 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/11 17:15:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 13:02:10 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	unset_env(t_status *status, char *key)
 
 	temp = status->env;
 	prev = NULL;
-	if (temp != NULL && temp->v_name == key)
+	if (temp != NULL && ft_strcmp(temp->v_name, key) != 0)
 	{
 		status->env = temp->next;
 		free_env2(temp);
@@ -45,10 +45,10 @@ void	unset_exp(t_status *status, char *key)
 
 	temp = status->exp;
 	prev = NULL;
-	if (temp != NULL && temp->vexp_name == key)
+	if (temp != NULL && ft_strcmp(temp->vexp_name, key) != 0)
 	{
 		status->exp = temp->next;
-		free_exp(temp);
+		free_exp2(temp);
 		return ;
 	}
 	while (temp != NULL && ft_strcmp(temp->vexp_name, key) != 0)
@@ -59,10 +59,7 @@ void	unset_exp(t_status *status, char *key)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	free(temp->vexp_name);
-	free(temp->vexp_value);
-	free(temp);
-	// free_exp(temp);
+	free_exp2(temp);
 }
 
 int	valid_unset(char *key, char *type)

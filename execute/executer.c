@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 16:24:24 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 13:05:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void throw_execve_error(char **cmd, t_status *status)
 	lst_clear(status->token_lst);
 	free(status->token_lst);
 	matrix_free(cmd);
+	matrix_free(status->envp);
 	free_env(status->env);
 	free_exp(status->exp);
 	free(status);
@@ -41,6 +42,7 @@ void	execute(t_status *status, char **cmd, int default_fd[2])
 			close(status->old_pipe_in);
 		close(default_fd[IN]);
 		close(default_fd[OUT]);
+		status->envp = array_env(status);
 		if (execve(cmd[0], cmd, status->envp) == -1)
 			throw_execve_error(cmd, status);
 	}

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 16:23:37 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 12:13:51 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	main(int argc, char **argv, char **envp)
 	init(status);
 	create_env(status, envp);
 	create_exp(status, envp);
-	status->envp = envp;
+	// status->envp = envp;
 	while (1)
 	{
 		sig_handling();

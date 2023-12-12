@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/06 13:45:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 12:17:16 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*search_for_file(char *cmd, t_status *status)
 	char *path;
 	char **dir;
 
-	path = get_path(status->envp);
+	path = get_env("PATH", status);
 	if (path == NULL)
 		return (NULL);
 	dir = ft_split(path, ':');

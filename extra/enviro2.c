@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviro2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:58:03 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/04 11:58:04 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/12 12:26:02 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**array_env(t_status *status)
 		num++;
 		cur = cur->next;
 	}
-	env = ft_calloc(sizeof(char **), num + 1);
+	env = ft_calloc(sizeof(char *), num + 1);
 	cur = status->env;
 	i = 0;
 	while (cur != NULL)

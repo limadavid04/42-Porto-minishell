@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:36:35 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/11 16:57:04 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 13:22:06 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	export_single(char *cmd, t_status *status)
 	}
 	if (cmd[len] != '=')
 	{
+		// printf("key = %s\n", key);
 		rename_export(status, key);
 		free(key);
 		return ;

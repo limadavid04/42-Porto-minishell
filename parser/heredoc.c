@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 16:26:31 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 10:35:08 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void get_heredoc_input(char *delim, int fd)
 			free(temp);
 			if (!line)
 			{
-				ft_putstr_fd("minishell: warning: here-document delimited by end-of-file", 2);
+				ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
 				break ;
 			}
 			if (!ft_strncmp(line, delim, ft_strlen(line)))
