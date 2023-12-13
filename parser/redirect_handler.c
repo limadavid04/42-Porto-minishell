@@ -1,11 +1,11 @@
 #include "../minishell.h"
 
-int	redirect_input(t_list	*redir)
+int	redirect_input(t_list *redir, t_status *status)
 {
 	int	fd;
 	char *new_filename;
 
-	new_filename = process_tokens(redir->next->content, 1);
+	new_filename = process_tokens(redir->next->content, 1, status);
 	// printf("NEW filename = %s\n", new_filename);
 	fd = open(new_filename, O_RDONLY);
 	if (fd == -1)
@@ -19,12 +19,12 @@ int	redirect_input(t_list	*redir)
 	close(fd);
 	return (1);
 }
-int	redirect_output(t_list	*redir, int	append)
+int	redirect_output(t_list	*redir, int	append, t_status *status)
 {
 	int	fd;
 	char *new_filename;
 
-	new_filename = process_tokens(redir->next->content, 1);
+	new_filename = process_tokens(redir->next->content, 1, status);
 	// printf("NEW filename = %s\n", new_filename);
 	if (append == 1)
 		fd = open(new_filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -48,7 +48,7 @@ int	handle_heredoc(t_list	*heredoc, t_status *status)
 	char	*temp;
 	int		fd;
 
-	temp = process_tokens(heredoc->next->content, 0);
+	temp = process_tokens(heredoc->next->content, 0, status);
 	delim = ft_strjoin(temp, "\n");
 	free(temp);
 	create_heredoc_subprocess(delim, status);
@@ -74,17 +74,17 @@ int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 	{
 		if (!ft_strncmp(cur->content, ">", ft_strlen(cur->content)))
 		{
-			if (!redirect_output(cur, 0))
+			if (!redirect_output(cur, 0, status))
 				return (0);
 		}
 		else if (!ft_strncmp(cur->content, ">>", ft_strlen(cur->content)))
 		{
-			if (!redirect_output(cur, 1))
+			if (!redirect_output(cur, 1, status))
 				return (0);
 		}
 		else if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)))
 		{
-			if (!redirect_input(cur))
+			if (!redirect_input(cur, status))
 				return (0);
 		}
 		else if (!ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 15:53:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 15:31:48 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	if (redirect_handler(cmd_start, pipe_tkn, status))
 	{
 		cmd = get_cmd(cmd_start, pipe_tkn);
-		cmd = strip_tokens(cmd);
+		cmd = strip_tokens(cmd, status);
 		if (commands(cmd))
 			x_commands(&cmd[0], status);
 		else

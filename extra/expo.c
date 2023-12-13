@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:58:07 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/11 16:57:39 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 15:19:31 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ t_exp	*new__exp(char *vexp_name, char *vexp_value)
 	if (!new_exp)
 		return (0);
 	new_exp->vexp_name = ft_strdup(vexp_name);
-	new_exp->vexp_value = ft_strdup(vexp_value);
+	if (vexp_value == NULL)
+		new_exp->vexp_value = NULL;
+	else
+		new_exp->vexp_value = ft_strdup(vexp_value);
 	new_exp->next = NULL;
 	return (new_exp);
 }

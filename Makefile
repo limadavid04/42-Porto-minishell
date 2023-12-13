@@ -55,6 +55,6 @@ fclean: clean
 	@echo "[$(GREEN)Done!$(RESET)]"
 
 valgrind: re
-	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes  ./minishell
+	valgrind --suppressions=readline_supression --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
 
 re: fclean all

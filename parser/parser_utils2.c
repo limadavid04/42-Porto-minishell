@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 16:16:45 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/12 15:50:14 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	find_next_delimiter(char *cmd)
 	return (i);
 }
 
-char	*expand_var(char *new_token, char *token, int *i)
+char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
 	char	*var;
@@ -34,7 +34,7 @@ char	*expand_var(char *new_token, char *token, int *i)
 	size = find_next_delimiter(&token[*i]);
 	var_name = malloc(sizeof(char) * size + 1);
 	ft_strlcpy(var_name, &token[*i], size + 1);
-	var = getenv(var_name);
+	var = get_env(var_name, status);
 	free(var_name);
 	*i += (size - 1);
 	if (var == NULL)
@@ -46,6 +46,7 @@ char	*expand_var(char *new_token, char *token, int *i)
 		free(new_token);
 		new_token = ft_strjoin(temp, var);
 		free(temp);
+		// free(var);
 	}
 	return (new_token);
 }
@@ -67,7 +68,7 @@ static char	*handle_single_quote(char *new_token, char cur_char, int *quote)
 	return (new_token);
 }
 
-char	*process_tokens(char *token, int expand)
+char	*process_tokens(char *token, int expand, t_status *status)
 {
 	int		i;
 	char	*new_token;
@@ -83,7 +84,7 @@ char	*process_tokens(char *token, int expand)
 		else if (quote == 0 && is_double_quote(token[i]))
 			quote = 2;
 		else if (quote != 1 && is_dollar(token[i]) && expand == 1)
-			new_token = expand_var(new_token, token, &i);
+			new_token = expand_var(new_token, token, &i, status);
 		else if (quote == 0 && !is_double_quote(token[i]) \
 		&& !is_single_quote(token[i]))
 			new_token = add_char(token[i], new_token);
@@ -95,7 +96,7 @@ char	*process_tokens(char *token, int expand)
 	}
 	return (new_token);
 }
-char	**strip_tokens(char **cmd)
+char	**strip_tokens(char **cmd, t_status *status)
 {
 	char	**new_cmd;
 	int		i;
@@ -108,7 +109,7 @@ char	**strip_tokens(char **cmd)
 	new_cmd = malloc(sizeof(char *) * (arg_nbr + 1));
 	while (cmd[i])
 	{
-		new_cmd[i] = process_tokens(cmd[i], 1);
+		new_cmd[i] = process_tokens(cmd[i], 1, status);
 		i++;
 	}
 	new_cmd[arg_nbr] = NULL;
