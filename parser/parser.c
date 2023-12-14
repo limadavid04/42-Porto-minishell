@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/12 15:31:48 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 17:20:08 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 		if (commands(cmd))
 			x_commands(&cmd[0], status);
 		else
-			execute(status, cmd, default_fd);
+			execute(status, cmd);
 		matrix_free(cmd);
 	}
 	restore_default_fd(default_fd);

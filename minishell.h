@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/12 15:31:47 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 17:20:07 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ int		wait_for_children(t_status *status);
 
 // utils/quotes.c
 bool	missing_quotes(const char *str);
-// bool	invalid_redirects(const char *str);
-// bool	check_input(const char *str);
+
 void print_error(int error_code, char *error_msg, char *file);
 
 //utils/utils.c
@@ -116,34 +115,32 @@ void	exec_ctrl_bslash(int signal);
 void	signals_exec(void);
 void print_syntax_err(struct s_list *token);
 
-// lexar/lexar.c
+// lexer/lexer.c
 t_list	*state_no_quote(t_info *info);
 t_list	*state_double_quote(t_info *info);
 t_list	*state_single_quote(t_info *info);
 void	get_tokens(t_info *info);
 t_list	**lexer(char *cmd);
 
-// lexar/lexar_utils.c
-int	check_next_char(char *c);
+// lexer/lexer_utils.c
+int		check_next_char(char *c);
 void	print_linked_list(t_list	*head);
 void	lst_clear(t_list **lst);
 t_list	*create_token(t_list **head, t_list *node, int *i, char *cmd);
 
-// lexar/lexar_utils1.c
+// lexer/lexer_utils1.c
 int		is_whitespace(char c);
 int		is_special_char(char c);
 int		is_dollar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
 
-// lexar/lexar_utils2.c
+// lexer/lexer_utils2.c
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
 int		check_for_errors_in_redirect(t_list	**token_lst);
 int		check_for_pipe_errors(t_list **token_lst);
 
-// parser/parser.c
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);
 void	handle_ctrl_c(int sig);
@@ -157,11 +154,9 @@ void	signals_exec(void);
 // signal/signal_heredoc.c
 void	signals_heredoc(t_heredoc *heredoc);
 
-
 // parser/parser.c
+void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	parser_main(t_status *status);
-// void	parse_tokens(t_list *token_lst, t_status *status);
-// void	parse_CMD(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_pipe(t_status *status, t_list *pipe_tkn);
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
 
@@ -190,8 +185,7 @@ void	free_heap(t_status *status, char *delim, int fd);
 
 
 // execute/executer.c
-// void throw_execve_error(char **cmd, t_status *status);
-void	execute(t_status *status, char **cmd, int default_fd[2]);
+void	execute(t_status *status, char **cmd);
 
 // execute/path.c
 char *get_file_full_path(char *cmd, char *dir);
@@ -201,7 +195,6 @@ int is_valid_relative_path(char *cmd);
 int	validate_cmd(char **cmd, t_status *status);
 
 // execute/path_utils.c
-char *get_path(char **envp);
 int is_executable_file(char *cmd);
 int is_directory(char *cmd);
 
@@ -217,8 +210,8 @@ int		ft_strcmp(char *s1, char *s2);
 void	b_echo(char **cmd);
 
 // builtins/b_exit.c
-void	exit_args(char **cmd);
-void	b_exit(char **cmd);
+void	exit_args(char **cmd, t_status *status);
+void	b_exit(char **cmd, t_status *status);
 
 // builtins/b_export.c
 void	rename_export(t_status *status, char *key);

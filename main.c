@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 16:49:33 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 16:53:55 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init(t_status *status)
 	status->last_pid = 0;
 }
 
-void	init_status(t_status *status, t_list **token_lst)
+void	init_status_new_cmd(t_status *status, t_list **token_lst)
 {
 	status->old_pipe_in = -1;
 	status->process_count = 0;
@@ -62,7 +62,7 @@ int interpret_new_command(t_status *status)
 	else
 	{
 		token_lst = lexer(command);
-		init_status(status, token_lst);
+		init_status_new_cmd(status, token_lst);
 		if (!(!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst)))
 		{
 			parser_main(status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:25:59 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/22 12:26:01 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:11:37 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	x_commands(char **cmd, t_status *status)
 			print_env(status);
 	}
 	else if (ft_strcmp(cmd[0], "exit") == 0)
-		b_exit(cmd);
+		b_exit(cmd, status);
 	g_exit_status = 0;
 }
 
