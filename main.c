@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/12 12:13:51 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 16:49:33 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,39 @@ void	init_status(t_status *status, t_list **token_lst)
 	status->process_count = 0;
 	status->token_lst = token_lst;
 }
-int	main(int argc, char **argv, char **envp)
+
+int interpret_new_command(t_status *status)
 {
 	char		*command;
-	t_status	*status;
 	t_list		**token_lst;
+
+	sig_handling();
+	command = readline("$> ");
+	if (handle_ctrl_d(command))
+		return (1);
+	add_history(command);
+	if (missing_quotes(command))
+		print_error(SYNTAX_ERROR, "Missing Quotes" ,"minishell");
+	else
+	{
+		token_lst = lexer(command);
+		init_status(status, token_lst);
+		if (!(!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst)))
+		{
+			parser_main(status);
+			if (status->last_pid != 0)
+				wait_for_children(status);
+		}
+		lst_clear(token_lst);
+		free(token_lst);
+	}
+	free(command);
+	return (0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_status	*status;
 
 	(void)argc;
 	(void)argv;
@@ -58,30 +86,10 @@ int	main(int argc, char **argv, char **envp)
 	init(status);
 	create_env(status, envp);
 	create_exp(status, envp);
-	// status->envp = envp;
 	while (1)
 	{
-		sig_handling();
-		command = readline("$> ");
-		if (handle_ctrl_d(command))
+		if (interpret_new_command(status))
 			break ;
-		add_history(command);
-		if (missing_quotes(command))
-			print_error(SYNTAX_ERROR, "Missing Quotes" ,"minishell");
-		else
-		{
-			token_lst = lexer(command);
-			init_status(status, token_lst);
-			if (!(!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst)))
-			{
-				parser_main(status);
-				if (status->last_pid != 0)
-					wait_for_children(status);
-			}
-			lst_clear(token_lst);
-			free(token_lst);
-		}
-		free(command);
 	}
 	free_env(status->env);
 	free_exp(status->exp);

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 12:48:24 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 16:11:51 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,31 @@ int	find_next_delimiter(char *cmd)
 	return (i);
 }
 
+char *join_var_expansion_with_token(char *new_token, char *var)
+{
+	char	*temp;
+
+	temp = malloc(sizeof(char) *ft_strlen(new_token) + 1);
+	ft_strlcpy(temp, new_token, ft_strlen(new_token) + 1);
+	free(new_token);
+	new_token = ft_strjoin(temp, var);
+	free(temp);
+	return (new_token);
+}
 char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
 	char	*var;
 	char	*var_name;
-	char	*temp;
 
 	(*i)++;
+	if (token[*i] == '?')
+	{
+		var = ft_itoa(g_exit_status);
+		new_token = join_var_expansion_with_token(new_token, var);
+		free(var);
+		return (new_token);
+	}
 	size = find_next_delimiter(&token[*i]);
 	var_name = malloc(sizeof(char) * size + 1);
 	ft_strlcpy(var_name, &token[*i], size + 1);
@@ -39,15 +56,7 @@ char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 	*i += (size - 1);
 	if (var == NULL)
 		return (new_token);
-	else
-	{
-		temp = malloc(sizeof(char) *ft_strlen(new_token) + 1);
-		ft_strlcpy(temp, new_token, ft_strlen(new_token) + 1);
-		free(new_token);
-		new_token = ft_strjoin(temp, var);
-		free(temp);
-		// free(var);
-	}
+	new_token = join_var_expansion_with_token(new_token, var);
 	return (new_token);
 }
 static char	*handle_double_quote(char *new_token, char cur_char, int *quote)
