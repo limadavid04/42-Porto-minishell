@@ -47,7 +47,6 @@ void print_error(int error_code, char *error_msg, char *file)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error_msg, 2);
 	ft_putstr_fd("\n", 2);
-	// printf("%s: %s\n", file, error_msg);
 }
 
 long long	ft_atol(const char *str)

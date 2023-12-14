@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/12 15:50:14 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/14 12:48:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	find_next_delimiter(char *cmd)
 	int	i;
 
 	i = 0;
-	while (cmd[i] && !is_special_char(cmd[i]) && !is_whitespace(cmd[i]) \
-	&& !is_double_quote(cmd[i]) && !is_single_quote(cmd[i]) && cmd[i] != '$')
+	while ((cmd[i] >= 65 && cmd[i] <= 90) || (cmd[i] >= 97 && cmd[i] <= 122)\
+	|| (cmd[i] >= 48 && cmd[i] <= 57) || cmd[i] == 95)
 		i++;
 	return (i);
 }
