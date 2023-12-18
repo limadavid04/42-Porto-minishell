@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 16:53:55 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:44:57 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	init_status_new_cmd(t_status *status, t_list **token_lst)
 	status->token_lst = token_lst;
 }
 
-int interpret_new_command(t_status *status)
+int	interpret_new_command(t_status *status)
 {
 	char		*command;
 	t_list		**token_lst;
@@ -58,7 +58,7 @@ int interpret_new_command(t_status *status)
 		return (1);
 	add_history(command);
 	if (missing_quotes(command))
-		print_error(SYNTAX_ERROR, "Missing Quotes" ,"minishell");
+		print_error(SYNTAX_ERROR, "Missing Quotes", "minishell");
 	else
 	{
 		token_lst = lexer(command);

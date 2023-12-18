@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/18 11:44:30 by dlima             #+#    #+#             */
+/*   Updated: 2023/12/18 11:44:36 by dlima            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	is_number(char *str)
@@ -27,10 +39,10 @@ int	is_number(char *str)
 	return (1);
 }
 
-void print_syntax_err(struct s_list *token)
+void	print_syntax_err(struct s_list *token)
 {
 	g_exit_status = SYNTAX_ERROR;
-	ft_putstr_fd(SYNTAX_MSG,2);
+	ft_putstr_fd(SYNTAX_MSG, 2);
 	write(1, "`", 2);
 	if (token == NULL)
 		ft_putstr_fd("newline", 2);
@@ -40,7 +52,7 @@ void print_syntax_err(struct s_list *token)
 	ft_putstr_fd("\n", 2);
 }
 
-void print_error(int error_code, char *error_msg, char *file)
+void	print_error(int error_code, char *error_msg, char *file)
 {
 	g_exit_status = error_code;
 	ft_putstr_fd(file, 2);

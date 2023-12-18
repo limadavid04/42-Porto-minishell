@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:36:35 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/12 13:22:06 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:38:42 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_exit_status;
 
 void	rename_export(t_status *status, char *key)
 {
@@ -60,7 +58,6 @@ void	export_single(char *cmd, t_status *status)
 	}
 	if (cmd[len] != '=')
 	{
-		// printf("key = %s\n", key);
 		rename_export(status, key);
 		free(key);
 		return ;

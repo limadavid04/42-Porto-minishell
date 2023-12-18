@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:35:52 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/13 16:18:32 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:38:56 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_exit_status;
 
 void	unset_env(t_status *status, char *key)
 {

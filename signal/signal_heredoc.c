@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 16:01:11 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 16:02:08 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:43:19 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
 {
-	static t_heredoc *here_static;
+	static t_heredoc	*here_static;
+
 	if (signal == -1)
 		here_static = heredoc;
 	else
@@ -24,6 +25,7 @@ void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
 		exit(g_exit_status);
 	}
 }
+
 void	signals_heredoc(t_heredoc *heredoc)
 {
 	exec_ctrl_c_heredoc(-1, heredoc);

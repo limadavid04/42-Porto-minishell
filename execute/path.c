@@ -6,32 +6,34 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 12:50:17 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:42:18 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *get_file_full_path(char *cmd, char *dir)
+char	*get_file_full_path(char *cmd, char *dir)
 {
-	char *file;
-	char *slash_cmd;
+	char	*file;
+	char	*slash_cmd;
 
 	slash_cmd = ft_strjoin("/", cmd);
 	file = ft_strjoin(dir, slash_cmd);
 	free(slash_cmd);
 	return (file);
 }
-char *find_exec_bin(char **dir, char *cmd)
+
+char	*find_exec_bin(char **dir, char *cmd)
 {
-	char *file;
-	int i;
+	char	*file;
+	int		i;
 
 	i = 0;
 	while (dir[i])
 	{
 		file = get_file_full_path(cmd, dir[i]);
-		if (!access(file, F_OK) && !is_directory(file) && is_executable_file(file))
+		if (!access(file, F_OK) && !is_directory(file) \
+		&& is_executable_file(file))
 		{
 			matrix_free(dir);
 			return (file);
@@ -45,8 +47,8 @@ char *find_exec_bin(char **dir, char *cmd)
 
 char	*search_for_file(char *cmd, t_status *status)
 {
-	char *path;
-	char **dir;
+	char	*path;
+	char	**dir;
 
 	path = get_env("PATH", status);
 	if (path == NULL)
@@ -55,7 +57,7 @@ char	*search_for_file(char *cmd, t_status *status)
 	return (find_exec_bin(dir, cmd));
 }
 
-int is_valid_relative_path(char *cmd)
+int	is_valid_relative_path(char *cmd)
 {
 	if (access(cmd, F_OK) == 0)
 	{
@@ -78,7 +80,7 @@ int is_valid_relative_path(char *cmd)
 
 int	validate_cmd(char **cmd, t_status *status)
 {
-	char *executable;
+	char	*executable;
 
 	if (!ft_strncmp(*cmd, "", ft_strlen(*cmd)))
 	{
@@ -86,7 +88,7 @@ int	validate_cmd(char **cmd, t_status *status)
 		return (0);
 	}
 	if (ft_strchr(*cmd, '/') != 0)
-		return(is_valid_relative_path(*cmd));
+		return (is_valid_relative_path(*cmd));
 	executable = search_for_file(*cmd, status);
 	if (executable == NULL)
 		print_error(CMD_NOT_FOUND, "Command not found", *cmd);
@@ -98,4 +100,3 @@ int	validate_cmd(char **cmd, t_status *status)
 	}
 	return (0);
 }
-

@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:13 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 17:20:08 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:39:43 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void throw_execve_error(char **cmd, t_status *status)
+void	throw_execve_error(char **cmd, t_status *status)
 {
 	print_error(errno, strerror(errno), cmd[0]);
 	lst_clear(status->token_lst);
@@ -27,7 +27,7 @@ void throw_execve_error(char **cmd, t_status *status)
 
 void	execute(t_status *status, char **cmd)
 {
-	int pid;
+	int	pid;
 
 	if (!cmd[0] || !validate_cmd(&cmd[0], status))
 		return ;

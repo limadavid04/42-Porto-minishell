@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/06 12:03:50 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:46:49 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ t_list	*state_single_quote(t_info *info)
 	node = info->node;
 	cmd = info->cmd;
 	i = info->i;
-
 	if (is_single_quote(cmd[*i]) && info->quote == 1)
 	{
 		info->quote = 0;
@@ -111,7 +110,7 @@ void	get_tokens(t_info *info)
 	while (cmd[i] != '\0')
 	{
 		if ((info->quote == 0 && is_single_quote(cmd[i]))\
-		 || info->quote == 1)
+		|| info->quote == 1)
 			info->node = state_single_quote(info);
 		else if ((info->quote == 0 && is_double_quote(cmd[i]))\
 		|| info->quote == 2)

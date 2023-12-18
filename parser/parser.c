@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 17:20:08 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:51:03 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
-	char **cmd;
-	int	cmd_size;
-	int	i;
+	char	**cmd;
+	int		cmd_size;
+	int		i;
 
 	i = 0;
 	cmd_size = command_length(cmd_start, pipe_tkn);
@@ -40,6 +40,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	cmd[i] = 0;
 	return (cmd);
 }
+
 void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
@@ -56,7 +57,8 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	close(pipe_fd[OUT]);
 	status->old_pipe_in = pipe_fd[IN];
 }
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
+
+void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
@@ -76,14 +78,14 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn,  t_status *status)
 	}
 	restore_default_fd(default_fd);
 }
+
 void	parse_tokens(t_status *status)
 {
-	t_list *cur_tkn;
-	t_list *cmd_start;
+	t_list	*cur_tkn;
+	t_list	*cmd_start;
 
 	cur_tkn = *status->token_lst;
 	cmd_start = *status->token_lst;
-
 	while (cur_tkn != NULL)
 	{
 		if (ft_strncmp(cur_tkn->content, "|", ft_strlen(cur_tkn->content)) == 0)
@@ -103,4 +105,3 @@ void	parser_main(t_status *status)
 		return ;
 	parse_tokens(status);
 }
-

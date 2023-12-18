@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/14 17:20:07 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:53:43 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@
 # include <errno.h>
 
 extern int g_exit_status;
+
 # define HEREDOC_FILE ".heredoc"
 # define SYNTAX_MSG "minishell: syntax error near unexpected token "
 # define EXIT_CTRL_C 130
-#define SUCCESS 0
-#define GENERAL_ERROR 1
-#define SYNTAX_ERROR 2
-#define CMD_CANNOT_EXECUTE 126
-#define CMD_NOT_FOUND 127
-#define INVALID_ARGUMENT 128
+# define SUCCESS 0
+# define GENERAL_ERROR 1
+# define SYNTAX_ERROR 2
+# define CMD_CANNOT_EXECUTE 126
+# define CMD_NOT_FOUND 127
+# define INVALID_ARGUMENT 128
 # define IN 0
 # define OUT 1
-
 
 typedef struct s_exp {
 	char			*vexp_name;
@@ -70,14 +70,12 @@ typedef struct Status
 	t_exp	*exp;
 }	t_status;
 
-
 typedef struct Heredoc
 {
 	t_status	*status;
 	int			fd;
 	char		*delim;
 }	t_heredoc;
-
 
 typedef struct TapeInfo
 {
@@ -95,7 +93,7 @@ int		wait_for_children(t_status *status);
 // utils/quotes.c
 bool	missing_quotes(const char *str);
 
-void print_error(int error_code, char *error_msg, char *file);
+void	print_error(int error_code, char *error_msg, char *file);
 
 //utils/utils.c
 long long	ft_atol(const char *str);
@@ -113,7 +111,7 @@ void	sig_handling(void);
 void	exec_ctrl_c(int signal);
 void	exec_ctrl_bslash(int signal);
 void	signals_exec(void);
-void print_syntax_err(struct s_list *token);
+void	print_syntax_err(struct s_list *token);
 
 // lexer/lexer.c
 t_list	*state_no_quote(t_info *info);
@@ -183,20 +181,19 @@ int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	create_heredoc_subprocess(char *delim, t_status *status);
 void	free_heap(t_status *status, char *delim, int fd);
 
-
 // execute/executer.c
 void	execute(t_status *status, char **cmd);
 
 // execute/path.c
-char *get_file_full_path(char *cmd, char *dir);
-char *find_exec_bin(char **dir, char *cmd);
+char	*get_file_full_path(char *cmd, char *dir);
+char	*find_exec_bin(char **dir, char *cmd);
 char	*search_for_file(char *cmd, t_status *status);
-int is_valid_relative_path(char *cmd);
-int	validate_cmd(char **cmd, t_status *status);
+int		is_valid_relative_path(char *cmd);
+int		validate_cmd(char **cmd, t_status *status);
 
 // execute/path_utils.c
-int is_executable_file(char *cmd);
-int is_directory(char *cmd);
+int		is_executable_file(char *cmd);
+int		is_directory(char *cmd);
 
 // builtins/b_cd.c
 void	update_oldpwd(t_status *status);

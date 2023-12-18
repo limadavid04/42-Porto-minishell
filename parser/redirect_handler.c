@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirect_handler.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/18 11:51:33 by dlima             #+#    #+#             */
+/*   Updated: 2023/12/18 11:51:34 by dlima            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	redirect_input(t_list *redir, t_status *status)
 {
-	int	fd;
-	char *new_filename;
+	int		fd;
+	char	*new_filename;
 
 	new_filename = process_tokens(redir->next->content, 1, status);
-	// printf("NEW filename = %s\n", new_filename);
 	fd = open(new_filename, O_RDONLY);
 	if (fd == -1)
 	{
@@ -19,13 +30,13 @@ int	redirect_input(t_list *redir, t_status *status)
 	close(fd);
 	return (1);
 }
-int	redirect_output(t_list	*redir, int	append, t_status *status)
+
+int	redirect_output(t_list	*redir, int append, t_status *status)
 {
-	int	fd;
-	char *new_filename;
+	int		fd;
+	char	*new_filename;
 
 	new_filename = process_tokens(redir->next->content, 1, status);
-	// printf("NEW filename = %s\n", new_filename);
 	if (append == 1)
 		fd = open(new_filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else

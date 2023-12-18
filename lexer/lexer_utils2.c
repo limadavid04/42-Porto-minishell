@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/11 15:48:23 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:46:31 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,6 @@ char	*add_char(char c, char *content)
 	}
 	return (new_content);
 }
-// char *get_custom_error_msg(char *token)
-// {
-// 	if (!ft_strncmp(token, "<", ft_strlen(token)))
-// 		print_error(SYNTAX_ERROR, SYNTAX_MSG)
-// }
 
 int	check_for_errors_in_redirect(t_list	**token_lst)
 {
@@ -64,9 +59,8 @@ int	check_for_errors_in_redirect(t_list	**token_lst)
 	{
 		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
 		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content))
+		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)) \
 		|| !ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
-
 		{
 			if (cur->next == NULL \
 			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \

@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:26:16 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/14 17:15:38 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:38:01 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_exit_status;
 
 void	free_all(char **cmd, t_status *status)
 {
@@ -25,9 +23,10 @@ void	free_all(char **cmd, t_status *status)
 	close(status->default_fd[OUT]);
 	free(status);
 }
+
 int	has_pipe(t_list *token_lst)
 {
-	t_list *cur_tkn;
+	t_list	*cur_tkn;
 
 	cur_tkn = token_lst;
 	while (cur_tkn != NULL)

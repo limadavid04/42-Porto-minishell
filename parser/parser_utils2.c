@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/14 16:11:51 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 11:50:16 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,18 @@ int	find_next_delimiter(char *cmd)
 	return (i);
 }
 
-char *join_var_expansion_with_token(char *new_token, char *var)
+char	*join_var_expansion_with_token(char *new_token, char *var)
 {
 	char	*temp;
 
-	temp = malloc(sizeof(char) *ft_strlen(new_token) + 1);
+	temp = malloc(sizeof(char) * ft_strlen(new_token) + 1);
 	ft_strlcpy(temp, new_token, ft_strlen(new_token) + 1);
 	free(new_token);
 	new_token = ft_strjoin(temp, var);
 	free(temp);
 	return (new_token);
 }
+
 char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
@@ -59,6 +60,7 @@ char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 	new_token = join_var_expansion_with_token(new_token, var);
 	return (new_token);
 }
+
 static char	*handle_double_quote(char *new_token, char cur_char, int *quote)
 {
 	if (!is_double_quote(cur_char))
@@ -105,6 +107,7 @@ char	*process_tokens(char *token, int expand, t_status *status)
 	}
 	return (new_token);
 }
+
 char	**strip_tokens(char **cmd, t_status *status)
 {
 	char	**new_cmd;
