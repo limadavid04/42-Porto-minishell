@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/18 11:53:43 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:52:01 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ extern int g_exit_status;
 
 # define HEREDOC_FILE ".heredoc"
 # define SYNTAX_MSG "minishell: syntax error near unexpected token "
+# define SINGLE_PIPE_ERR "syntax error near unexpected token `|'"
+# define DOUBLE_PIPE_ERR "syntax error near unexpected token `||'"
+# define HERE_ERR "minishell: warning: here-document delimited by end-of-file\n"
 # define EXIT_CTRL_C 130
 # define SUCCESS 0
 # define GENERAL_ERROR 1

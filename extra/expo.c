@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:58:07 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/12 15:19:31 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:42:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void free_exp2(t_exp *tmp)
+void	free_exp2(t_exp *tmp)
 {
 	if (!tmp)
 		return ;
@@ -20,7 +20,6 @@ void free_exp2(t_exp *tmp)
 	free(tmp->vexp_value);
 	free(tmp);
 }
-
 
 void	free_exp(t_exp *exp)
 {

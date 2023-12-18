@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:48:32 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:53:47 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	get_heredoc_input(char *delim, int fd)
 		free(temp);
 		if (!line)
 		{
-			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
+			ft_putstr_fd(HERE_ERR, 2);
 			break ;
 		}
 		if (!ft_strncmp(line, delim, ft_strlen(line)))
@@ -70,11 +70,11 @@ void	get_heredoc_input(char *delim, int fd)
 	}
 }
 
-void init_heredoc_struct(t_heredoc *heredoc, t_status *status, int fd, char *delim)
+void	init_heredoc(t_heredoc *here, t_status *status, int fd, char *delim)
 {
-	heredoc->delim = delim;
-	heredoc->status = status;
-	heredoc->fd = fd;
+	here->delim = delim;
+	here->status = status;
+	here->fd = fd;
 }
 
 void	create_heredoc_subprocess(char *delim, t_status *status)
@@ -95,7 +95,7 @@ void	create_heredoc_subprocess(char *delim, t_status *status)
 		close(old_fd[OUT]);
 		g_exit_status = 0;
 		fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		init_heredoc_struct(&heredoc_struct, status, fd, delim);
+		init_heredoc(&heredoc_struct, status, fd, delim);
 		signals_heredoc(&heredoc_struct);
 		get_heredoc_input(delim, fd);
 		free_heap(status, delim, fd);

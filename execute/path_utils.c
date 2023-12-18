@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:33:32 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:40:50 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/18 14:28:23 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ int	is_directory(char *cmd)
 	stat(cmd, &path_stat);
 	return (S_ISDIR(path_stat.st_mode));
 }
-
