@@ -211,6 +211,7 @@ void	b_echo(char **cmd);
 
 // builtins/b_exit.c
 void	exit_args(char **cmd, t_status *status);
+int		has_pipe(t_list *token_lst);
 void	b_exit(char **cmd, t_status *status);
 
 // builtins/b_export.c

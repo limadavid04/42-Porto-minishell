@@ -74,8 +74,8 @@ void	b_export(t_status *status, char **cmd)
 	int	i;
 
 	i = -1;
-	// if (has_pipe(status))
-	// 	return ;
+	if (has_pipe(*status->token_lst))
+		return ;
 	while (cmd[++i])
 		export_single(cmd[i], status);
 	g_exit_status = 0;
