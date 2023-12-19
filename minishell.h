@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 11:25:56 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:44:05 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int		is_redir(t_list *cmd);
 char	**strip_tokens(char **cmd, t_status *status);
 char	*expand_var(char *new_token, char *token, int *i, t_status *status);
 char	*process_tokens(char *token, int expand, t_status *status);
-int		check_for_pipe_errors(t_list **token_lst);
+int		check_pipe_err(t_list **token_lst);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
@@ -214,6 +214,7 @@ void	b_echo(char **cmd);
 
 // builtins/b_exit.c
 void	exit_args(char **cmd, t_status *status);
+int		has_pipe(t_list *token_lst);
 void	b_exit(char **cmd, t_status *status);
 
 // builtins/b_export.c

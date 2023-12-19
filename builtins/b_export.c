@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 11:36:35 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/18 11:38:42 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:43:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	b_export(t_status *status, char **cmd)
 	int	i;
 
 	i = -1;
-	// if (has_pipe(status))
-	// 	return ;
+	if (has_pipe(*status->token_lst))
+		return ;
 	while (cmd[++i])
 		export_single(cmd[i], status);
 	g_exit_status = 0;

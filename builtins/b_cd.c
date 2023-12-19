@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_cd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psousa <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:26:49 by psousa            #+#    #+#             */
-/*   Updated: 2023/11/22 12:26:52 by psousa           ###   ########.fr       */
+/*   Updated: 2023/12/19 11:42:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	go_old_path(char **path, t_status *status)
 	if (!*path)
 	{
 		printf("OLDPWD not set\n");
-		//g_exit_status = 1;
+		g_exit_status = 1;
 		return (1);
 	}
 	printf("%s\n", get_env("OLDPWD", status));

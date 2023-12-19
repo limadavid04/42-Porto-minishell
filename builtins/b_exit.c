@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:26:16 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/18 11:38:01 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:42:48 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ void	exit_args(char **cmd, t_status *status)
 	if (!is_number(cmd[1]))
 	{
 		print_error(2, "numeric argument required", *cmd);
-		exit_code = (char)ft_atol(cmd[1]);
 		free_all(cmd, status);
-		exit(exit_code);
+		exit(2);
 	}
 	else if (is_number(cmd[1]) && !cmd[2])
 	{
