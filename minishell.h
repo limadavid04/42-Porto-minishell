@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 11:44:05 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:02:19 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,17 @@ typedef struct TapeInfo
 // main.c
 int		wait_for_children(t_status *status);
 
-// utils/quotes.c
+// utils/utils1.c
 bool	missing_quotes(const char *str);
+char	*join_three(char *one, char *two, char *three);
+int		is_all_digits(char *str);
 
-void	print_error(int error_code, char *error_msg, char *file);
 
 //utils/utils.c
+void	print_error(int error_code, char *error_msg, char *file);
 long long	ft_atol(const char *str);
 int		is_number(char *str);
 void	free_env2(t_env *tmp);
-char	*join_three(char *one, char *two, char *three);
-int		is_all_digits(char *str);
 
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);
@@ -173,6 +173,10 @@ int		count_redir(t_list *cmd_start, t_list *pipe_tkn);
 
 // parser/parser_utils1.c
 int		is_redir(t_list *cmd);
+int		find_next_delimiter(char *cmd);
+void	free_heap(t_status *status, char *delim, int fd);
+char	*join_var_expansion_with_token(char *new_token, char *var);
+
 
 // parser/parser_utils2.c
 char	**strip_tokens(char **cmd, t_status *status);
@@ -185,7 +189,6 @@ int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 //parser/heredoc.c
 void	create_heredoc_subprocess(char *delim, t_status *status);
-void	free_heap(t_status *status, char *delim, int fd);
 
 // execute/executer.c
 void	execute(t_status *status, char **cmd);

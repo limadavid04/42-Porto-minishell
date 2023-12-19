@@ -20,7 +20,7 @@ extra/enviro extra/enviro2 extra/expo extra/expo2\
 execute/executer execute/path_utils execute/path \
 lexer/lexer lexer/lexer_utils lexer/lexer_utils2 lexer/lexer_utils1 parser/parser parser/parser_utils\
 parser/parser_utils1 parser/parser_utils2 parser/redirect_handler signal/exec_signal signal/signal \
-signal/signal_heredoc utils/quotes  \
+signal/signal_heredoc utils/utils1  \
 utils/utils  parser/heredoc
 
 OBJS = $(addsuffix .o, $(FILES))

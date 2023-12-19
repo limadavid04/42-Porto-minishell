@@ -6,34 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:50:16 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:59:13 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	find_next_delimiter(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	while ((cmd[i] >= 65 && cmd[i] <= 90) || (cmd[i] >= 97 && cmd[i] <= 122)\
-	|| (cmd[i] >= 48 && cmd[i] <= 57) || cmd[i] == 95)
-		i++;
-	return (i);
-}
-
-char	*join_var_expansion_with_token(char *new_token, char *var)
-{
-	char	*temp;
-
-	temp = malloc(sizeof(char) * ft_strlen(new_token) + 1);
-	ft_strlcpy(temp, new_token, ft_strlen(new_token) + 1);
-	free(new_token);
-	new_token = ft_strjoin(temp, var);
-	free(temp);
-	return (new_token);
-}
 
 char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {

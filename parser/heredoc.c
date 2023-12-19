@@ -6,24 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 14:53:47 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:59:27 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_heap(t_status *status, char *delim, int fd)
-{
-	if (status->old_pipe_in != -1)
-		close(status->old_pipe_in);
-	lst_clear(status->token_lst);
-	free(status->token_lst);
-	free_env(status->env);
-	free_exp(status->exp);
-	free(status);
-	close(fd);
-	free(delim);
-}
 
 void	save_fd_heredoc(t_status *status, int old_fd[2])
 {

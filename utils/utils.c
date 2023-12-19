@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:44:30 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:44:36 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:02:19 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,29 +97,3 @@ void	free_env2(t_env *tmp)
 	free(tmp);
 }
 
-char	*join_three(char *one, char *two, char *three)
-{
-	char	*tmp;
-	char	*final;
-
-	if (!(one && two && three))
-		return (NULL);
-	tmp = ft_strjoin(one, two);
-	final = ft_strjoin(tmp, three);
-	free(tmp);
-	return (final);
-}
-
-int	is_all_digits(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
