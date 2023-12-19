@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:44:57 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:27:24 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	interpret_new_command(t_status *status)
 	{
 		token_lst = lexer(command);
 		init_status_new_cmd(status, token_lst);
-		if (!(!check_for_errors_in_redirect(token_lst) || !check_for_pipe_errors(token_lst)))
+		if (!(!check_pipe_err(token_lst) || !check_redir_err(token_lst)))
 		{
 			parser_main(status);
 			if (status->last_pid != 0)
@@ -80,8 +80,13 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_status	*status;
 
-	(void)argc;
+
 	(void)argv;
+	if (argc != 1)
+	{
+		print_error(EXIT_FAILURE, TOO_MANY_ARGS_ERR, "minishell");
+		return (g_exit_status);
+	}
 	status = malloc(sizeof(t_status));
 	init(status);
 	create_env(status, envp);

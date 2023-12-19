@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:51:03 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:29:36 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	parse_tokens(t_status *status)
 	cmd_start = *status->token_lst;
 	while (cur_tkn != NULL)
 	{
-		if (ft_strncmp(cur_tkn->content, "|", ft_strlen(cur_tkn->content)) == 0)
+		if (is_pipe(cur_tkn->content))
 		{
 			parse_command(cmd_start, cur_tkn, status);
 			cmd_start = cur_tkn->next;

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/18 14:52:01 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:25:56 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-#include <fcntl.h>
+# include <fcntl.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -38,6 +38,7 @@ extern int g_exit_status;
 # define SINGLE_PIPE_ERR "syntax error near unexpected token `|'"
 # define DOUBLE_PIPE_ERR "syntax error near unexpected token `||'"
 # define HERE_ERR "minishell: warning: here-document delimited by end-of-file\n"
+# define TOO_MANY_ARGS_ERR "Minishell doesn't expect any arguments"
 # define EXIT_CTRL_C 130
 # define SUCCESS 0
 # define GENERAL_ERROR 1
@@ -128,6 +129,7 @@ int		check_next_char(char *c);
 void	print_linked_list(t_list	*head);
 void	lst_clear(t_list **lst);
 t_list	*create_token(t_list **head, t_list *node, int *i, char *cmd);
+int		check_redir_err(t_list	**token_lst);
 
 // lexer/lexer_utils1.c
 int		is_whitespace(char c);
@@ -139,8 +141,9 @@ int		is_double_quote(char c);
 // lexer/lexer_utils2.c
 t_list	*handle_special(t_list **head, t_list *node, int *i, char *cmd);
 char	*add_char(char c, char *content);
-int		check_for_errors_in_redirect(t_list	**token_lst);
-int		check_for_pipe_errors(t_list **token_lst);
+int		check_pipe_err(t_list **token_lst);
+int		is_pipe(char *content);
+
 
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);

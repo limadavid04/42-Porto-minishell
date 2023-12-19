@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:05:59 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/05 14:35:17 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:19:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,32 @@ t_list	*create_token(t_list **head, t_list *node, int *i, char *cmd)
 	ft_lstadd_back(head, node);
 	node->content = add_char(cmd[*i], (char *)node->content);
 	return (node);
+}
+
+int	check_redir_err(t_list	**token_lst)
+{
+	t_list	*cur;
+
+	cur = *token_lst;
+	while (cur != NULL)
+	{
+		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
+		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
+		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)) \
+		|| !ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
+		{
+			if (cur->next == NULL \
+			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, ">", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, ">>", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
+			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
+			{
+				print_syntax_err(cur->next);
+				return (0);
+			}
+		}
+		cur = cur->next;
+	}
+	return (1);
 }

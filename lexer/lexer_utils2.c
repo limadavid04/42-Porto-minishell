@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 14:49:12 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 11:19:04 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,60 +50,48 @@ char	*add_char(char c, char *content)
 	return (new_content);
 }
 
-int	check_for_errors_in_redirect(t_list	**token_lst)
-{
-	t_list	*cur;
 
-	cur = *token_lst;
-	while (cur != NULL)
+int	is_pipe(char *content)
+{
+	if (!content)
+		return (0);
+	if (!ft_strncmp(content, "|", ft_strlen(content)))
+		return (1);
+	return (0);
+}
+
+int	check_single_pipe_err(char *content)
+{
+	if (is_pipe(content))
 	{
-		if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, ">", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, ">>", ft_strlen(cur->content)) \
-		|| !ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
-		{
-			if (cur->next == NULL \
-			|| !ft_strncmp(cur->next->content, "<", ft_strlen(cur->content)) \
-			|| !ft_strncmp(cur->next->content, ">", ft_strlen(cur->content)) \
-			|| !ft_strncmp(cur->next->content, ">>", ft_strlen(cur->content)) \
-			|| !ft_strncmp(cur->next->content, "<<", ft_strlen(cur->content)) \
-			|| !ft_strncmp(cur->next->content, "|", ft_strlen(cur->content)))
-			{
-				print_syntax_err(cur->next);
-				return (0);
-			}
-		}
-		cur = cur->next;
+		print_error(SYNTAX_ERROR, SINGLE_PIPE_ERR, "minishell");
+		return (0);
 	}
 	return (1);
 }
 
-int	check_for_pipe_errors(t_list **token_lst)
+int	check_pipe_err(t_list **token_lst)
 {
 	t_list	*cur;
 
 	cur = *token_lst;
 	if (cur == NULL)
 		return (0);
-	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
-	{
-		print_error(SYNTAX_ERROR, SINGLE_PIPE_ERR, "minishell");
+	if (!check_single_pipe_err(cur->content))
 		return (0);
-	}
 	while (cur->next != NULL)
 	{
-		if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
-			if (!ft_strncmp(cur->next->content, "|", ft_strlen(cur->next->content)))
+		if (is_pipe(cur->content))
+		{
+			if (is_pipe(cur->next->content))
 			{
 				print_error(SYNTAX_ERROR, DOUBLE_PIPE_ERR, "minishell");
 				return (0);
 			}
+		}
 		cur = cur->next;
 	}
-	if (!ft_strncmp(cur->content, "|", ft_strlen(cur->content)))
-	{
-		print_error(SYNTAX_ERROR, SINGLE_PIPE_ERR, "minishell");
+	if (!check_single_pipe_err(cur->content))
 		return (0);
-	}
 	return (1);
 }
