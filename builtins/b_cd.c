@@ -25,8 +25,11 @@ void	update_oldpwd(t_status *status)
 
 int	handle_cd(char *path, t_status *status)
 {
-	g_exit_status = chdir(path);
-	if (g_exit_status < 0)
+	if (!path)
+		g_exit_status = 127;
+	else
+		g_exit_status = chdir(path);
+	if (g_exit_status == 127)
 		return (g_exit_status);
 	update_oldpwd(status);
 	return (g_exit_status);
@@ -62,7 +65,7 @@ void	b_cd(t_status *status, char **cmd)
 	path = cmd[1];
 	if (cmd[1] && cmd[2])
 	{
-		printf("too many arguments");
+		printf("too many arguments\n");
 		g_exit_status = 1;
 		return ;
 	}
@@ -75,9 +78,9 @@ void	b_cd(t_status *status, char **cmd)
 		if (go_old_path(&path, status))
 			return ;
 	}
-	if (handle_cd(path, status) < 0)
+	if (handle_cd(path, status) == 127)
 	{
 		g_exit_status = 1;
-		perror("cd");
+		print_error();
 	}
 }
