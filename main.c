@@ -6,11 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 12:38:01 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:47:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_exit_status;
 
 static int	wait_for_children(t_status *status)
 {

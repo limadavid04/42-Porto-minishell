@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect_handler.c                                 :+:      :+:    :+:   */
+/*   redirect.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -77,11 +77,8 @@ static int	handle_heredoc(t_list	*heredoc, t_status *status)
 	return (0);
 }
 
-int	redirect_handler2(t_list *cmd_start, t_status *status)
+int	redirect2(t_list *cur, t_status *status)
 {
-	t_list	*cur;
-
-	cur = cmd_start;
 	if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)))
 	{
 		if (!redirect_input(cur, status))
@@ -95,7 +92,7 @@ int	redirect_handler2(t_list *cmd_start, t_status *status)
 	return (1);
 }
 
-int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
+int	redirect(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 {
 	t_list	*cur;
 
@@ -112,7 +109,7 @@ int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 			if (!redirect_output(cur, 1, status))
 				return (0);
 		}
-		else if (!redirect_handler2(cmd_start, status))
+		else if (!redirect2(cur, status))
 			return (0);
 		cur = cur->next;
 	}
