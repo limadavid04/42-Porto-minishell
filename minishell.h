@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 12:41:47 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:06:26 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,9 @@ char	*add_char(char c, char *content);
 int		check_pipe_err(t_list **token_lst);
 int		is_pipe(char *content);
 
+//lexer/lexer_utils3.c
+t_list	*state_no_quote_inside_word(t_info *info);
+
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);
 void	handle_ctrl_c(int sig);
@@ -164,6 +167,7 @@ int		is_redir(t_list *cmd);
 int		find_next_delimiter(char *cmd);
 void	free_heap(t_status *status, char *delim, int fd);
 char	*join_var_expansion_with_token(char *new_token, char *var);
+char	*get_var(int size, char *src, t_status *status);
 
 // parser/parser_utils2.c
 char	**strip_tokens(char **cmd, t_status *status);

@@ -6,17 +6,18 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 12:30:53 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:04:44 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+
+
 static char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
 	char	*var;
-	char	*var_name;
 
 	(*i)++;
 	if (token[*i] == '?')
@@ -27,14 +28,16 @@ static char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 		return (new_token);
 	}
 	size = find_next_delimiter(&token[*i]);
-	var_name = malloc(sizeof(char) * size + 1);
-	ft_strlcpy(var_name, &token[*i], size + 1);
-	var = get_env(var_name, status);
-	free(var_name);
-	*i += (size - 1);
-	if (var == NULL)
+	if (size == 0)
+	{
+		new_token = add_char('$', new_token);
+		(*i)--;
 		return (new_token);
-	new_token = join_var_expansion_with_token(new_token, var);
+	}
+	var = get_var(size, &token[*i], status);
+	*i += (size - 1);
+	if (var != NULL)
+		new_token = join_var_expansion_with_token(new_token, var);
 	return (new_token);
 }
 

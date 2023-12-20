@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 12:39:45 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:07:09 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,7 @@ static t_list	*state_no_quote(t_info *info)
 		}
 	}
 	else if (info->inside_word == 1)
-	{
-		if (is_whitespace(cmd[*info->i]))
-			info->inside_word = 0;
-		else if (is_special_char(cmd[*info->i]))
-		{
-			info->node = handle_special(info->head, info->node, info->i, cmd);
-			info->inside_word = 0;
-		}
-		else
-			info->node->content = add_char(cmd[*info->i], \
-			(char *)info->node->content);
-	}
+		info->node = state_no_quote_inside_word(info);
 	return (info->node);
 }
 

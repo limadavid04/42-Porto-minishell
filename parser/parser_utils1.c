@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:24:33 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:59:07 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 12:58:08 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	find_next_delimiter(char *cmd)
 	int	i;
 
 	i = 0;
-	while ((cmd[i] >= 65 && cmd[i] <= 90) || (cmd[i] >= 97 && cmd[i] <= 122)\
+	while ((cmd[i] >= 65 && cmd[i] <= 90) || (cmd[i] >= 97 && cmd[i] <= 122) \
 	|| (cmd[i] >= 48 && cmd[i] <= 57) || cmd[i] == 95)
 		i++;
 	return (i);
@@ -58,4 +58,16 @@ char	*join_var_expansion_with_token(char *new_token, char *var)
 	new_token = ft_strjoin(temp, var);
 	free(temp);
 	return (new_token);
+}
+
+char	*get_var(int size, char *src, t_status *status)
+{
+	char	*var;
+	char	*var_name;
+
+	var_name = malloc(sizeof(char) * size + 1);
+	ft_strlcpy(var_name, src, size + 1);
+	var = get_env(var_name, status);
+	free(var_name);
+	return (var);
 }
