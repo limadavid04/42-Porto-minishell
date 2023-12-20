@@ -73,7 +73,7 @@ void	b_exit(char **cmd, t_status *status)
 		exit_args(cmd, status);
 		if (len > 2)
 		{
-			print_error(1, "too many arguments", *cmd);
+			print_error(EXIT_FAILURE, "too many arguments", *cmd);
 			return ;
 		}
 	}

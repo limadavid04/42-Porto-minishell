@@ -62,3 +62,17 @@ int	is_all_digits(char *str)
 	}
 	return (1);
 }
+
+void	print_export_err(int error_code, char *error_msg, char *type, char *key)
+{
+	g_exit_status = error_code;
+	ft_putstr_fd(type, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd("`", 2);
+	ft_putstr_fd(key, 2);
+	ft_putstr_fd("'", 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error_msg, 2);
+	ft_putstr_fd("\n", 2);
+
+}

@@ -25,6 +25,11 @@ void	update_oldpwd(t_status *status)
 
 int	handle_cd(char *path, t_status *status)
 {
+	if (!get_env("HOME", status) && (!path))
+	{
+		print_error(EXIT_FAILURE, "HOME not set", "cd");
+		return (1);
+	}
 	g_exit_status = chdir(path);
 	if (g_exit_status < 0)
 		return (g_exit_status);
@@ -37,8 +42,7 @@ int	go_old_path(char **path, t_status *status)
 	*path = get_env("OLDPWD", status);
 	if (!*path)
 	{
-		printf("OLDPWD not set\n");
-		g_exit_status = 1;
+		print_error(EXIT_FAILURE,"OLDPWD not set", "cd");
 		return (1);
 	}
 	printf("%s\n", get_env("OLDPWD", status));
@@ -62,8 +66,7 @@ void	b_cd(t_status *status, char **cmd)
 	path = cmd[1];
 	if (cmd[1] && cmd[2])
 	{
-		printf("too many arguments");
-		g_exit_status = 1;
+		print_error(EXIT_FAILURE,"too many arguments", "cd");
 		return ;
 	}
 	if (path == NULL || *path == '\0')

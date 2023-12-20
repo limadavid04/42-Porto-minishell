@@ -38,7 +38,7 @@ void	x_commands(char **cmd, t_status *status)
 	}
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		b_exit(cmd, status);
-	g_exit_status = 0;
+	// g_exit_status = 0;
 }
 
 int	commands(char **cmd)

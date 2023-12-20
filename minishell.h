@@ -95,6 +95,8 @@ typedef struct TapeInfo
 bool	missing_quotes(const char *str);
 char	*join_three(char *one, char *two, char *three);
 int		is_all_digits(char *str);
+void	print_export_err(int error_code, char *error_msg, char *type, char *key);
+
 
 //utils/utils.c
 void	print_error(int error_code, char *error_msg, char *file);
