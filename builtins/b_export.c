@@ -25,7 +25,7 @@ int	valid_export(char *key, char *type)
 	i = 0;
 	if (!(ft_isalpha(key[i]) || key[i] == '_'))
 	{
-		printf("%s: `%s': not a valid identifier\n", type, key);
+		print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 		return (0);
 	}
 	i++;
@@ -33,7 +33,7 @@ int	valid_export(char *key, char *type)
 	{
 		if (!(ft_isalnum(key[i]) || key[i] == '_'))
 		{
-			printf("%s: `%s': not a valid identifier\n", type, key);
+			print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 			return (0);
 		}
 		i++;
@@ -60,8 +60,10 @@ void	export_single(char *cmd, t_status *status)
 	{
 		rename_export(status, key);
 		free(key);
+		g_exit_status = 0;
 		return ;
 	}
+	g_exit_status = 0;
 	value = ft_strdup(cmd + len + 1);
 	set_env(key, value, status);
 	set_exp(key, value, status);
@@ -78,5 +80,4 @@ void	b_export(t_status *status, char **cmd)
 		return ;
 	while (cmd[++i])
 		export_single(cmd[i], status);
-	g_exit_status = 0;
 }

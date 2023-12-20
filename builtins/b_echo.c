@@ -43,4 +43,5 @@ void	b_echo(char **cmd)
 		i++;
 	}
 	print_words(cmd, i, flag);
+	g_exit_status = 0;
 }

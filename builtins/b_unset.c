@@ -67,7 +67,7 @@ int	valid_unset(char *key, char *type)
 	i = 0;
 	if (!(ft_isalpha(key[i]) || key[i] == '_'))
 	{
-		printf("%s: `%s': not a valid identifier\n", type, key);
+		print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 		return (0);
 	}
 	i++;
@@ -75,7 +75,7 @@ int	valid_unset(char *key, char *type)
 	{
 		if (!(ft_isalnum(key[i]) || key[i] == '_') || key[i] == '=' )
 		{
-			printf("%s: `%s': not a valid identifier\n", type, key);
+			print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 			return (0);
 		}
 		i++;
@@ -89,8 +89,8 @@ void	b_unset(t_status *status, char **cmd)
 	int		len;
 	int		i;
 
-	// if (has_pipe(data))
-	// 	return ;
+	if (has_pipe(*status->token_lst))
+		return ;
 	i = -1;
 	while (cmd[++i])
 	{
