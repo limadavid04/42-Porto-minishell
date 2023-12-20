@@ -98,10 +98,10 @@ static void	get_tokens(t_info *info)
 	info->i = &i;
 	while (cmd[i] != '\0')
 	{
-		if ((info->quote == 0 && is_single_quote(cmd[i]))\
+		if ((info->quote == 0 && is_single_quote(cmd[i])) \
 		|| info->quote == 1)
 			info->node = state_single_quote(info);
-		else if ((info->quote == 0 && is_double_quote(cmd[i]))\
+		else if ((info->quote == 0 && is_double_quote(cmd[i])) \
 		|| info->quote == 2)
 			info->node = state_double_quote(info);
 		else if (info->quote == 0 && !is_double_quote(cmd[i]) \

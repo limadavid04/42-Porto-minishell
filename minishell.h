@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/20 13:29:33 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:45:44 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include <sys/stat.h>
 # include <errno.h>
 
-extern int g_exit_status;
+extern int	g_exit_status;
 
 # define HEREDOC_FILE ".heredoc"
 # define SYNTAX_MSG "minishell: syntax error near unexpected token "
@@ -92,11 +92,10 @@ typedef struct TapeInfo
 }	t_info;
 
 // utils/utils1.c
-bool	missing_quotes(const char *str);
-char	*join_three(char *one, char *two, char *three);
-int		is_all_digits(char *str);
-void	print_export_err(int error_code, char *error_msg, char *type, char *key);
-
+bool		missing_quotes(const char *str);
+char		*join_three(char *one, char *two, char *three);
+int			is_all_digits(char *str);
+void		export_err(int error_code, char *error_msg, char *type, char *key);
 
 //utils/utils.c
 void		print_error(int error_code, char *error_msg, char *file);
@@ -175,8 +174,8 @@ char		*get_var(int size, char *src, t_status *status);
 char		**strip_tokens(char **cmd, t_status *status);
 char		*process_tokens(char *token, int expand, t_status *status);
 
-//parser/redirect_handler.c
-int			redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
+//parser/redirect.c
+int			redirect(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 
 //parser/heredoc.c
 void		create_heredoc_subprocess(char *delim, t_status *status);

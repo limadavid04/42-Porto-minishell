@@ -96,4 +96,3 @@ void	free_env2(t_env *tmp)
 	free(tmp->v_value);
 	free(tmp);
 }
-

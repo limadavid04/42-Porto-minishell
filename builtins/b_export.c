@@ -25,7 +25,7 @@ int	valid_export(char *key, char *type)
 	i = 0;
 	if (!(ft_isalpha(key[i]) || key[i] == '_'))
 	{
-		print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
+		export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 		return (0);
 	}
 	i++;
@@ -33,7 +33,7 @@ int	valid_export(char *key, char *type)
 	{
 		if (!(ft_isalnum(key[i]) || key[i] == '_'))
 		{
-			print_export_err(EXIT_FAILURE, "not a valid identifier", type, key);
+			export_err(EXIT_FAILURE, "not a valid identifier", type, key);
 			return (0);
 		}
 		i++;

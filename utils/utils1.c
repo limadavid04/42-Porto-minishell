@@ -63,7 +63,7 @@ int	is_all_digits(char *str)
 	return (1);
 }
 
-void	print_export_err(int error_code, char *error_msg, char *type, char *key)
+void	export_err(int error_code, char *error_msg, char *type, char *key)
 {
 	g_exit_status = error_code;
 	ft_putstr_fd(type, 2);
