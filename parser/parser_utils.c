@@ -67,4 +67,3 @@ int	count_redir(t_list *cmd_start, t_list *pipe_tkn)
 	}
 	return (i);
 }
-

@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-int	g_exit_status;
-
 static int	wait_for_children(t_status *status)
 {
 	int	exit_code;
@@ -79,7 +77,6 @@ static int	interpret_new_command(t_status *status)
 int	main(int argc, char **argv, char **envp)
 {
 	t_status	*status;
-
 
 	(void)argv;
 	if (argc != 1)

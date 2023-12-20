@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-
-
 static char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
