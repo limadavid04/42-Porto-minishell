@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:51:33 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 12:27:19 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:40:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	redirect_input(t_list *redir, t_status *status)
 	fd = open(new_filename, O_RDONLY);
 	if (fd == -1)
 	{
-		print_error(errno, strerror(errno), new_filename);
+		print_error(EXIT_FAILURE, strerror(errno), new_filename);
 		free(new_filename);
 		return (0);
 	}
@@ -43,7 +43,7 @@ static int	redirect_output(t_list	*redir, int append, t_status *status)
 		fd = open(new_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		print_error(errno, strerror(errno), new_filename);
+		print_error(EXIT_FAILURE, strerror(errno), new_filename);
 		free(new_filename);
 		return (0);
 	}
@@ -77,6 +77,24 @@ static int	handle_heredoc(t_list	*heredoc, t_status *status)
 	return (0);
 }
 
+int	redirect_handler2(t_list *cmd_start, t_status *status)
+{
+	t_list	*cur;
+
+	cur = cmd_start;
+	if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)))
+	{
+		if (!redirect_input(cur, status))
+			return (0);
+	}
+	else if (!ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
+	{
+		if (!handle_heredoc(cur, status))
+			return (0);
+	}
+	return (1);
+}
+
 int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 {
 	t_list	*cur;
@@ -94,16 +112,8 @@ int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 			if (!redirect_output(cur, 1, status))
 				return (0);
 		}
-		else if (!ft_strncmp(cur->content, "<", ft_strlen(cur->content)))
-		{
-			if (!redirect_input(cur, status))
-				return (0);
-		}
-		else if (!ft_strncmp(cur->content, "<<", ft_strlen(cur->content)))
-		{
-			if (!handle_heredoc(cur, status))
-				return (0);
-		}
+		else if (!redirect_handler2(cmd_start, status))
+			return (0);
 		cur = cur->next;
 	}
 	return (1);
