@@ -6,13 +6,11 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:26:49 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 11:42:04 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:13:16 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_exit_status;
 
 void	update_oldpwd(t_status *status)
 {
@@ -42,7 +40,7 @@ int	go_old_path(char **path, t_status *status)
 	*path = get_env("OLDPWD", status);
 	if (!*path)
 	{
-		print_error(EXIT_FAILURE,"OLDPWD not set", "cd");
+		print_error(EXIT_FAILURE, "OLDPWD not set", "cd");
 		return (1);
 	}
 	printf("%s\n", get_env("OLDPWD", status));
@@ -66,7 +64,7 @@ void	b_cd(t_status *status, char **cmd)
 	path = cmd[1];
 	if (cmd[1] && cmd[2])
 	{
-		print_error(EXIT_FAILURE,"too many arguments", "cd");
+		print_error(EXIT_FAILURE, "too many arguments", "cd");
 		return ;
 	}
 	if (path == NULL || *path == '\0')

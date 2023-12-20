@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:42:04 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 12:04:41 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/20 13:15:38 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,4 @@ void	print_export_err(int error_code, char *error_msg, char *type, char *key)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error_msg, 2);
 	ft_putstr_fd("\n", 2);
-
 }
