@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 16:01:11 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:43:19 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:37:52 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
+static void	exec_ctrl_c_heredoc(int signal, t_heredoc *heredoc)
 {
 	static t_heredoc	*here_static;
 

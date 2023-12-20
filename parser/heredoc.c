@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 12:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:59:27 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:25:33 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	save_fd_heredoc(t_status *status, int old_fd[2])
+static void	save_fd_heredoc(t_status *status, int old_fd[2])
 {
 	old_fd[IN] = dup(IN);
 	old_fd[OUT] = dup(OUT);
@@ -22,7 +22,7 @@ void	save_fd_heredoc(t_status *status, int old_fd[2])
 	close(status->default_fd[OUT]);
 }
 
-void	restore_fd_heredoc(t_status *status, int old_fd[2])
+static void	restore_fd_heredoc(t_status *status, int old_fd[2])
 {
 	status->default_fd[IN] = dup(IN);
 	status->default_fd[OUT] = dup(OUT);
@@ -32,7 +32,7 @@ void	restore_fd_heredoc(t_status *status, int old_fd[2])
 	close(old_fd[OUT]);
 }
 
-void	get_heredoc_input(char *delim, int fd)
+static void	get_heredoc_input(char *delim, int fd)
 {
 	char	*line;
 	char	*temp;
@@ -57,7 +57,7 @@ void	get_heredoc_input(char *delim, int fd)
 	}
 }
 
-void	init_heredoc(t_heredoc *here, t_status *status, int fd, char *delim)
+static void	init_heredoc(t_heredoc *here, t_status *status, int fd, char *delim)
 {
 	here->delim = delim;
 	here->status = status;

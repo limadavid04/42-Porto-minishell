@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:30:01 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:59:13 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:30:53 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*expand_var(char *new_token, char *token, int *i, t_status *status)
+static char	*expand_var(char *new_token, char *token, int *i, t_status *status)
 {
 	int		size;
 	char	*var;

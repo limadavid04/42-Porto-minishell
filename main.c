@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:32:38 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:27:24 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:38:01 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_exit_status;
 
-int	wait_for_children(t_status *status)
+static int	wait_for_children(t_status *status)
 {
 	int	exit_code;
 
@@ -33,21 +33,21 @@ int	wait_for_children(t_status *status)
 	return (exit_code);
 }
 
-void	init(t_status *status)
+static void	init(t_status *status)
 {
 	status->env = NULL;
 	status->exp = NULL;
 	status->last_pid = 0;
 }
 
-void	init_status_new_cmd(t_status *status, t_list **token_lst)
+static void	init_status_new_cmd(t_status *status, t_list **token_lst)
 {
 	status->old_pipe_in = -1;
 	status->process_count = 0;
 	status->token_lst = token_lst;
 }
 
-int	interpret_new_command(t_status *status)
+static int	interpret_new_command(t_status *status)
 {
 	char		*command;
 	t_list		**token_lst;

@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:17:40 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:19:04 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:35:36 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*add_char(char c, char *content)
 	return (new_content);
 }
 
-
 int	is_pipe(char *content)
 {
 	if (!content)
@@ -60,7 +59,7 @@ int	is_pipe(char *content)
 	return (0);
 }
 
-int	check_single_pipe_err(char *content)
+static int	check_single_pipe_err(char *content)
 {
 	if (is_pipe(content))
 	{

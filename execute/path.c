@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 11:01:17 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:42:18 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:34:18 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*get_file_full_path(char *cmd, char *dir)
+static char	*get_file_full_path(char *cmd, char *dir)
 {
 	char	*file;
 	char	*slash_cmd;
@@ -23,7 +23,7 @@ char	*get_file_full_path(char *cmd, char *dir)
 	return (file);
 }
 
-char	*find_exec_bin(char **dir, char *cmd)
+static char	*find_exec_bin(char **dir, char *cmd)
 {
 	char	*file;
 	int		i;
@@ -45,7 +45,7 @@ char	*find_exec_bin(char **dir, char *cmd)
 	return (NULL);
 }
 
-char	*search_for_file(char *cmd, t_status *status)
+static char	*search_for_file(char *cmd, t_status *status)
 {
 	char	*path;
 	char	**dir;
@@ -57,7 +57,7 @@ char	*search_for_file(char *cmd, t_status *status)
 	return (find_exec_bin(dir, cmd));
 }
 
-int	is_valid_relative_path(char *cmd)
+static int	is_valid_relative_path(char *cmd)
 {
 	if (access(cmd, F_OK) == 0)
 	{

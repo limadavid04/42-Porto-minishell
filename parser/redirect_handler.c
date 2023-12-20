@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:51:33 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:51:34 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:27:19 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	redirect_input(t_list *redir, t_status *status)
+static int	redirect_input(t_list *redir, t_status *status)
 {
 	int		fd;
 	char	*new_filename;
@@ -31,7 +31,7 @@ int	redirect_input(t_list *redir, t_status *status)
 	return (1);
 }
 
-int	redirect_output(t_list	*redir, int append, t_status *status)
+static int	redirect_output(t_list	*redir, int append, t_status *status)
 {
 	int		fd;
 	char	*new_filename;
@@ -53,7 +53,7 @@ int	redirect_output(t_list	*redir, int append, t_status *status)
 	return (1);
 }
 
-int	handle_heredoc(t_list	*heredoc, t_status *status)
+static int	handle_heredoc(t_list	*heredoc, t_status *status)
 {
 	char	*delim;
 	char	*temp;
@@ -76,6 +76,7 @@ int	handle_heredoc(t_list	*heredoc, t_status *status)
 	unlink(".heredoc");
 	return (0);
 }
+
 int	redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 {
 	t_list	*cur;

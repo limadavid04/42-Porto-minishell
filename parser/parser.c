@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:58:23 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/19 11:29:36 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:27:51 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
+static char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 {
 	char	**cmd;
 	int		cmd_size;
@@ -41,7 +41,7 @@ char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn)
 	return (cmd);
 }
 
-void	create_pipe(t_status *status, t_list *pipe_tkn)
+static void	create_pipe(t_status *status, t_list *pipe_tkn)
 {
 	int	pipe_fd[2];
 
@@ -58,7 +58,7 @@ void	create_pipe(t_status *status, t_list *pipe_tkn)
 	status->old_pipe_in = pipe_fd[IN];
 }
 
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
+static void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 {
 	char	**cmd;
 	int		default_fd[2];
@@ -79,7 +79,7 @@ void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status)
 	restore_default_fd(default_fd);
 }
 
-void	parse_tokens(t_status *status)
+static void	parse_tokens(t_status *status)
 {
 	t_list	*cur_tkn;
 	t_list	*cmd_start;

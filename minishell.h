@@ -6,7 +6,7 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 10:41:47 by psousa            #+#    #+#             */
-/*   Updated: 2023/12/19 12:02:19 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:41:47 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,10 @@ typedef struct TapeInfo
 	int		inside_word;
 }	t_info;
 
-// main.c
-int		wait_for_children(t_status *status);
-
 // utils/utils1.c
 bool	missing_quotes(const char *str);
 char	*join_three(char *one, char *two, char *three);
 int		is_all_digits(char *str);
-
 
 //utils/utils.c
 void	print_error(int error_code, char *error_msg, char *file);
@@ -118,10 +114,6 @@ void	signals_exec(void);
 void	print_syntax_err(struct s_list *token);
 
 // lexer/lexer.c
-t_list	*state_no_quote(t_info *info);
-t_list	*state_double_quote(t_info *info);
-t_list	*state_single_quote(t_info *info);
-void	get_tokens(t_info *info);
 t_list	**lexer(char *cmd);
 
 // lexer/lexer_utils.c
@@ -144,7 +136,6 @@ char	*add_char(char c, char *content);
 int		check_pipe_err(t_list **token_lst);
 int		is_pipe(char *content);
 
-
 // signal/signal.c
 int		handle_ctrl_d(char *cmd);
 void	handle_ctrl_c(int sig);
@@ -159,10 +150,7 @@ void	signals_exec(void);
 void	signals_heredoc(t_heredoc *heredoc);
 
 // parser/parser.c
-void	parse_command(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
 void	parser_main(t_status *status);
-void	create_pipe(t_status *status, t_list *pipe_tkn);
-char	**get_cmd(t_list *cmd_start, t_list *pipe_tkn);
 
 // parser/parser_utils.c
 void	save_default_fd(int default_fd[2]);
@@ -177,12 +165,9 @@ int		find_next_delimiter(char *cmd);
 void	free_heap(t_status *status, char *delim, int fd);
 char	*join_var_expansion_with_token(char *new_token, char *var);
 
-
 // parser/parser_utils2.c
 char	**strip_tokens(char **cmd, t_status *status);
-char	*expand_var(char *new_token, char *token, int *i, t_status *status);
 char	*process_tokens(char *token, int expand, t_status *status);
-int		check_pipe_err(t_list **token_lst);
 
 //parser/redirect_handler.c
 int		redirect_handler(t_list *cmd_start, t_list *pipe_tkn, t_status *status);
@@ -194,10 +179,6 @@ void	create_heredoc_subprocess(char *delim, t_status *status);
 void	execute(t_status *status, char **cmd);
 
 // execute/path.c
-char	*get_file_full_path(char *cmd, char *dir);
-char	*find_exec_bin(char **dir, char *cmd);
-char	*search_for_file(char *cmd, t_status *status);
-int		is_valid_relative_path(char *cmd);
 int		validate_cmd(char **cmd, t_status *status);
 
 // execute/path_utils.c

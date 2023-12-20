@@ -6,13 +6,13 @@
 /*   By: dlima <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:25:48 by dlima             #+#    #+#             */
-/*   Updated: 2023/12/18 11:46:49 by dlima            ###   ########.fr       */
+/*   Updated: 2023/12/19 12:39:45 by dlima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_list	*state_no_quote(t_info *info)
+static t_list	*state_no_quote(t_info *info)
 {
 	char	*cmd;
 
@@ -43,7 +43,7 @@ t_list	*state_no_quote(t_info *info)
 	return (info->node);
 }
 
-t_list	*state_double_quote(t_info *info)
+static t_list	*state_double_quote(t_info *info)
 {
 	char	*cmd;
 	int		*i;
@@ -71,7 +71,7 @@ t_list	*state_double_quote(t_info *info)
 	return (node);
 }
 
-t_list	*state_single_quote(t_info *info)
+static t_list	*state_single_quote(t_info *info)
 {
 	char	*cmd;
 	int		*i;
@@ -99,7 +99,7 @@ t_list	*state_single_quote(t_info *info)
 	return (node);
 }
 
-void	get_tokens(t_info *info)
+static void	get_tokens(t_info *info)
 {
 	int		i;
 	char	*cmd;
