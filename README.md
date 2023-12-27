@@ -61,13 +61,24 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-his project is about creating a simple shell.
+This goal of this project is to create a simple shell.
 
-Here's why:
-* You’ll be able to travel through time and come back to problems people faced when Windows didn’t exist.
-* You will learn a lot about processes and file descriptors. :smile:
+Minishell is based on bash, and altough it is not as feature rich it has the following capabilities:
 
-Of course, This version of the shell is very incomplete!
+	- Lexer and parser for the input which:
+		- Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
+		- Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
+	- Has working history which can be browsed with Up and Down arrow keys;
+	- Builtin commands such as echo, cd, pwd, export, unset, env and exit;
+    - It Searches and launches the right executable (based on the PATH variable or using a relative or an absolute path);
+	- Signal handling for ctrl-C, ctrl-D and ctrl-\\;
+	- Pipelining of commands with the pipe ("|") operator;
+	- I/O Redirection 
+		- ◦ < should redirect input. 
+		- ◦ > should redirect output. 
+		- ◦ << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history! 
+		- ◦ >> should redirect output in append mode
+	- Expansion of environment variables ($HOME, $PWD, etc) and exit status ($?);
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
